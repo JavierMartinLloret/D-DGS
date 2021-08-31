@@ -1,0 +1,9 @@
+## Minucias de la memoria
+Memoria/*.toc
+Memoria/*.tks
+Memoria/*.log
+Memoria/*.lot
+Memoria/*.lof
+Memoria/*.dvi
+Memoria/*.aux
+Memoria/Estilos/*.log

@@ -1,0 +1,92 @@
+% ------------------------------------------------------------------------------
+% Este fichero es parte de la plantilla LaTeX para la realización de Proyectos
+% Final de Grado, protegido bajo los términos de la licencia GFDL.
+% Para más información, la licencia completa viene incluida en el
+% fichero fdl-1.3.tex
+
+% Copyright (C) 2012 SPI-FM. Universidad de Cádiz
+% ------------------------------------------------------------------------------
+
+\documentclass[11pt,a4paper]{book}
+
+\usepackage{./Estilos/paquetes}
+\usepackage{./Estilos/colores}
+
+% Metadatos
+\author{Javier Martín Lloret}
+\title{Trabajo Fin de Grado}
+\date{\today}
+
+% Directorio usual de los gráficos o imágenes
+\graphicspath{{./Graficos}}
+
+\begin{document}
+\pagestyle{plain}
+
+% Portadas
+\input{./Portadas/portada-inicial.tex}
+\cleardoublepage
+
+\input{./Portadas/portada-secundaria.tex}
+\cleardoublepage
+
+% Disposiciones legales
+
+%%%%%%%%
+
+% Agradecimientos
+
+\input{./Contenidos/agradecimientos.tex}
+\newpage
+
+% Preámbulo/Resumen
+
+\input{./Contenidos/resumen.tex}
+\newpage
+
+\frontmatter
+
+\tableofcontents
+\listoffigures
+\listoftables
+%\lstlistoflistings
+\newpage
+
+\part{Prolegómeno}
+
+\chapter{Introducción}
+
+\chapter{Generalidades}
+
+\chapter{Estado del Arte}
+
+\chapter{Objetivos}
+
+\chapter{Planificación del proyecto}
+
+
+\part{Desarrollo}
+
+\chapter{Análisis}
+
+\chapter{Implementación}
+
+\chapter{Pruebas}
+
+
+\part{Epílogo}
+
+\chapter{Manuales}
+
+\chapter{Conclusiones}
+
+\appendix
+
+\part{Anexos}
+
+\chapter{Código fuente de especial interés}
+
+\chapter{Bibliografía}
+
+
+\end{document}
