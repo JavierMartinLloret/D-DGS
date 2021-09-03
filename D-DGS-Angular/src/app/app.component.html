@@ -14,15 +14,37 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-8 mt-4">
       <ul class="list-group">
-
+        <li
+          *ngFor="let user of userArrayExample" 
+          class="list-group-item"
+          (click)="openForEdit(user)"
+          [class.active]="user == selectedUser"
+          >
+          {{user.nickname}} - {{user.email}}
+        </li>
       </ul>
       <div class="card mt-4">
         <div class="card-body">
           <div class="card-title">
-            This is a example of desing
+            Create new User
           </div>
+          <div class="form-group">
+            <input type="text" [(ngModel)]="selectedUser.nickname" placeholder="Insert a Name" class="form-control">
+          </div>
+          <div class="form-group mt-2">
+            <input type="text" [(ngModel)]="selectedUser.email" placeholder="Insert a email" class="form-control">
+          </div>
+          <button (click)="addOrEdit()" class="btn btn-primary mt-2">
+            Submit
+          </button>
+          <button 
+            *ngIf="selectedUser.id !== undefined"
+            class="btn btn-danger mt-2"
+            (click)="delete()">
+            Delete
+          </button>
         </div>
       </div>
     </div>
