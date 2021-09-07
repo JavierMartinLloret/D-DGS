@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { FormsModule } from '@angular/forms' //ngModel
 
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http"; //Get Requests to the API
 
 import { BrowserModule } from '@angular/platform-browser';
 
