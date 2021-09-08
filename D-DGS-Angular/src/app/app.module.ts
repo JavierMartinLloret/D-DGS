@@ -2,22 +2,36 @@ import { NgModule } from '@angular/core';
 
 import { FormsModule } from '@angular/forms' //ngModel
 
-import { HttpClientModule } from "@angular/common/http"; //Get Requests to the API
+import { HttpClientModule } from "@angular/common/http"; // Connection via HTTP protocol with node API
+
+import { RouterModule, Routes } from "@angular/router"; // Routing through the website
 
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { ListOfUsersComponent } from './components/list-of-users/list-of-users.component';
+import { InsertUserComponent } from './components/insert-user/insert-user.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+
+const routes: Routes = [
+  {path: 'users', component: ListOfUsersComponent},
+  {path: 'insert_user', component: InsertUserComponent},
+  {path: '', redirectTo: '/users', pathMatch: 'full'},
+  {path: '**', component: PageNotFoundComponent}
+]
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListOfUsersComponent
+    ListOfUsersComponent,
+    InsertUserComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     FormsModule, //ngModel
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [],
   bootstrap: [AppComponent]
