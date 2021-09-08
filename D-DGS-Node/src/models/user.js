@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema({
     password: String | undefined,
     is_active: Boolean | undefined,
     type_user: Boolean | undefined,
+}, {
+    timestamps: true
 });
 
 const User = mongoose.model('User', userSchema);
