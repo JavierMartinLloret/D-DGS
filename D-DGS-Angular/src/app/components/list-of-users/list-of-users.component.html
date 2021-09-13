@@ -8,19 +8,20 @@
     <div class="row">
       <div class="col-md-8 mt-4">
           <div class="card-title">
-            <h1>List of hardcoded users</h1>
-            <ul>
-                <li *ngFor="let user of users">
-                    <div>Nickname: {{user.nickname}}</div>
-                    <div>Email: {{user.email}}</div>
-                    <div></div>
-                </li>
-            </ul>
+            <div>
+              <h1>Current users on DB</h1>
+              <ul>
+                  <li *ngFor="let user of users">
+                      <div>Nickname: {{user.nickname}}</div>
+                      <div>Email: {{user.email}}</div>
+                      <div></div>
+                  </li>
+              </ul>
+            </div>
+            <div>
+              <a routerLink="/insert_user">Create a new user</a>
+            </div>
           </div>
       </div>
     </div>
-  </div>
-  
-  <div class="container">
-    <a href="/">Input a new user into BD </a>
   </div>

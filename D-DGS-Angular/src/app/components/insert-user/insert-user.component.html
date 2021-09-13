@@ -1,1 +1,30 @@
-<p>insert-user works!</p>
+<h1>Creating a new User!</h1>
+<div>
+    <form>
+        <div>
+            <table>
+                <thead>
+                  <tr>
+                    <td><label for="Nickname">Nickname:</label></td>
+                    <td><input type="text" id="Nickname" [(ngModel)]="userInInterface.nickname" name="Nickname"></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><label for="Email">Email:</label></td>
+                    <td><input type="text" id="Email" [(ngModel)]="userInInterface.email" name="email"></td>
+                  </tr>
+                  <tr>
+                    <td><label for="Password">Password:</label></td>
+                    <td><input type="password" id="Password" [(ngModel)]="userInInterface.password" name="Password"></td>
+                  </tr>
+                  <tr>
+                      <td><label for="Is_Active">Is this user currently active?</label></td>
+                      <td><input type="checkbox" id="Is_Active" [(ngModel)]="userInInterface.is_active" name="Is_Active"></td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+        <button (click)="insertUser()">Create the user</button>
+    </form>
+</div>
