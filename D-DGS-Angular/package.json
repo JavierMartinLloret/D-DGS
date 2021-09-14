@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "~12.2.3",
     "@angular/router": "~12.2.3",
     "bootstrap": "^5.1.0",
+    "dmn-js": "^11.0.2",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
