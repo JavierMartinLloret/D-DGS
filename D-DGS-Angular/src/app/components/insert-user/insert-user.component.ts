@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { User } from 'src/app/models/user';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-insert-user',
@@ -7,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InsertUserComponent implements OnInit {
 
-  constructor() { }
+  public newUser: User = new User();
+
+  constructor(private _usersService: UsersService,
+              private _router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  insertUserInDB() {
+    console.log("The user which will bew inserted into db is", this.newUser)
+    this._usersService.postUser(this.newUser).subscribe(user => {
+      if(user) {
+        this._router.navigateByUrl('/users');
+      }
+    })
   }
 
 }
