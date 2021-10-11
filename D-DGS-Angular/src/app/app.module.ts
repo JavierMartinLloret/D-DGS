@@ -12,11 +12,13 @@ import { AppComponent } from './app.component';
 import { ListOfUsersComponent } from './components/list-of-users/list-of-users.component';
 import { InsertUserComponent } from './components/insert-user/insert-user.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { HelloWorldDiagramComponent } from './components/hello-world-diagram/hello-world-diagram.component';
 
 const routes: Routes = [
   {path: 'users', component: ListOfUsersComponent},
   {path: 'insert_user', component: InsertUserComponent},
   {path: '', redirectTo: '/users', pathMatch: 'full'},
+  {path: 'h-w-d', component: HelloWorldDiagramComponent}, //Testing the new library for the diagrams
   {path: '**', component: PageNotFoundComponent}
 ]
 
@@ -25,7 +27,8 @@ const routes: Routes = [
     AppComponent,
     ListOfUsersComponent,
     InsertUserComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    HelloWorldDiagramComponent
   ],
   imports: [
     BrowserModule,
