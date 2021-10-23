@@ -1,6 +1,6 @@
 export class User {
 
-    /*  VALORES PROVISIONALES. NO HAY InyDp con BD  */
+    /*VALORES PROVISIONALES*/
     id: number | undefined;
     nickname: string | undefined;
     email: string | undefined;

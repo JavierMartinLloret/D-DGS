@@ -7,7 +7,7 @@ import { User } from '../models/user';
 })
 export class UsersService {
 
-  private baseURL: string = "http://localhost:3000/users";
+  private baseURL: string = "http://localhost:3000/users"; //URL de la API con la BD Mongo
 
   constructor(private _httpClient: HttpClient) { }
 

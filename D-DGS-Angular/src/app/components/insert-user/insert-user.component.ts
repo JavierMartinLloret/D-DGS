@@ -19,6 +19,9 @@ export class InsertUserComponent implements OnInit {
   }
 
   insertUserInDB() {
+    /* Completamos campos no inicializados */
+
+
     console.log("The user which will bew inserted into db is", this.newUser)
     this._usersService.postUser(this.newUser).subscribe(user => {
       if(user) {
