@@ -13,11 +13,29 @@ router.get('/users', async (req, res) => {
     }
 })
 
+router.get('/id', async (req, res) => {
+    try {
+        let searchedId = new Number(req.body.id).valueOf();
+        let existsInDb = new Boolean(false);
+
+        const answer = await UserModel.find({
+            id: searchedId
+        });
+        if(answer.length != 0) // Comprobar de esta manera es triste, pero más lo es robar
+            existsInDb = true;
+
+        res.status(200).send(existsInDb.valueOf());
+
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 router.post('/users', async (req, res) => {
     const user = new User(req.body);
     try {
         await user.save();
-        res.status(201).send(user);
+        res.status(201).send(user); // 201 === Resource created
     } catch (error) {
         res.status(500).send(error);
     }

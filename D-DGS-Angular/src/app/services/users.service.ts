@@ -15,7 +15,6 @@ export class UsersService {
     return this._httpClient.get(this.baseURL);
   }
 
-  //TODO: LOS OBJETOS USUARIO PUEDEN VARIAR SEGÚN SE SELECCIONEN MÁS O MENOS CAMPOS.
   postUser(userToPost: User) {
     return this._httpClient.post(this.baseURL, userToPost);
   }
