@@ -9,10 +9,16 @@ export class UsersService {
 
   private baseURL: string = "http://localhost:3000/users"; //URL de la API con la BD Mongo
 
+  private lastIDURL: string = "http://localhost:3000/lastID";
+
   constructor(private _httpClient: HttpClient) { }
 
   getUsers() {
     return this._httpClient.get(this.baseURL);
+  }
+
+  getLastID(){
+    return this._httpClient.get(this.lastIDURL);
   }
 
   postUser(userToPost: User) {

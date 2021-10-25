@@ -22,8 +22,15 @@ export class InsertUserComponent implements OnInit {
     /* Completamos campos no inicializados */
     this.newUser.is_active ? true: this.newUser.is_active = false;
     this.newUser.type_user ? true: this.newUser.type_user = false;
+    /* Creamos identificador para el nuevo usuario */
+    let id = new Number(0);
 
-    console.log("The user which will bew inserted into db is", this.newUser)
+    this._usersService.getLastID().subscribe(idObtained => {
+      let id = new Number(idObtained);
+      this.newUser.id = id.valueOf();
+      console.log(id);      
+    });
+
     this._usersService.postUser(this.newUser).subscribe(user => {
       if(user) {
         this._router.navigateByUrl('/users');
