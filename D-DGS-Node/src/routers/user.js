@@ -48,12 +48,8 @@ router.get('/lastId', async (req, res) =>{
             let initialPosition = string.search(":");
             position = string.search(",");
             id = string.substring(initialPosition+2, position); // +2=== :ESPACIO
-
-            console.log(initialPosition);
-            console.log(position)
         }
-
-        console.log(id);
+        
         res.status(200).send(id);
 
     } catch (error) {
