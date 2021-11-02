@@ -12,19 +12,18 @@ router.get('/users', async (req, res) => {
         res.status(500).send(error);
     }
 })
-// Check if an user is in DB
-router.get('/id', async (req, res) => {
+// Returns the searched user or an empty object
+router.get('/users/:id', async (req, res) => {
     try {
-        let searchedId = new Number(req.body.id).valueOf();
-        let existsInDb = new Boolean(false);
+        let searchedId = new Number(req.params.id).valueOf();
+        let query ={"id": searchedId};
 
-        const answer = await UserModel.find({
-            id: searchedId
-        });
-        if(answer.length != 0) // Comprobar de esta manera es triste, pero más lo es robar
-            existsInDb = true;
+        const user = await UserModel.findOne(query);
 
-        res.status(200).send(existsInDb.valueOf());
+        if (user != null)
+            res.status(200).send(user);
+        else
+            res.status(204).send({});
 
     } catch (error) {
         res.status(500).send(error);
