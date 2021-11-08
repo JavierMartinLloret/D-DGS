@@ -33,31 +33,28 @@ router.get('/users/:id', async (req, res) => {
 router.put('/users/:id', async (req, res) => {
     try {
         const userID = new Number(req.params.id).valueOf();
-        const user = {
-            "nickname": req.body.nickname,
-            "email": req.body.email,
-            "password": req.body.password,
-            "is_active": req.body.is_active,
-            "type_user": req.body.type_user
-        }
-        console.log("Request ID of user to change:"+userID);
-        console.log("Request body:"+req.body);
+        console.log("ID del usuario: "+userID);
+        console.log("Body del objeto req: "+req.body);
+        const updatedUser = new User(req.body);
+        console.log("UpdatedUser object que se construye: "+updatedUser);
+
 
         const query = {"id": userID};
         const update = {$set:{
-            "nickname": user.nickname,
-            "email": user.email,
-            "password": user.password,
-            "is_active": user.is_active,
-            "type_user": user.type_user,
+            "nickname": updatedUser.nickname,
+            "email": updatedUser.email,
+            "password": updatedUser.password,
+            "is_active": updatedUser.is_active,
+            "type_user": updatedUser.type_user
         }};
 
         await UserModel.updateOne(query, update);
 
-        res.status(200).send(user);
+        res.status(200).send("Holiwi");
 
     } catch (error) {
-        
+        console.log(error);
+        res.status(500).send(error);
     }
 })
 

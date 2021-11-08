@@ -22,6 +22,11 @@ export class UsersService {
     return this._httpClient.get(this.baseURL+"/"+id);
   }
 
+  putUser(id: number, user: User)
+  {
+    return this._httpClient.put(this.baseURL+"/"+id, user);
+  }
+
   getLastID(){
     return this._httpClient.get(this.lastIDURL);
   }

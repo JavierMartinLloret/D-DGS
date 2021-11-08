@@ -28,7 +28,8 @@ export class UserComponent implements OnInit {
   modifyUser()
   {
     //updatedDataUser llega con todos los campos vacíos a menos que explícitamente se hayan modificado en el formulario
-    
+    this._usersService.putUser(this.userID, this.updatedDataUser);
+    console.log(this.updatedDataUser);
     
   }
 }
