@@ -29,6 +29,38 @@ router.get('/users/:id', async (req, res) => {
         res.status(500).send(error);
     }
 })
+// Modifies the user's profile
+router.put('/users/:id', async (req, res) => {
+    try {
+        const userID = new Number(req.params.id).valueOf();
+        const user = {
+            "nickname": req.body.nickname,
+            "email": req.body.email,
+            "password": req.body.password,
+            "is_active": req.body.is_active,
+            "type_user": req.body.type_user
+        }
+        console.log("Request ID of user to change:"+userID);
+        console.log("Request body:"+req.body);
+
+        const query = {"id": userID};
+        const update = {$set:{
+            "nickname": user.nickname,
+            "email": user.email,
+            "password": user.password,
+            "is_active": user.is_active,
+            "type_user": user.type_user,
+        }};
+
+        await UserModel.updateOne(query, update);
+
+        res.status(200).send(user);
+
+    } catch (error) {
+        
+    }
+})
+
 // GetLastIdFromUsers
 router.get('/lastId', async (req, res) =>{
     try {

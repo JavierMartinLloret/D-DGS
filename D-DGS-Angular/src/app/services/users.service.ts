@@ -17,6 +17,11 @@ export class UsersService {
     return this._httpClient.get(this.baseURL);
   }
 
+  getUser(id: number)
+  {
+    return this._httpClient.get(this.baseURL+"/"+id);
+  }
+
   getLastID(){
     return this._httpClient.get(this.lastIDURL);
   }

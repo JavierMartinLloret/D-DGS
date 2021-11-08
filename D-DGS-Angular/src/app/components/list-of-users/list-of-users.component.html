@@ -13,7 +13,7 @@
                 <li *ngFor="let user of users">
                     <div>Nickname: {{user.nickname}}</div>
                     <div>Email: {{user.email}}</div>
-                    <div><a [routerLink]="['/edit_user', user.id]">Edit the user</a></div>
+                    <div><a [routerLink]="['/users/', user.id]">Edit the user</a></div>
                     <div><a [routerLink]="['/']">Delete user CURRENTLY DISABLED</a></div>
                 </li>
             </ul>
