@@ -9,6 +9,9 @@ const app = express();
 
 app.use(express.json());
 
+var cors = require('cors');
+app.use(cors());
+
 app.all('/*', (req, res, next) => {
     //Enable CORS policy so we can make http request between the node and ng app
     res.header('Access-Control-Allow-Origin', '*');
