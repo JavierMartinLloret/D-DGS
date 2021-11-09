@@ -50,7 +50,7 @@ router.put('/users/:id', async (req, res) => {
 
         await UserModel.updateOne(query, update);
 
-        res.status(200).send("Holiwi");
+        res.status(200).send(true);
 
     } catch (error) {
         console.log(error);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -16,10 +16,11 @@ export class UserComponent implements OnInit {
   public updatedDataUser: User = new User;
 
   constructor(private _usersService: UsersService,
-    private route: ActivatedRoute) {}
+    private _route: ActivatedRoute,
+    private _router: Router) {}
 
   ngOnInit(): void {
-    this.userID = this.route.snapshot.params['id'];
+    this.userID = this._route.snapshot.params['id'];
     this._usersService.getUser(this.userID).subscribe(user => {
       this.user = user;
     })
@@ -28,7 +29,10 @@ export class UserComponent implements OnInit {
   modifyUser()
   {
     //updatedDataUser llega con todos los campos vacíos a menos que explícitamente se hayan modificado en el formulario
-    this._usersService.putUser(this.userID, this.updatedDataUser);
+    this._usersService.putUser(this.userID, this.updatedDataUser).subscribe(newUser => {
+      if(newUser)
+        this._router.navigateByUrl('/users');
+    })
     console.log(this.updatedDataUser);
     
   }
