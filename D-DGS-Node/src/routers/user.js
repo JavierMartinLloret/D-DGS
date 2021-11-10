@@ -33,10 +33,7 @@ router.get('/users/:id', async (req, res) => {
 router.put('/users/:id', async (req, res) => {
     try {
         const userID = new Number(req.params.id).valueOf();
-        console.log("ID del usuario: "+userID);
-        console.log("Body del objeto req: "+req.body);
         const updatedUser = new User(req.body);
-        console.log("UpdatedUser object que se construye: "+updatedUser);
 
 
         const query = {"id": userID};
@@ -53,7 +50,6 @@ router.put('/users/:id', async (req, res) => {
         res.status(200).send(true);
 
     } catch (error) {
-        console.log(error);
         res.status(500).send(error);
     }
 })
@@ -68,7 +64,6 @@ router.delete('/users/:id', async (req, res) => {
 
         res.status(200).send(true);
     } catch (error) {
-        console.log(error);
         res.status(500).send(error);
     }
 })
@@ -97,7 +92,6 @@ router.get('/lastId', async (req, res) =>{
 
     } catch (error) {
         res.status(500).send(error);
-        console.log(error);
     }
 })
 
