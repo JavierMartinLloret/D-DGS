@@ -28,7 +28,13 @@ export class UserComponent implements OnInit {
   
   modifyUser()
   {
-    //updatedDataUser llega con todos los campos vacíos a menos que explícitamente se hayan modificado en el formulario
+    // updatedDataUser llega con todos los campos vacíos a menos que explícitamente se hayan modificado en el formulario
+    // Los booleanos hay que inicializarlos o no podemos poner en false los atributos
+    if(this.updatedDataUser.is_active == undefined)
+      this.updatedDataUser.is_active = false;
+    if(this.updatedDataUser.type_user == undefined)
+      this.updatedDataUser.type_user = false;
+    
     this._usersService.putUser(this.userID, this.updatedDataUser).subscribe(newUser => {
       if(newUser)
         this._router.navigateByUrl('/users');
