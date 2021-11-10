@@ -27,6 +27,11 @@ export class UsersService {
     return this._httpClient.put(this.baseURL+"/"+id, user);
   }
 
+  deleteUser(id: number)
+  {
+    return this._httpClient.delete(this.baseURL+"/"+id);
+  }
+
   getLastID(){
     return this._httpClient.get(this.lastIDURL);
   }

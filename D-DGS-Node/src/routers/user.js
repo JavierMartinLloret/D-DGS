@@ -58,6 +58,21 @@ router.put('/users/:id', async (req, res) => {
     }
 })
 
+// Deletes the user from DB
+router.delete('/users/:id', async (req, res) => {
+    try {
+        const userID = new Number(req.params.id).valueOf();
+        const query = {"id": userID}
+
+        await UserModel.deleteOne(query);
+
+        res.status(200).send(true);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+})
+
 // GetLastIdFromUsers
 router.get('/lastId', async (req, res) =>{
     try {

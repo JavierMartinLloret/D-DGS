@@ -32,8 +32,14 @@ export class UserComponent implements OnInit {
     this._usersService.putUser(this.userID, this.updatedDataUser).subscribe(newUser => {
       if(newUser)
         this._router.navigateByUrl('/users');
+    })    
+  }
+
+  deleteUser()
+  {
+    this._usersService.deleteUser(this.userID).subscribe(newUser => {
+      if(newUser)
+        this._router.navigateByUrl('/users');
     })
-    console.log(this.updatedDataUser);
-    
   }
 }

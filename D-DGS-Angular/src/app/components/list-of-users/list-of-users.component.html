@@ -14,7 +14,7 @@
                     <div>Nickname: {{user.nickname}}</div>
                     <div>Email: {{user.email}}</div>
                     <div><a [routerLink]="['/users/', user.id]">Edit the user</a></div>
-                    <div><a [routerLink]="['/']">Delete user CURRENTLY DISABLED</a></div>
+                    <div><button (click)="deleteUserFromMenu(user.id)">Delete this user</button></div>
                 </li>
             </ul>
           </div>
