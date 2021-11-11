@@ -28,7 +28,8 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
-              "src/favicon.png"
+              "src/favicon.png",
+              "./node_modules/mxgraph/javascript/src"
             ],
             "styles": [
               "src/styles.scss",
@@ -37,7 +38,9 @@
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/popper.js/dist/popper.min.js",
-              "./node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/js/mxgraph.conf.js",
+              "node_modules/mxgraph/javascript/mxClient.js"
             ]
           },
           "configurations": {
