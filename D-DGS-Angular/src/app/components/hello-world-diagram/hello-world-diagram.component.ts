@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-hello-world-diagram',
   templateUrl: './hello-world-diagram.component.html',
@@ -10,6 +11,12 @@ export class HelloWorldDiagramComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.loadHWDiagram();
+  }
+
+  loadHWDiagram()
+  {
+    
   }
 
 }
