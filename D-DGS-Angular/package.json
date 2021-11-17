@@ -20,11 +20,15 @@
     "@angular/platform-browser-dynamic": "~12.2.3",
     "@angular/router": "~12.2.3",
     "bootstrap": "^5.1.0",
+    "i": "^0.3.7",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "save": "^2.4.0",
     "tslib": "^2.2.0",
+    "vis": "^4.21.0-EOL",
+    "vis-data": "^7.1.2",
+    "vis-timeline": "^7.5.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
