@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-list-of-users',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListOfUsersComponent implements OnInit {
 
-  constructor() { }
+  public users: any = [];
+
+  constructor(private _userService: UsersService,
+    private _router: Router) { }
 
   ngOnInit(): void {
+    this._userService.getUsers().subscribe(users => {
+      this.users = users;
+    })
+  }
+
+  deleteUserFromMenu(iDFromUserToDelete: number){
+    this._userService.deleteUser(iDFromUserToDelete).subscribe(newUser => {
+      if(newUser)
+        window.location.reload();
+    })
   }
 
 }

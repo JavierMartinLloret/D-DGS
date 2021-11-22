@@ -1,1 +1,25 @@
-<p>insert-user works!</p>
+<div>
+    <h1>Creating a new User</h1>
+    <div>
+        <form ngNativeValidate (ngSubmit)="insertUserInDB()">
+            <div>
+                Nickname: <input type="text" id="nickname" [(ngModel)]="newUser.nickname" name="nickname" required>
+            </div>
+            <div>
+                Email: <input type="email" id="email" [(ngModel)]="newUser.email" name="email" required>
+            </div>
+            <div>
+                Password: <input type="password" id="password" [(ngModel)]="newUser.password" name="password" required>
+            </div>
+            <div>
+                Is it an active user? <input type="checkbox" id="active_user" [(ngModel)]="newUser.is_active" name="active_user">
+            </div>
+            <div>
+                Is it a special type user? <input type="checkbox" id="type_user" [(ngModel)]="newUser.type_user" name="type_user">
+            </div>
+            <div>
+                <input type="submit" value="Insert new User">
+            </div>
+        </form>
+    </div>
+</div>
