@@ -1,10 +1,10 @@
 const express = require("express");
 const User = require("../models/user");
 const UserModel = require('../models/user');
-const router = new express.Router();
+const userRouter = new express.Router();
 
 // Get all users
-router.get('/users', async (req, res) => {
+userRouter.get('/users', async (req, res) => {
     try {
         const users = await UserModel.find({});
         res.status(200).send(users);
@@ -13,7 +13,7 @@ router.get('/users', async (req, res) => {
     }
 })
 // Returns the searched user or an empty object
-router.get('/users/:id', async (req, res) => {
+userRouter.get('/users/:id', async (req, res) => {
     try {
         let searchedId = new Number(req.params.id).valueOf();
         let query ={"id": searchedId};
@@ -30,7 +30,7 @@ router.get('/users/:id', async (req, res) => {
     }
 })
 // Modifies the user's profile
-router.put('/users/:id', async (req, res) => {
+userRouter.put('/users/:id', async (req, res) => {
     try {
         const userID = new Number(req.params.id).valueOf();
         const updatedUser = new User(req.body);
@@ -55,7 +55,7 @@ router.put('/users/:id', async (req, res) => {
 })
 
 // Deletes the user from DB
-router.delete('/users/:id', async (req, res) => {
+userRouter.delete('/users/:id', async (req, res) => {
     try {
         const userID = new Number(req.params.id).valueOf();
         const query = {"id": userID}
@@ -69,7 +69,7 @@ router.delete('/users/:id', async (req, res) => {
 })
 
 // GetLastIdFromUsers
-router.get('/lastId', async (req, res) =>{
+userRouter.get('/lastId', async (req, res) =>{
     try {
         const query = {};
         const sortParameters = {id: -1}; // Orden decreciente
@@ -96,7 +96,7 @@ router.get('/lastId', async (req, res) =>{
 })
 
 
-router.post('/users', async (req, res) => {
+userRouter.post('/users', async (req, res) => {
     const user = new User(req.body);
     try {
         await user.save();
@@ -106,4 +106,4 @@ router.post('/users', async (req, res) => {
     }
 })
 
-module.exports = router;
+module.exports = userRouter;

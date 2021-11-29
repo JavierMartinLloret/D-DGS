@@ -2,6 +2,7 @@
 
 const express = require("express");
 const userRouter = require('./routers/user');
+const activityRouter = require('./routers/activity');
 const mongoose = require('./db/mongoose');
 
 
@@ -21,6 +22,7 @@ app.all('/*', (req, res, next) => {
 })
 
 app.use(userRouter);
+app.use(activityRouter);
 
 app.listen(3000, () =>{
     console.log('Express server running on the port 3000');
