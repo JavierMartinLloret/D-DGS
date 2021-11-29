@@ -9,28 +9,43 @@ import { Network } from 'vis-network';
 })
 export class TestDiagramComponent implements OnInit {
 
+  public container: any;
+  public nodes: any;
+  public edges: any;
+  public data: any;
+  public options: any;
+  public network: any;
+
   constructor() { }
 
   ngOnInit(): void {
-    var nodes = new DataSet([
+    this.container = document.getElementById("idDiagrama");
+    this.nodes = document.getElementById("idNodos");
+
+    this.nodes = new DataSet([
       { id: 1, label: "Nodo 1" },
       { id: 2, label: "Nodo 2" }
     ]);
 
-    var edges = new DataSet([
+    this.edges = new DataSet([
       { id:1, from: 1, to: 2 }
     ]);
 
     var data = {
-      nodes: nodes,
-      edges: edges
+      nodes: this.nodes,
+      edges: this.edges
     }
 
-    var options = {};
+    this.options = {  };
 
-    var container = document.getElementById("mynetwork");
+    if(this.container != null)
+    {
+      this.network = new Network(this.container, data, this.options);
+    }
+  }
 
-    if(container != null)
-      var network = new Network(container, data, options);
+  showNodes()
+  {
+    console.log(this.nodes);
   }
 }
