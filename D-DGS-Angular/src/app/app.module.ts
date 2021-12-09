@@ -11,11 +11,13 @@ import { InsertUserComponent } from './components/insert-user/insert-user.compon
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { UserComponent } from './components/user/user.component';
 import { TestDiagramComponent } from './components/test-diagram/test-diagram.component';
+import { DiagramCreationComponent } from './components/diagram-creation/diagram-creation.component';
 
 const routes: Routes = [
   {path: 'users', component: ListOfUsersComponent},
   {path: 'users/:id', component: UserComponent},
   {path: 'insert_user', component: InsertUserComponent},
+  {path: 'create_a_diagram', component: DiagramCreationComponent},
   {path: '', redirectTo: '/users', pathMatch: 'full'},
   {path: 'test', component: TestDiagramComponent},
   {path: '**', component: PageNotFoundComponent}
@@ -28,7 +30,8 @@ const routes: Routes = [
     InsertUserComponent,
     PageNotFoundComponent,
     UserComponent,
-    TestDiagramComponent
+    TestDiagramComponent,
+    DiagramCreationComponent
   ],
   imports: [
     BrowserModule,
