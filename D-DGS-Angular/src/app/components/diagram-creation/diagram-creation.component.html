@@ -1,1 +1,21 @@
-<p>diagram-creation works!</p>
+<h1>Diagram Creation Process</h1>
+<h2>Domain in use: Test Domain</h2>
+<p>Currently on section 1: Create your activities and tasks</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mt-4">
+            <div class="card-title">
+                <div *ngIf="ActivitiesOnDB">
+                    <h3>Current Activities:</h3>
+                    <li *ngFor="let activity of Activities">
+                        <div>Activity name: {{activity.name}}</div>
+                        <div>Activity description: {{activity.description}}</div>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    
+</div>
