@@ -35,6 +35,11 @@ export class DiagramDomainService {
         return this._httpClient.get(this.tasksURL);
     }
 
+    getATask(taskID: string)
+    {
+        return this._httpClient.get(this.tasksURL+"/"+taskID);
+    } 
+
     postANewTask(taskToPost: Task) {
         return this._httpClient.post(this.tasksURL, taskToPost);
     }

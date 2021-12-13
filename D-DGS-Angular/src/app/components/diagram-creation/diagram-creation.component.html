@@ -5,17 +5,26 @@
     <div class="row">
         <div class="col-md-8 mt-4">
             <div class="card-title">
-                <div *ngIf="ActivitiesOnDB">
+                <div>
                     <h3>Current Activities:</h3>
-                    <li *ngFor="let activity of Activities">
-                        <div>Activity name: {{activity.name}}</div>
-                        <div>Activity description: {{activity.description}}</div>
-                    </li>
+                    <ul *ngFor="let activity of Activities">
+                        <li>
+                            <div>Activity name: {{activity.name}}</div>
+                            <div>Activity description: {{activity.description}}</div>
+                            <h4>Tasks Attached to the Activity</h4>
+                            <ul *ngFor="let task of activity.tasks">
+                                <li>
+                                    <div>Task name: {{task.name}}</div>
+                                    <div>Task description: {{task.description}}</div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div>
-    
+
 </div>

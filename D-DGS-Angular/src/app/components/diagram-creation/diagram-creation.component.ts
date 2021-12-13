@@ -8,12 +8,9 @@ import { DiagramDomainService } from "src/app/services/diagramDomain.service";
   styleUrls: ['./diagram-creation.component.css']
 })
 export class DiagramCreationComponent implements OnInit {
-  /* This class will change alot when different domains were implemented for now,
-    lets assume there's just one domain to make it all easier. */
-
+  
   public Activities: any = [];
-  public Tasks: any = [];
-  public ActivitiesOnDB: boolean = false;
+  private ActivitiesOnDB: boolean = false;
 
   constructor(private _diagramDomainService: DiagramDomainService) { }
 
@@ -21,11 +18,8 @@ export class DiagramCreationComponent implements OnInit {
     this._diagramDomainService.getActivities().subscribe(activities => {
       this.Activities = activities;
     })
-    this._diagramDomainService.getTasks().subscribe(tasks => {
-      this.Tasks = tasks;
-    })
     if(this.Activities)
-      this.ActivitiesOnDB = true;
+      this.ActivitiesOnDB;
   }
 
 }

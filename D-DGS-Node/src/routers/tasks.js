@@ -13,6 +13,20 @@ taskRouter.get('/tasks', async (req, res) => {
     }
 })
 
+taskRouter.get('/tasks/:id', async (req, res) => {
+    try {
+        const taskID = req.params.id;
+        const query = {"_id": taskID};
+        console.log(taskID);
+        const task = await TaskModel.findOne(query);
+
+        res.status(200).send(task);        
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+})
+
 taskRouter.post('/tasks', async (req, res) => {
     const task = new Task(req.body);
     try {
@@ -26,7 +40,7 @@ taskRouter.post('/tasks', async (req, res) => {
 taskRouter.delete('/tasks/:id', async (req, res) => {
     try {
         const taskID = req.params.id;
-        const query = {"_id": taskID}
+        const query = {"_id": taskID};
 
         await TaskModel.deleteOne(query);
 

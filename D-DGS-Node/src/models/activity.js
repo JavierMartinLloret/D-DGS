@@ -7,7 +7,9 @@ const ActivitySchema = new mongoose.Schema({
     tasks:
     [
         {
-            type: mongoose.Schema.Types.ObjectId , ref: 'Task'
+            _idTask: mongoose.Schema.Types.ObjectId,
+            name: String,
+            description: String
         }
     ],
 },  {
