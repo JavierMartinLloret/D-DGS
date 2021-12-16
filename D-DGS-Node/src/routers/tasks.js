@@ -17,7 +17,6 @@ taskRouter.get('/tasks/:id', async (req, res) => {
     try {
         const taskID = req.params.id;
         const query = {"_id": taskID};
-        console.log(taskID);
         const task = await TaskModel.findOne(query);
 
         res.status(200).send(task);        

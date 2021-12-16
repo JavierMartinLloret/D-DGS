@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { Activity } from "../models/activity";
 import { Task } from "../models/task";
 
@@ -18,12 +19,22 @@ export class DiagramDomainService {
         return this._httpClient.get(this.activitiesURL);
     }
 
+    getAnActivity(activityID: string)
+    {
+        return this._httpClient.get(this.activitiesURL+"/"+activityID);
+    }
+
     postANewActivity(activityToPost: Activity)
     {
         return this._httpClient.post(this.activitiesURL, activityToPost);
     }
 
-    deleteAnActivity(activityID: string)
+    updateAnActivity(activityToUpdate: Activity) // DEBE MANTENER LA CONSISTENCIA
+    {
+        return this._httpClient.put(this.activitiesURL, activityToUpdate);
+    }
+
+    deleteAnActivity(activityID: string) // DEBE MANTENER LA CONSISTENCIA
     {
         return this._httpClient.delete(this.activitiesURL+"/"+activityID);
     }

@@ -13,13 +13,48 @@ activityRouter.get('/activities', async (req, res) => {
     }
 })
 
+// Get one activity
+activityRouter.get('/activities/:id', async (req, res) => {
+    try {
+        const activtyID = req.params.id;
+        const query = {"_id": activtyID};
+        const activity = await ActivityModel.findOne(query);
+
+        res.status(500).send(activity);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 // Register an activity in DB
 activityRouter.post('/activities', async (req, res) => {
-    // No he coseguido reproducir en Postman como enviar en la creación el campo tareas vacío.
     const activity = new Activity(req.body);
     try {
         await activity.save();
         res.status(201).send(activity);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+// Upadte an activity
+activityRouter.put('/activities', async (req, res) => {
+    try {
+        const updatedActivity = new Activity(req.body);
+        
+        const query = {"_id": req.body._id};
+        const update = {$set:{
+            "name": updatedActivity.name,
+            "description": updatedActivity.description,
+            "tasks": updatedActivity.tasks
+        }};
+        console.log(req.body);
+        console.log(query);
+
+        await ActivityModel.updateOne(query, update);
+
+        res.status(200).send(true);
+
     } catch (error) {
         res.status(500).send(error);
     }
