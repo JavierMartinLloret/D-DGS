@@ -1,30 +1,53 @@
-<h1>Diagram Creation Process</h1>
-<h2>Domain in use: Test Domain</h2>
-<p>Currently on section 1: Create your activities and tasks</p>
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 mt-4">
-            <div class="card-title">
-                <div>
-                    <h3>Current Activities:</h3>
-                    <ul *ngFor="let activity of Activities">
-                        <li>
-                            <div>Activity name: {{activity.name}}</div>
-                            <div>Activity description: {{activity.description}}</div>
-                            <h4>Tasks Attached to the Activity</h4>
-                            <ul *ngFor="let task of activity.tasks">
+<div>
+    <h1>Diagram Creation Process</h1>
+    <h2>Domain in use: Test Domain</h2>
+    <div *ngIf="userInDomainFase == true">
+        <h3>Currently on section 1: Create your activities and tasks</h3>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mt-4">
+                    <div class="card-title">
+                        <div>
+                            <h4>Current Activities:</h4>
+                            <!-- Habría que incluir aquí algo para añadir nueva actividad y o tareas -->
+                            <ul *ngFor="let activity of Activities">
                                 <li>
-                                    <div>Task name: {{task.name}}</div>
-                                    <div>Task description: {{task.description}}</div>
+                                    <div>Activity name: {{activity.name}}</div>
+                                    <div>Activity description: {{activity.description}}</div>
+                                    <h4>Tasks Attached to the Activity</h4>
+                                    <ul *ngFor="let task of activity.tasks">
+                                        <li>
+                                            <div>Task name: {{task.name}}</div>
+                                            <div>Task description: {{task.description}}</div>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div>
+            <button (click)="loadSection2()" [routerLink]="['/create_a_diagram']">Go to section 2: Rewards creation area</button>
+        </div>
     </div>
-</div>
-<div>
+    <div *ngIf="userInRewardFase == true">
+        <h3>Currently on section 2: Create your rewards</h3>
+        <div>
+            <button (click)="loadSection1()" [routerLink]="['/create_a_diagram']">Go back to section 1: Domain creation area</button>
+            <button (click)="loadSection3()" [routerLink]="['/create_a_diagram']">Go to section 3: Desing area</button>
+        </div>
+    </div>
+    <div *ngIf="userInDesingFase == true">
+        <h3>Currently on section 3: Desing Area</h3>
+        <div>
+            <button (click)="loadSection2()" [routerLink]="['/create_a_diagram']">Go back to section 2: Rewards creation area</button>
+        </div>
+        <div>
+            <button>Download the diagram!(Ojalá tuviera acabao)</button>
+        </div>
+    </div>
+
 
 </div>

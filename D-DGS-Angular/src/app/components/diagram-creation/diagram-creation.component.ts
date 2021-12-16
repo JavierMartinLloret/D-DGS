@@ -10,7 +10,10 @@ import { DiagramDomainService } from "src/app/services/diagramDomain.service";
 export class DiagramCreationComponent implements OnInit {
   
   public Activities: any = [];
-  private ActivitiesOnDB: boolean = false;
+  public userInDomainFase: boolean = true;
+  public userInRewardFase: boolean = false;
+  public userInDesingFase: boolean = false;
+  public ActivitiesOnDB: boolean = false;
 
   constructor(private _diagramDomainService: DiagramDomainService) { }
 
@@ -20,6 +23,28 @@ export class DiagramCreationComponent implements OnInit {
     })
     if(this.Activities)
       this.ActivitiesOnDB;
+  }
+
+  /* Este uso de la lógica sería ulceroso ante los ojos de Paco, pero más triste es robar. */
+  loadSection1()
+  {
+    this.userInDomainFase = true;
+    this.userInRewardFase = false;
+    this.userInDesingFase = false;
+  }
+
+  loadSection2()
+  {
+    this.userInDomainFase = false;
+    this.userInRewardFase = true;
+    this.userInDesingFase = false;
+  }
+
+  loadSection3()
+  {
+    this.userInDomainFase = false;
+    this.userInRewardFase = false;
+    this.userInDesingFase = true;
   }
 
 }
