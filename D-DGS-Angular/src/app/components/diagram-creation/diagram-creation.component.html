@@ -3,26 +3,61 @@
     <h2>Domain in use: Test Domain</h2>
     <div *ngIf="userInDomainFase == true">
         <h3>Currently on section 1: Create your activities and tasks</h3>
+        <button (click)="addNewActivityClicked()">Display for create a new Activity</button>
+        <div *ngIf="addNewActivityIsClicked">
+            <form ngNativeValidate (ngSubmit)="addNewActivity()">
+                <div>
+                    Activity's name: <input type="text" id="name" name="name" [(ngModel)]="activityToCreate.name" required>
+                </div>
+                <div>
+                    Activity's description: <input type="text" id="description" name="description" [(ngModel)]="activityToCreate.description" required>
+                </div>
+                <!-- Podría hacerse desde aquí mismo lo de añadir una nueva tarea a la actividad para que no fuese de una en una, pero weno-->
+                <div>
+                    <input type="submit" value="Create the activity">
+                </div>
+            </form>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-8 mt-4">
                     <div class="card-title">
                         <div>
                             <h4>Current Activities:</h4>
-                            <!-- Habría que incluir aquí algo para añadir nueva actividad y o tareas -->
                             <ul *ngFor="let activity of Activities">
                                 <li>
                                     <div>Activity name: {{activity.name}}</div>
                                     <div>Activity description: {{activity.description}}</div>
-                                    <h4>Tasks Attached to the Activity</h4>
-                                    <ul *ngFor="let task of activity.tasks">
-                                        <li>
-                                            <div>Task name: {{task.name}}</div>
-                                            <div>Task description: {{task.description}}</div>
-                                        </li>
-                                    </ul>
+                                    <div *ngIf="activtyHasTaskAttached(activity)">
+                                        <h4>Tasks Attached to the Activity</h4>
+                                        <ul *ngFor="let task of activity.tasks">
+                                            <li>
+                                                <div>Task name: {{task.name}}</div>
+                                                <div>Task description: {{task.description}}</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div *ngIf="!activtyHasTaskAttached(activity)">
+                                        <h4>This Activity has now task attached</h4>
+                                    </div>
+                                    <button (click)="addNewTaskClicked(activity)">Add a new task to this activity</button>
                                 </li>
                             </ul>
+                            <div *ngIf="addNewTaskIsClicked">
+                                <p>Adding a new task to {{parentActivityForTheNewTask.name}}</p>
+                                <form ngNativeValidate (NgSubmit)="addNewTaskToAnActivity()">
+                                    <div>
+                                        Task's name: <input type="text" id="name" name="name" [(ngModel)]="taskToCreate.name" required>
+                                    </div>
+                                    <div>
+                                        Task's description: <input type="text" id="description" name="description" [(ngModel)]="taskToCreate.description" required>
+                                    </div>
+                                    <!-- Podría hacerse desde aquí mismo lo de añadir una nueva tarea a la actividad para que no fuese de una en una, pero weno-->
+                                    <div>
+                                        <input type="submit" value="Create the task">
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
