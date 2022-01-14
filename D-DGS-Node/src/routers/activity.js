@@ -9,7 +9,7 @@ activityRouter.get('/activities', async (req, res) => {
         const activities = await ActivityModel.find({});
         res.status(200).send(activities);
     } catch (error) {
-        send.status(500).send(error);
+        res.status(500).send(error);
     }
 })
 
@@ -20,7 +20,7 @@ activityRouter.get('/activities/:id', async (req, res) => {
         const query = {"_id": activtyID};
         const activity = await ActivityModel.findOne(query);
 
-        res.status(500).send(activity);
+        res.status(200).send(activity);
     } catch (error) {
         res.status(500).send(error);
     }
