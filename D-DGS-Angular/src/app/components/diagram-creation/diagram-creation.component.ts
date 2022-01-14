@@ -12,6 +12,7 @@ import { DiagramDomainService } from "src/app/services/diagramDomain.service";
 export class DiagramCreationComponent implements OnInit {
   
   public Activities: any = [];
+  public Tasks: any = [];
   public newTasksArray: Task[] = new Array<Task>();
   public activityToCreate: Activity = new Activity("","",this.newTasksArray);
   public parentActivityForTheNewTask: Activity = new Activity("","",this.newTasksArray);
@@ -33,6 +34,9 @@ export class DiagramCreationComponent implements OnInit {
   ngOnInit(): void {
     this._diagramDomainService.getActivities().subscribe(activities => {
       this.Activities = activities;
+    })
+    this._diagramDomainService.getTasks().subscribe(tasks => {
+      this.Tasks = tasks;
     })
     if(this.Activities)
       this.ActivitiesOnDB;
@@ -82,16 +86,32 @@ export class DiagramCreationComponent implements OnInit {
       if(activity)
         this._router.navigateByUrl('/create_a_diagram');
     });
+    window.location.reload();
   }
 
-  addNewTaskToAnActivity()
+  addNewTask()
   {
-    this.taskToCreate.activity = this.parentActivityForTheNewTask; //Updating parent activity
-    this._diagramDomainService.postANewTask(this.taskToCreate);
-    
-    this.parentActivityForTheNewTask.tasks.push(this.taskToCreate);
-    this._diagramDomainService.updateAnActivity(this.parentActivityForTheNewTask);
+    console.log("addNewTask 1");    
+    // AÑADIR LA NUEVA TAREA A BD
+    this.taskToCreate.activity = this.parentActivityForTheNewTask;
+    this._diagramDomainService.postANewTask(this.taskToCreate).subscribe(task => {
+      if(task)
+        this._router.navigateByUrl('/create_a_diagram');
+    });
 
+    console.log("addNewTask 2");
+    // ACTUALIZAR LA ACTIVIDAD
+    // NECESITO EL _ID DE LA ACTIVIDAD QUE CORRESPONDE A ACTIVITY TO CREATE
+    this.activityToCreate.tasks.push(this.taskToCreate);
+    this._diagramDomainService.updateAnActivity(this.activityToCreate).subscribe(activity => {
+      if(activity)
+        this._router.navigateByUrl('/create_a_diagram');
+    })
+
+    console.log("addNewTask 3");
+    //window.location.reload();
+    
+    console.log("addNewTask 4");
   }
 
 }

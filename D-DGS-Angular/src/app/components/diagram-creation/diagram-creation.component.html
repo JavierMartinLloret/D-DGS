@@ -44,15 +44,14 @@
                                 </li>
                             </ul>
                             <div *ngIf="addNewTaskIsClicked">
-                                <p>Adding a new task to {{parentActivityForTheNewTask.name}}</p>
-                                <form ngNativeValidate (NgSubmit)="addNewTaskToAnActivity()">
+                                <p>Currently adding a new task</p>
+                                <form ngNativeValidate (ngSubmit)="addNewTask()">
                                     <div>
-                                        Task's name: <input type="text" id="name" name="name" [(ngModel)]="taskToCreate.name" required>
+                                        Task's name: <input type="text" id="task_name" name="name" [(ngModel)]="taskToCreate.name" required>
                                     </div>
                                     <div>
-                                        Task's description: <input type="text" id="description" name="description" [(ngModel)]="taskToCreate.description" required>
+                                        Task's description: <input type="text" id="task_description" name="description" [(ngModel)]="taskToCreate.description" required>
                                     </div>
-                                    <!-- Podría hacerse desde aquí mismo lo de añadir una nueva tarea a la actividad para que no fuese de una en una, pero weno-->
                                     <div>
                                         <input type="submit" value="Create the task">
                                     </div>

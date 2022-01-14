@@ -42,13 +42,15 @@ activityRouter.put('/activities', async (req, res) => {
     try {
         const updatedActivity = new Activity(req.body);
         
-        const query = {"_id": req.body._id};
+        const query = {"_id": req.body._id}; //     OBJETO LLEGA SIN ESTE _ID INICIALIZADO
         const update = {$set:{
             "name": updatedActivity.name,
             "description": updatedActivity.description,
             "tasks": updatedActivity.tasks
         }};
+        console.log("BODY DE LA REQUEST:");
         console.log(req.body);
+        console.log("QUERY");
         console.log(query);
 
         await ActivityModel.updateOne(query, update);
