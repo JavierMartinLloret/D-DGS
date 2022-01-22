@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Activity } from "../models/activity";
 import { Task } from "../models/task";
+import { Reward } from "../models/reward";
 
 @Injectable({
     providedIn: 'root'
@@ -58,5 +59,26 @@ export class DiagramDomainService {
     deleteATask(taskID: string)
     {
         return this._httpClient.delete(this.tasksURL+"/"+taskID);
+    }
+
+    /* REWARDS */
+
+    private rewardsURL: string ="http://localhost:3000/rewards"
+
+    getRewards() {
+        return this._httpClient.get(this.rewardsURL);
+    }
+
+    getAReward(rewardID: string) {
+        return this._httpClient.get(this.rewardsURL+"/"+rewardID);
+    }
+
+    postANewReward(rewardToPost: Reward)
+    {
+        return this._httpClient.post(this.rewardsURL, rewardToPost);
+    }
+
+    deleteAReward(rewardID: string) {
+        return this._httpClient.delete(this.rewardsURL+"/"+rewardID);
     }
 }
