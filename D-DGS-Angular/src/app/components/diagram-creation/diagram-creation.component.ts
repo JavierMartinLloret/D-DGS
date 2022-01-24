@@ -111,27 +111,28 @@ export class DiagramCreationComponent implements OnInit {
 
   addNewTask()
   {
-    console.log("addNewTask 1");    
-    // AÑADIR LA NUEVA TAREA A BD
-    this.taskToCreate.activity = this.parentActivityForTheNewTask;
-    this._diagramDomainService.postANewTask(this.taskToCreate).subscribe(task => {
-      if(task)
-        this._router.navigateByUrl('/create_a_diagram');
+    /*
+      1º Asignar al cuerpo de la tarea a enviar quien es la actividad padre === recastear la tarea
+     */
+    this.taskToCreate = new Task(this.taskToCreate.name, this.taskToCreate.description, this.parentActivityForTheNewTask);
+    console.log(this.taskToCreate);
+
+    /**
+      2º Actualizar la tarea padre
+     */
+    let taskArray: Array<Task>;
+    taskArray = this.parentActivityForTheNewTask.tasks;
+    taskArray.push(this.taskToCreate);
+    console.log(taskArray);
+    
+    this._diagramDomainService.updateAnActivity(this.parentActivityForTheNewTask).subscribe(activity => {
+      if(activity)
+      this._router.navigateByUrl('/create_a_diagram');
     });
 
-    console.log("addNewTask 2");
-    // ACTUALIZAR LA ACTIVIDAD
-    // NECESITO EL _ID DE LA ACTIVIDAD QUE CORRESPONDE A ACTIVITY TO CREATE
-    this.activityToCreate.tasks.push(this.taskToCreate);
-    this._diagramDomainService.updateAnActivity(this.activityToCreate).subscribe(activity => {
-      if(activity)
-        this._router.navigateByUrl('/create_a_diagram');
-    })
-
-    console.log("addNewTask 3");
     //window.location.reload();
     
-    console.log("addNewTask 4");
+    
   }
 
   addNewReward()

@@ -32,6 +32,8 @@ export class DiagramDomainService {
 
     updateAnActivity(activityToUpdate: Activity) // DEBE MANTENER LA CONSISTENCIA
     {
+        // Parsear antes el JSON para evitar error por estructura circular
+        
         return this._httpClient.put(this.activitiesURL, activityToUpdate);
     }
 
