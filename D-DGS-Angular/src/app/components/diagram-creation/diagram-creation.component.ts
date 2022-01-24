@@ -123,13 +123,17 @@ export class DiagramCreationComponent implements OnInit {
     let taskArray: Array<Task>;
     taskArray = this.parentActivityForTheNewTask.tasks;
     taskArray.push(this.taskToCreate);
-    console.log(taskArray);
+    const ayguanaday = JSON.stringify(console.log(this.parentActivityForTheNewTask));
+
+    console.log(ayguanaday);
     
+    /*
     this._diagramDomainService.updateAnActivity(this.parentActivityForTheNewTask).subscribe(activity => {
       if(activity)
       this._router.navigateByUrl('/create_a_diagram');
     });
 
+    */
     //window.location.reload();
     
     
