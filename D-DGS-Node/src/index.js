@@ -4,7 +4,8 @@ const express = require("express");
 const userRouter = require('./routers/user');
 const activityRouter = require('./routers/activity');
 const taskRouter = require('./routers/tasks');
-const rewarRouter = require('./routers/reward');
+const rewardRouter = require('./routers/reward');
+const activity_tasksRouter = require('./routers/activity_tasks');
 const mongoose = require('./db/mongoose');
 
 
@@ -26,7 +27,9 @@ app.all('/*', (req, res, next) => {
 app.use(userRouter);
 app.use(activityRouter);
 app.use(taskRouter);
-app.use(rewarRouter);
+app.use(rewardRouter);
+app.use(activity_tasksRouter);
+
 
 app.listen(3000, () =>{
     console.log('Express server running on the port 3000');

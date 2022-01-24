@@ -1,16 +1,8 @@
 const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema({
-    name: {
-        type: String
-    },
-    description: {
-        type: String
-    },
-    // A task is related with one activity
-    activity: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Activity'
-    }
+    name: String,
+    description: String
 },  {
     timestamps: true
 });
