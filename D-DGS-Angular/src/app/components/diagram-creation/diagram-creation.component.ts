@@ -3,7 +3,10 @@ import { Router } from "@angular/router";
 import { Activity } from 'src/app/models/activity';
 import { Reward } from 'src/app/models/reward';
 import { Task } from 'src/app/models/task';
+import { Activity_Tasks} from 'src/app/models/activity_tasks'
 import { DiagramDomainService } from "src/app/services/diagramDomain.service";
+
+import { Observable, of } from "rxjs";
 
 @Component({
   selector: 'app-diagram-creation',
@@ -15,10 +18,11 @@ export class DiagramCreationComponent implements OnInit {
   // Variables fase 1
   public Activities: any = [];
   public Tasks: any = [];
+  public Activities_Tasks: any = [];
   public newTasksArray: Task[] = new Array<Task>();
-  public activityToCreate: Activity = new Activity("","",this.newTasksArray);
-  public parentActivityForTheNewTask: Activity = new Activity("","",this.newTasksArray);
-  public taskToCreate: Task = new Task("","", this.parentActivityForTheNewTask);
+  public activityToCreate: Activity = new Activity("","");
+  public parentActivityForTheNewTask: Activity = new Activity("","");
+  public taskToCreate: Task = new Task("","");
   
   // Variables fase 2
   public Rewards: any = [];
@@ -49,6 +53,9 @@ export class DiagramCreationComponent implements OnInit {
     })
     if(this.Activities)
       this.ActivitiesOnDB;
+    this._diagramDomainService.getAllA_T().subscribe(relationships => {
+      this.Activities_Tasks = relationships;
+    })    
 
     this._diagramDomainService.getRewards().subscribe(rewards => {
       this.Rewards = rewards;
@@ -95,10 +102,7 @@ export class DiagramCreationComponent implements OnInit {
     this.addNewRewardIsClicked = (this.addNewRewardIsClicked) ? false: true;
   }
 
-  activtyHasTaskAttached(activityToEvaluate: Activity) // To display or not some text on the page view
-  {
-    return activityToEvaluate.tasks.length != 0;
-  }
+  /* ACTIVITY */
 
   addNewActivity()
   {
@@ -106,37 +110,36 @@ export class DiagramCreationComponent implements OnInit {
       if(activity)
         this._router.navigateByUrl('/create_a_diagram');
     });
+
+    // Añadir nueva "Tabla de relaciones"
+    window.location.reload();
+  }
+
+  removeActivity(activityToRemove: any)
+  {
+    let actReference: any = activityToRemove;
+
+    this._diagramDomainService.getAnA_T(actReference._id).subscribe(rel => {
+      if(rel != null) // Existen tareas asociadas a la actividad
+      {
+        let relationReference: any = rel;
+        let tasks: Array<string> = relationReference.tasks;
+        tasks.forEach(ID => {          
+          this._diagramDomainService.deleteATask(ID).subscribe(res => {})
+        });
+        // Borrar la propia relación
+        this._diagramDomainService.deleteAnA_T(relationReference._id).subscribe(val => {})
+      }
+      // Borrar la actividad
+      this._diagramDomainService.deleteAnActivity(actReference._id).subscribe(val => {})     
+    })
+    
     window.location.reload();
   }
 
   addNewTask()
   {
-    /*
-      1º Asignar al cuerpo de la tarea a enviar quien es la actividad padre === recastear la tarea
-     */
-    this.taskToCreate = new Task(this.taskToCreate.name, this.taskToCreate.description, this.parentActivityForTheNewTask);
-    console.log(this.taskToCreate);
 
-    /**
-      2º Actualizar la tarea padre
-     */
-    let taskArray: Array<Task>;
-    taskArray = this.parentActivityForTheNewTask.tasks;
-    taskArray.push(this.taskToCreate);
-    const ayguanaday = JSON.stringify(console.log(this.parentActivityForTheNewTask));
-
-    console.log(ayguanaday);
-    
-    /*
-    this._diagramDomainService.updateAnActivity(this.parentActivityForTheNewTask).subscribe(activity => {
-      if(activity)
-      this._router.navigateByUrl('/create_a_diagram');
-    });
-
-    */
-    //window.location.reload();
-    
-    
   }
 
   addNewReward()
