@@ -28,7 +28,8 @@
                                 <li>
                                     <div>Activity name: {{activity.name}}</div>
                                     <div>Activity description: {{activity.description}}</div>
-                                    <div *ngIf="activtyHasTaskAttached(activity)">
+                                    <div><button (click)="removeActivity(activity)">Remove activity</button></div>
+                                    <div >
                                         <h4>Tasks Attached to the Activity</h4>
                                         <ul *ngFor="let task of activity.tasks">
                                             <li>
@@ -36,9 +37,6 @@
                                                 <div>Task description: {{task.description}}</div>
                                             </li>
                                         </ul>
-                                    </div>
-                                    <div *ngIf="!activtyHasTaskAttached(activity)">
-                                        <h4>This Activity has now task attached</h4>
                                     </div>
                                     <button (click)="addNewTaskClicked(activity)">Add a new task to this activity</button>
                                 </li>

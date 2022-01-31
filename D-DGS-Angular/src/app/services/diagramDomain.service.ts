@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Activity } from "../models/activity";
 import { Task } from "../models/task";
+import { Activity_Tasks } from "../models/activity_tasks";
 import { Reward } from "../models/reward";
 
 @Injectable({
@@ -30,12 +31,12 @@ export class DiagramDomainService {
         return this._httpClient.post(this.activitiesURL, activityToPost);
     }
 
-    updateAnActivity(activityToUpdate: Activity) // DEBE MANTENER LA CONSISTENCIA
+    updateAnActivity(activityToUpdate: Activity)
     {
         return this._httpClient.put(this.activitiesURL, activityToUpdate);
     }
 
-    deleteAnActivity(activityID: string) // DEBE MANTENER LA CONSISTENCIA
+    deleteAnActivity(activityID: string)
     {
         return this._httpClient.delete(this.activitiesURL+"/"+activityID);
     }
@@ -59,6 +60,34 @@ export class DiagramDomainService {
     deleteATask(taskID: string)
     {
         return this._httpClient.delete(this.tasksURL+"/"+taskID);
+    }
+
+    /* ACTIVITY - REWARDS */
+    private Activity_TasksURL: string = "http://localhost:3000/activities_tasks"
+
+    getAllA_T()
+    {
+        return this._httpClient.get(this.Activity_TasksURL);
+    }
+
+    getAnA_T(parentActivityID: string)
+    {
+        return this._httpClient.get(this.Activity_TasksURL+"/"+parentActivityID);
+    }
+
+    postANewA_T(relationship: Activity_Tasks)
+    {
+        return this._httpClient.post(this.Activity_TasksURL, relationship);
+    }
+
+    updateAnA_T(relationship: Activity_Tasks)
+    {
+        return this._httpClient.put(this.Activity_TasksURL+"/"+relationship.activity, relationship);
+    }
+
+    deleteAnA_T(parentActivityID: string)
+    {
+        return this._httpClient.delete(this.Activity_TasksURL+"/"+parentActivityID);
     }
 
     /* REWARDS */

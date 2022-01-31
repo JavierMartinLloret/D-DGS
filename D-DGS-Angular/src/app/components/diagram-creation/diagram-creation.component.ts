@@ -111,7 +111,6 @@ export class DiagramCreationComponent implements OnInit {
         this._router.navigateByUrl('/create_a_diagram');
     });
 
-    // Añadir nueva "Tabla de relaciones"
     window.location.reload();
   }
 
@@ -137,9 +136,17 @@ export class DiagramCreationComponent implements OnInit {
     window.location.reload();
   }
 
-  addNewTask()
+  addNewTask(parentActivity: any)
   {
+    /*
+        Crear la petición para la tarea y "rescatar" el ObjectID generado.
 
+        Obtener el Objeto Relaciones de la actividad.
+
+        Si existe el objeto de relaciones, modifico el array de tareas (añadir el nuevo ObjectID).
+
+        Si no existe, creo el objeto tanto con el ID de la actividad como con el ID de la tarea.
+    */
   }
 
   addNewReward()
