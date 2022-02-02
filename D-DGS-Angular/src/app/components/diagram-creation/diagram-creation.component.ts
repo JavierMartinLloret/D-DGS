@@ -102,41 +102,63 @@ export class DiagramCreationComponent implements OnInit {
     this.addNewRewardIsClicked = (this.addNewRewardIsClicked) ? false: true;
   }
 
+  getLocalActivity(id: string) // Because who cares about efficiency?
+  {
+    let seekedActivity: Activity = new Activity("","");
+    this.Activities.forEach((activity: any) => {
+      if(activity._id == id)
+        seekedActivity = activity;
+    });
+
+    return seekedActivity;
+  }
+
+  getLocalTask(id: string)
+  {
+    let seekedTask: Task = new Task("","");
+    this.Tasks.forEach((task: any) => {
+      if(task._id == id)
+        seekedTask = task;
+    });
+
+    return seekedTask;
+  }
+
   /* ACTIVITY */
 
   addNewActivity()
   {
-    this._diagramDomainService.postANewActivity(this.activityToCreate).subscribe(activity => {
-      if(activity)
-        this._router.navigateByUrl('/create_a_diagram');
+    this._diagramDomainService.postANewActivity(this.activityToCreate).subscribe(newActivityID => {
+      // We also create an empty relationship table for the new activity.
+      let newRelationshipTable: Activity_Tasks = new Activity_Tasks(newActivityID.toString(), new Array<String>());
+
+      this._diagramDomainService.postANewA_T(newRelationshipTable).subscribe(newRelationship => {
+        console.log("New relationship Object: "+newRelationship);
+        window.location.reload(); // WARNING!: MUST BE CALLED *AFTER* THE CALLS AND IN THE DEEPEST LEVEL
+      })            
     });
-
-    window.location.reload();
   }
 
-  removeActivity(activityToRemove: any)
+  // Edit activity (?)
+
+  removeActivity(activityID: string)
   {
-    let actReference: any = activityToRemove;
-
-    this._diagramDomainService.getAnA_T(actReference._id).subscribe(rel => {
-      if(rel != null) // Existen tareas asociadas a la actividad
-      {
-        let relationReference: any = rel;
-        let tasks: Array<string> = relationReference.tasks;
-        tasks.forEach(ID => {          
-          this._diagramDomainService.deleteATask(ID).subscribe(res => {})
-        });
-        // Borrar la propia relación
-        this._diagramDomainService.deleteAnA_T(relationReference._id).subscribe(val => {})
-      }
-      // Borrar la actividad
-      this._diagramDomainService.deleteAnActivity(actReference._id).subscribe(val => {})     
-    })
-    
+    this._diagramDomainService.getAnA_T(activityID).subscribe(rel => {
+    let relationReference: any = rel;
+    let tasks: Array<string> = relationReference.tasks;
+    tasks.forEach(ID => {       //Si no hay tareas asociadas no entra aquí    
+      this._diagramDomainService.deleteATask(ID).subscribe(res => {})
+    });
+    // Borrar la propia relación
+    this._diagramDomainService.deleteAnA_T(relationReference._id).subscribe(val => {})
+    // Borrar la actividad
+    this._diagramDomainService.deleteAnActivity(activityID).subscribe(val => {})
+      
     window.location.reload();
+    })
   }
 
-  addNewTask(parentActivity: any)
+  addNewTask()
   {
     /*
         Crear la petición para la tarea y "rescatar" el ObjectID generado.
@@ -147,6 +169,7 @@ export class DiagramCreationComponent implements OnInit {
 
         Si no existe, creo el objeto tanto con el ID de la actividad como con el ID de la tarea.
     */
+    
   }
 
   addNewReward()

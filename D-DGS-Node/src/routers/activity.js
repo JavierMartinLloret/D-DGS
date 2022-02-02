@@ -31,7 +31,7 @@ activityRouter.post('/activities', async (req, res) => {
     const activity = new Activity(req.body);
     try {
         await activity.save();
-        res.status(201).send(activity);
+        res.status(201).send(activity._id);
     } catch (error) {
         res.status(500).send(error);
     }

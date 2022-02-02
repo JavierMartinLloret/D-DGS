@@ -24,21 +24,19 @@
                     <div class="card-title">
                         <div>
                             <h4>Current Activities:</h4>
-                            <ul *ngFor="let activity of Activities">
+                            <ul *ngFor="let relation of Activities_Tasks">
                                 <li>
-                                    <div>Activity name: {{activity.name}}</div>
-                                    <div>Activity description: {{activity.description}}</div>
-                                    <div><button (click)="removeActivity(activity)">Remove activity</button></div>
-                                    <div >
-                                        <h4>Tasks Attached to the Activity</h4>
-                                        <ul *ngFor="let task of activity.tasks">
-                                            <li>
-                                                <div>Task name: {{task.name}}</div>
-                                                <div>Task description: {{task.description}}</div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <button (click)="addNewTaskClicked(activity)">Add a new task to this activity</button>
+                                    <div>Activity: {{getLocalActivity(relation.activity).name}}</div>
+                                    <div>Description: {{getLocalActivity(relation.activity).description}}</div>
+                                    <div><button (click)="removeActivity(relation.activity)">Remove activity</button></div>
+                                    <h4>Tasks attached to the activity:</h4>
+                                    <ul *ngFor="let task of relation.tasks">
+                                        <li>
+                                            <div>Task: {{getLocalTask(task).name}}</div>
+                                            <div>Description: {{getLocalTask(task).description}}</div>
+                                        </li>
+                                    </ul>
+                                    <button (click)="addNewTaskClicked(relation.activity)">Add a new task to this activity</button>
                                 </li>
                             </ul>
                             <div *ngIf="addNewTaskIsClicked">
