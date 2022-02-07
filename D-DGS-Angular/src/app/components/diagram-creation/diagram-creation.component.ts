@@ -21,8 +21,8 @@ export class DiagramCreationComponent implements OnInit {
   public Activities_Tasks: any = [];
   public newTasksArray: Task[] = new Array<Task>();
   public activityToCreate: Activity = new Activity("","");
-  public parentActivityForTheNewTask: Activity = new Activity("","");
   public taskToCreate: Task = new Task("","");
+  public relationshipWhichWillBeUpdated: Activity_Tasks = new Activity_Tasks("",new Array<string>());
   
   // Variables fase 2
   public Rewards: any = [];
@@ -91,9 +91,9 @@ export class DiagramCreationComponent implements OnInit {
     this.addNewActivityIsClicked = (this.addNewActivityIsClicked) ? false: true;
   }
 
-  addNewTaskClicked(parentActivity: Activity)
+  addNewTaskClicked(relationshipToUpdate: Activity_Tasks)
   {
-    this.parentActivityForTheNewTask = parentActivity;
+    this.relationshipWhichWillBeUpdated = relationshipToUpdate;
     this.addNewTaskIsClicked = (this.addNewTaskIsClicked) ? false: true;
   }
 
@@ -133,7 +133,6 @@ export class DiagramCreationComponent implements OnInit {
       let newRelationshipTable: Activity_Tasks = new Activity_Tasks(newActivityID.toString(), new Array<String>());
 
       this._diagramDomainService.postANewA_T(newRelationshipTable).subscribe(newRelationship => {
-        console.log("New relationship Object: "+newRelationship);
         window.location.reload(); // WARNING!: MUST BE CALLED *AFTER* THE CALLS AND IN THE DEEPEST LEVEL
       })            
     });
@@ -160,15 +159,35 @@ export class DiagramCreationComponent implements OnInit {
 
   addNewTask()
   {
-    /*
-        Crear la petición para la tarea y "rescatar" el ObjectID generado.
+    this._diagramDomainService.postANewTask(this.taskToCreate).subscribe((newTask: any) => {
+      let auxArray: Array<String> = this.relationshipWhichWillBeUpdated.tasks;
+      auxArray.push(newTask._id);
+      this.relationshipWhichWillBeUpdated.tasks = auxArray;
+      this._diagramDomainService.updateAnA_T(this.relationshipWhichWillBeUpdated).subscribe(rel => {window.location.reload();})
+    })
+  }
 
-        Obtener el Objeto Relaciones de la actividad.
-
-        Si existe el objeto de relaciones, modifico el array de tareas (añadir el nuevo ObjectID).
-
-        Si no existe, creo el objeto tanto con el ID de la actividad como con el ID de la tarea.
+  removeTask(parentActivityID: string, taskID: string)
+  {
+    /*Eliminar del array de tareas de la A_Ts el ID de la tarea a eliminar
+        Actualizar la relación en BDD
+      Eliminar la propia tarea de la BDD 
     */
+    this._diagramDomainService.getAnA_T(parentActivityID).subscribe((relation: any) => {
+      let tasksAttached: Array<String> = relation.tasks;
+      let newTaskArray: Array<String> = new Array<String>();
+      tasksAttached.forEach((task: String) => {
+        if(task != taskID)
+          newTaskArray.push(task);
+      })
+      relation.tasks = newTaskArray;
+
+      this._diagramDomainService.updateAnA_TAny(relation).subscribe((result:any) => {
+        window.location.reload();
+      })
+    })
+    this._diagramDomainService.deleteATask(taskID).subscribe((result:any) => {
+    })
     
   }
 

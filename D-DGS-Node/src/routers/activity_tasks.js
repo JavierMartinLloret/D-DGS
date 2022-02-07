@@ -17,7 +17,6 @@ activity_tasksRouter.get('/activities_tasks/:id', async (req, res) => {
         const parentActivityID = req.params.id;
         const query = {"activity": parentActivityID};
         const relationship = await activity_tasksModel.findOne(query);
-        console.log("Relationship returned");
         res.status(200).send(relationship);
     } catch (error) {
         res.status(500).send(error);
@@ -36,7 +35,7 @@ activity_tasksRouter.post('/activities_tasks', async (req, res) => {
 
 activity_tasksRouter.put('/activities_tasks/:id', async (req, res) =>{
     try {
-        const updatedRelationshipID = req.params.id;
+        const updatedRelationshipID = req.body._id;
         const updatedRelationship = new activity_tasksModel(req.body);
 
         const query = {"_id": updatedRelationshipID};
@@ -56,7 +55,7 @@ activity_tasksRouter.put('/activities_tasks/:id', async (req, res) =>{
 
 activity_tasksRouter.delete('/activities_tasks/:id', async (req, res) => {
     try {
-        const relationshipID = req.params.id;
+        const relationshipID = req.params.id; //body._id??
         const query = {"_id": relationshipID};
 
         await activity_tasksModel.deleteOne(query);

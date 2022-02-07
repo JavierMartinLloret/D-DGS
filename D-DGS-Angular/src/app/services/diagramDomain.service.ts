@@ -85,6 +85,11 @@ export class DiagramDomainService {
         return this._httpClient.put(this.Activity_TasksURL+"/"+relationship.activity, relationship);
     }
 
+    updateAnA_TAny(relationship: any)
+    {
+        return this._httpClient.put(this.Activity_TasksURL+"/"+relationship.activity, relationship);
+    }
+
     deleteAnA_T(parentActivityID: string)
     {
         return this._httpClient.delete(this.Activity_TasksURL+"/"+parentActivityID);

@@ -34,9 +34,11 @@
                                         <li>
                                             <div>Task: {{getLocalTask(task).name}}</div>
                                             <div>Description: {{getLocalTask(task).description}}</div>
+                                            <div><button (click)="removeTask(relation.activity, task)">Remove this task</button></div>                                            
                                         </li>
                                     </ul>
-                                    <button (click)="addNewTaskClicked(relation.activity)">Add a new task to this activity</button>
+                                    
+                                    <button (click)="addNewTaskClicked(relation)">Add a new task to this activity</button>
                                 </li>
                             </ul>
                             <div *ngIf="addNewTaskIsClicked">
