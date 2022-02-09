@@ -90,18 +90,7 @@
 
         <div>
             <button (click)="loadSection1()" [routerLink]="['/create_a_diagram']">Go back to section 1: Domain creation area</button>
-            <button (click)="loadSection3()" [routerLink]="['/create_a_diagram']">Go to section 3: Desing area</button>
+            <button [routerLink]="['/create_a_diagram/desing']">Go to section 3: Desing area</button>
         </div>
     </div>
-    <div *ngIf="userInDesingFase == true">
-        <h3>Currently on section 3: Desing Area</h3>
-        <div>
-            <button (click)="loadSection2()" [routerLink]="['/create_a_diagram']">Go back to section 2: Rewards creation area</button>
-        </div>
-        <div>
-            <button>Download the diagram!(Ojalá tuviera acabao)</button>
-        </div>
-    </div>
-
-
 </div>

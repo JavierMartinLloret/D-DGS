@@ -6,8 +6,6 @@ import { Task } from 'src/app/models/task';
 import { Activity_Tasks} from 'src/app/models/activity_tasks'
 import { DiagramDomainService } from "src/app/services/diagramDomain.service";
 
-import { Observable, of } from "rxjs";
-
 @Component({
   selector: 'app-diagram-creation',
   templateUrl: './diagram-creation.component.html',
@@ -28,11 +26,12 @@ export class DiagramCreationComponent implements OnInit {
   public Rewards: any = [];
   public rewardToCreate: Reward = new Reward("","");
 
-  // Flags fase 1
-  public ActivitiesOnDB: boolean = false;
+  // Flags multifase
   public userInDomainFase: boolean = true;
   public userInRewardFase: boolean = false;
-  public userInDesingFase: boolean = false;
+
+  // Flags fase 1
+  public ActivitiesOnDB: boolean = false;
   public addNewActivityIsClicked: boolean = false;
   public addNewTaskIsClicked: boolean = false;
 
@@ -45,6 +44,17 @@ export class DiagramCreationComponent implements OnInit {
               private _router: Router) { }
 
   ngOnInit(): void {
+    if(sessionStorage.getItem("userInDomainFase") == null)
+    {
+      sessionStorage.setItem("userInDomainFase", "true");
+      sessionStorage.setItem("userInRewardFase", "false");
+    }
+    else
+    {
+      this.userInDomainFase = (sessionStorage.getItem("userInDomainFase") == "true") ? true: false;
+      this.userInRewardFase = (sessionStorage.getItem("userInRewardFase") == "true") ? true: false; 
+    } 
+
     this._diagramDomainService.getActivities().subscribe(activities => {
       this.Activities = activities;
     })
@@ -56,7 +66,6 @@ export class DiagramCreationComponent implements OnInit {
     this._diagramDomainService.getAllA_T().subscribe(relationships => {
       this.Activities_Tasks = relationships;
     })    
-
     this._diagramDomainService.getRewards().subscribe(rewards => {
       this.Rewards = rewards;
     })
@@ -64,26 +73,20 @@ export class DiagramCreationComponent implements OnInit {
       this.thereAreRewards = true;
   }
 
-  /* Este uso de la lógica sería ulceroso ante los ojos de Paco, pero más triste es robar. */
   loadSection1()
   {
     this.userInDomainFase = true;
     this.userInRewardFase = false;
-    this.userInDesingFase = false;
+    sessionStorage.setItem("userInDomainFase", "true");
+    sessionStorage.setItem("userInRewardFase", "false");
   }
 
   loadSection2()
   {
     this.userInDomainFase = false;
     this.userInRewardFase = true;
-    this.userInDesingFase = false;
-  }
-
-  loadSection3()
-  {
-    this.userInDomainFase = false;
-    this.userInRewardFase = false;
-    this.userInDesingFase = true;
+    sessionStorage.setItem("userInDomainFase", "false");
+    sessionStorage.setItem("userInRewardFase", "true");
   }
 
   addNewActivityClicked()
@@ -157,6 +160,8 @@ export class DiagramCreationComponent implements OnInit {
     })
   }
 
+  /* TASK */
+
   addNewTask()
   {
     this._diagramDomainService.postANewTask(this.taskToCreate).subscribe((newTask: any) => {
@@ -191,21 +196,17 @@ export class DiagramCreationComponent implements OnInit {
     
   }
 
+  /* REWARD */
+
   addNewReward()
   {
-    this._diagramDomainService.postANewReward(this.rewardToCreate).subscribe(reward => {
-      if(reward)
-        this._router.navigateByUrl('/create_a_diagram');
-    })
+    this._diagramDomainService.postANewReward(this.rewardToCreate).subscribe(reward => {})
     window.location.reload();
   }
 
   deleteReward(rewardToDelete: any)
   {    
-    this._diagramDomainService.deleteAReward(rewardToDelete._id).subscribe(reward => {
-      if(reward)
-        this._router.navigateByUrl('/create_a_diagram');
-    })
+    this._diagramDomainService.deleteAReward(rewardToDelete._id).subscribe(reward => {})
     window.location.reload();
   }
 
