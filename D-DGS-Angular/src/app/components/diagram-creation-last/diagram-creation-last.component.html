@@ -1,3 +1,47 @@
 <div>
-    <h3>Currently on section 3: Desing Area [NO DRAG VERSION]</h3>
+    <h1>Diagram Desing Area</h1>
+    <div>
+        <h2>Creating a new Line</h2>
+        <div>
+            <h3>Current Line Activities:</h3>
+            <ul *ngFor="let a of currentLineActivities">
+                <li>{{a.name}}</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Add an Activity to the line</h3>
+            <select [(ngModel)]="activitySelected">
+                <option *ngFor="let a of Activities" [ngValue]="a">{{a.name}}</option>
+            </select>
+            <button (click)="addAnActivityToTheLine(activitySelected)">Add the Activity</button>
+        </div>
+        <div>
+            <h3>Current Line Rewards:</h3>
+            <ul *ngFor="let r of currentLineRewards">
+                <li>{{r.name}}</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Add a reward to the Line:</h3>
+            <select [(ngModel)]="rewardSelected">
+                <option *ngFor="let r of Rewards" [ngValue]="r">{{r.name}}</option>
+            </select>
+            <button (click)="addARewardToTheLine(rewardSelected)">Add the Reward</button>
+        </div>
+        <button (click)="createALine()">Create the Line</button>
+        <div>
+            <h2>Current Lines created:</h2>
+        </div>
+        <div>
+            <h2>Lines added to this Diagram:</h2>
+        </div>
+        <button (click)="createTheDiagram()">Create the Diagram</button>
+    </div>
+    <div>
+        <h2></h2>
+    </div>
+</div>
+<div>
+    <h1>DEBUG AREA</h1>
+    <button (click)="clearSessionStorage()">Clear SessionStorage</button>
 </div>
