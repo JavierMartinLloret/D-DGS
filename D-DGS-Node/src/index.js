@@ -6,6 +6,7 @@ const activityRouter = require('./routers/activity');
 const taskRouter = require('./routers/tasks');
 const rewardRouter = require('./routers/reward');
 const activity_tasksRouter = require('./routers/activity_tasks');
+const lineRouter = require('./routers/line');
 const mongoose = require('./db/mongoose');
 
 
@@ -29,6 +30,7 @@ app.use(activityRouter);
 app.use(taskRouter);
 app.use(rewardRouter);
 app.use(activity_tasksRouter);
+app.use(lineRouter);
 
 
 app.listen(3000, () =>{

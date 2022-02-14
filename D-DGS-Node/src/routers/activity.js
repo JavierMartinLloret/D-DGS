@@ -40,7 +40,6 @@ activityRouter.post('/activities', async (req, res) => {
 // Upadte an activity
 activityRouter.put('/activities', async (req, res) => {
     try {
-        console.log(req);
         const updatedActivity = new Activity(req.body);
         
         const query = {"_id": req.body._id}; //     OBJETO LLEGA SIN ESTE _ID INICIALIZADO
