@@ -1,7 +1,5 @@
 const express = require("express");
 const LineModel = require("../models/line");
-const ActivityModel = require("../models/activity");
-const RewardModel = require("../models/reward");
 const Line = require("../models/line");
 
 const LineRouter = new express.Router();
@@ -60,7 +58,6 @@ LineRouter.delete('/lines/:id', async (req, res) => {
     try {
         const lineID = req.params.id;
         const query = {"_id": lineID};
-        console.log(lineID);
 
         await LineModel.deleteOne(query);
 
