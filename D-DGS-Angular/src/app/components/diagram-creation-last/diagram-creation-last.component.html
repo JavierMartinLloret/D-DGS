@@ -1,7 +1,7 @@
 <div>
     <h1>Diagram Desing Area</h1>
     <div>
-        <h2>Creating a new Line</h2>
+        <h2>Create a new Line</h2>
         <div>
             <h3>Current Line Activities:</h3>
             <ul *ngFor="let a of currentLineActivities">
@@ -28,14 +28,27 @@
             </select>
             <button (click)="addARewardToTheLine(rewardSelected)">Add the Reward</button>
         </div>
-        <button (click)="createALine()">Create the Line</button>
         <div>
-            <h2>Current Lines created:</h2>
+            <button (click)="createALine()">Create the Line</button>
+        </div>
+        <h2>Create a new Diagram</h2>
+        <div>
+            <h3>Add a Line to the Diagram</h3>
+            <select [(ngModel)]="lineSelected">
+                <option *ngFor="let l of Lines" [ngValue]="l">ID:{{l._id}}</option>
+            </select>
+            <button (click)="addALineToTheDiagram(lineSelected)">Add the line</button>
         </div>
         <div>
-            <h2>Lines added to this Diagram:</h2>
+            <h3>Current Lines for the new Diagram:</h3>
+            <ul *ngFor="let l of currentDiagramLines">
+                <li>{{l._id}}</li>
+            </ul>
         </div>
-        <button (click)="createTheDiagram()">Create the Diagram</button>
+        <div>
+            <button (click)="createTheDiagram()">Create the Diagram</button>
+        </div>
+
     </div>
     <div>
         <h2></h2>

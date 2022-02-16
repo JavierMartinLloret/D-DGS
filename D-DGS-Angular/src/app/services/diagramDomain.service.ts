@@ -5,6 +5,8 @@ import { Activity } from "../models/activity";
 import { Task } from "../models/task";
 import { Activity_Tasks } from "../models/activity_tasks";
 import { Reward } from "../models/reward";
+import { Line } from "../models/line";
+import { Diagram } from "../models/diagram";
 
 @Injectable({
     providedIn: 'root'
@@ -97,7 +99,7 @@ export class DiagramDomainService {
 
     /* REWARDS */
 
-    private rewardsURL: string ="http://localhost:3000/rewards"
+    private rewardsURL: string ="http://localhost:3000/rewards";
 
     getRewards() {
         return this._httpClient.get(this.rewardsURL);
@@ -115,4 +117,55 @@ export class DiagramDomainService {
     deleteAReward(rewardID: string) {
         return this._httpClient.delete(this.rewardsURL+"/"+rewardID);
     }
+
+    /* LINE */
+
+    private linesURL: string ="http://localhost:3000/lines";
+
+    getLines(){
+        return this._httpClient.get(this.linesURL);
+    }
+
+    getALine(LineID: string){
+        return this._httpClient.get(this.linesURL+"/"+LineID);
+    }
+
+    postALine(lineToPost: Line){
+        return this._httpClient.post(this.linesURL, lineToPost);
+    }
+
+    // updateALine
+
+    deleteALine(LineID: string){
+        return this._httpClient.delete(this.linesURL);
+    }
+
+    /* DIAGRAM */
+
+    private diagramURL: string ="http://localhost:3000/diagrams"
+
+    getDiagrams(){
+        return this._httpClient.get(this.diagramURL);
+    }
+
+    getADiagram(DiagramID: string){
+        return this._httpClient.get(this.diagramURL+"/"+DiagramID);
+    }
+
+    postADiagram(diagramToPost: Diagram){
+        return this._httpClient.post(this.diagramURL, diagramToPost);
+    }
+
+    updateADiagram(diagramToUpdate: Diagram){
+        return this._httpClient.put(this.diagramURL+"/"+diagramToUpdate._id, diagramToUpdate);
+    }
+
+    deleteADiagram(DiagramID: string){
+        return this._httpClient.delete(this.diagramURL+"/"+DiagramID);
+    }
+
+
+
+
+
 }
