@@ -4,10 +4,10 @@ import { Reward } from 'src/app/models/reward';
 import { Line } from 'src/app/models/line';
 import { Diagram } from "src/app/models/diagram";
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
+import { Router } from '@angular/router';
 
-  /**
-   * SESSIONSTORAGE KEY VALUES
-   */
+const LOG_TOKEN: string = "LOG_TOKEN";
+// LOG_TOKEN: null | FAILED | identificador del dominio del usuario
 const ActivitiesBuffer: string = "ProvActivities";
 const RewardsBuffer: string = "ProvRewards";
 const LinesBuffer: string = "ProvLines";
@@ -34,9 +34,7 @@ export class DiagramCreationLastComponent implements OnInit {
 
   // Flags
 
-  constructor(private _diagramDomainService: DiagramDomainService) { }
-
-  ngOnInit(): void {
+  constructor(private _diagramDomainService: DiagramDomainService, private _router: Router) {
     this._diagramDomainService.getActivities().subscribe(a => {this.Activities = a;})
     this._diagramDomainService.getRewards().subscribe(r => {this.Rewards = r;})
     this._diagramDomainService.getLines().subscribe((lines: any) => {this.Lines = lines})
@@ -52,6 +50,14 @@ export class DiagramCreationLastComponent implements OnInit {
     obj = sessionStorage.getItem(LinesBuffer);
     if(obj != null)
     {this.currentDiagramLines = JSON.parse(obj);} 
+  }
+
+  ngOnInit(): void {    
+    if(sessionStorage.getItem(LOG_TOKEN) == null || sessionStorage.getItem(LOG_TOKEN) == "FAILED")
+    {
+      sessionStorage.removeItem(LOG_TOKEN);  
+      this._router.navigateByUrl('/login');
+    }  
   }
 
   addAnActivityToTheLine(activity: Activity)

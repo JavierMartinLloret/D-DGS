@@ -6,6 +6,9 @@ import { Task } from 'src/app/models/task';
 import { Activity_Tasks} from 'src/app/models/activity_tasks'
 import { DiagramDomainService } from "src/app/services/diagramDomain.service";
 
+const LOG_TOKEN: string = "LOG_TOKEN";
+// LOG_TOKEN: null | FAILED | identificador del dominio del usuario
+
 @Component({
   selector: 'app-diagram-creation',
   templateUrl: './diagram-creation.component.html',
@@ -40,10 +43,7 @@ export class DiagramCreationComponent implements OnInit {
   public addNewRewardIsClicked: boolean = false;
   
 
-  constructor(private _diagramDomainService: DiagramDomainService,
-              private _router: Router) { }
-
-  ngOnInit(): void {
+  constructor(private _diagramDomainService: DiagramDomainService, private _router: Router) {
     if(sessionStorage.getItem("userInDomainFase") == null)
     {
       sessionStorage.setItem("userInDomainFase", "true");
@@ -71,6 +71,14 @@ export class DiagramCreationComponent implements OnInit {
     })
     if(this.Rewards)
       this.thereAreRewards = true;
+  }
+
+  ngOnInit(): void {
+    if(sessionStorage.getItem(LOG_TOKEN) == null || sessionStorage.getItem(LOG_TOKEN) == "FAILED")
+    {
+      sessionStorage.removeItem(LOG_TOKEN);  
+      this._router.navigateByUrl('/login');
+    }
   }
 
   loadSection1()

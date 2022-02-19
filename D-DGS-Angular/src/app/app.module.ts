@@ -22,7 +22,7 @@ const routes: Routes = [
   {path: 'create_a_diagram', component: DiagramCreationComponent},
   {path: 'create_a_diagram/desing', component: DiagramCreationLastComponent},
   {path: 'login', component: LoginComponent},
-  {path: '', redirectTo: '/users', pathMatch: 'full'},
+  {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: 'test', component: TestDiagramComponent},
   {path: '**', component: PageNotFoundComponent}
 ]
