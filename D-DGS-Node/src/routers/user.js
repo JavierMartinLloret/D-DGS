@@ -3,7 +3,7 @@ const User = require("../models/user");
 const UserModel = require('../models/user');
 const userRouter = new express.Router();
 
-// Get all users
+// Get All
 userRouter.get('/users', async (req, res) => {
     try {
         const users = await UserModel.find({});
@@ -12,19 +12,43 @@ userRouter.get('/users', async (req, res) => {
         res.status(500).send(error);
     }
 })
-// Returns the searched user or an empty object
+// Get One By ID
 userRouter.get('/users/:id', async (req, res) => {
     try {
-        let searchedId = new Number(req.params.id).valueOf();
-        let query ={"id": searchedId};
+        const userID = req.params.id;
+        const query = {"_id": DiagramID};
+        const userSought = await UserModel.findOne(query);
 
-        const user = await UserModel.findOne(query);
-
-        if (user != null)
-            res.status(200).send(user);
-        else
-            res.status(204).send({});
-
+        res.status(200).send(userSought);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+// Get DomainID
+userRouter.get('/users/:nick/:pass', async (req, res) => {
+    const query = {
+        "nickname": req.params.nick,
+        "password": req.params.pass
+    };
+    let userSought;
+    try {
+        userSought = await UserModel.findOne(query);        
+    } catch (error) {
+        res.status(500).send(error);
+    }
+    if(userSought != null)
+        res.status(200).send(JSON.stringify(userSought.domainIdentificator));
+    else
+        res.status(200).send(JSON.stringify("FAILED"));  
+    
+    
+})
+// Post One
+userRouter.post('/users', async (req, res) => {
+    const user = new User(req.body);
+    try {
+        await user.save();
+        res.status(201).send(user); // 201 === Resource created
     } catch (error) {
         res.status(500).send(error);
     }
@@ -32,23 +56,18 @@ userRouter.get('/users/:id', async (req, res) => {
 // Modifies the user's profile
 userRouter.put('/users/:id', async (req, res) => {
     try {
-        const userID = new Number(req.params.id).valueOf();
-        const updatedUser = new User(req.body);
-
-
-        const query = {"id": userID};
+        const updatedUser = new UserModel(req.body);
+        const query = {"_id": req.params.id};
         const update = {$set:{
             "nickname": updatedUser.nickname,
             "email": updatedUser.email,
             "password": updatedUser.password,
-            "is_active": updatedUser.is_active,
-            "type_user": updatedUser.type_user
-        }};
+            "domainIdentificator": updatedUser.domainIdentificator
+        }}
 
         await UserModel.updateOne(query, update);
 
         res.status(200).send(true);
-
     } catch (error) {
         res.status(500).send(error);
     }
@@ -57,8 +76,8 @@ userRouter.put('/users/:id', async (req, res) => {
 // Deletes the user from DB
 userRouter.delete('/users/:id', async (req, res) => {
     try {
-        const userID = new Number(req.params.id).valueOf();
-        const query = {"id": userID}
+        const userID = req.params.id;
+        const query = {"_id": userID};
 
         await UserModel.deleteOne(query);
 
@@ -71,36 +90,7 @@ userRouter.delete('/users/:id', async (req, res) => {
 // GetLastIdFromUsers
 userRouter.get('/lastId', async (req, res) =>{
     try {
-        const query = {};
-        const sortParameters = {id: -1}; // Orden decreciente
-        let lastInsertedUser = await UserModel.findOne(query).sort(sortParameters);
-        let id = new Number(-1);
-
-        if(lastInsertedUser != null) // Si no hubiera ningún usuario, se devuelve el id -1
-        {
-            let string = new String(lastInsertedUser);
-            // Eliminamos el identificador de mongo
-            let position = string.lastIndexOf("id:");
-            string = string.substring(position, string.length);
-            // Acotamos al identificador como tal
-            let initialPosition = string.search(":");
-            position = string.search(",");
-            id = string.substring(initialPosition+2, position); // +2=== :ESPACIO
-        }
         
-        res.status(200).send(id);
-
-    } catch (error) {
-        res.status(500).send(error);
-    }
-})
-
-
-userRouter.post('/users', async (req, res) => {
-    const user = new User(req.body);
-    try {
-        await user.save();
-        res.status(201).send(user); // 201 === Resource created
     } catch (error) {
         res.status(500).send(error);
     }

@@ -7,9 +7,7 @@ import { User } from '../models/user';
 })
 export class UsersService {
 
-  private baseURL: string = "http://localhost:3000/users"; //URL de la API con la BD Mongo
-
-  private lastIDURL: string = "http://localhost:3000/lastID";
+  private baseURL: string = "http://localhost:3000/users";
 
   constructor(private _httpClient: HttpClient) { }
 
@@ -22,7 +20,12 @@ export class UsersService {
     return this._httpClient.get(this.baseURL+"/"+id);
   }
 
-  putUser(id: number, user: User)
+  getUserDomainIdentificator(nickname: String, password: String)
+  {
+    return this._httpClient.get(this.baseURL+"/"+nickname+"/"+password);
+  }
+
+  updateUser(id: number, user: User)
   {
     return this._httpClient.put(this.baseURL+"/"+id, user);
   }
@@ -30,10 +33,6 @@ export class UsersService {
   deleteUser(id: number)
   {
     return this._httpClient.delete(this.baseURL+"/"+id);
-  }
-
-  getLastID(){
-    return this._httpClient.get(this.lastIDURL);
   }
 
   postUser(userToPost: User) {

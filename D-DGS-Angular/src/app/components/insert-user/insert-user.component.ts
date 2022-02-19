@@ -18,22 +18,4 @@ export class InsertUserComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  insertUserInDB() {
-    /* Completamos campos no inicializados */
-    this.newUser.is_active ? true: this.newUser.is_active = false;
-    this.newUser.type_user ? true: this.newUser.type_user = false;
-    
-    /* Creamos identificador para el nuevo usuario */
-    this._usersService.getLastID().subscribe(id => {
-      let val = new Number(id).valueOf()+1;
-      this.newUser.id = val;
-      this._usersService.postUser(this.newUser).subscribe(user => {
-        if(user) {
-          this._router.navigateByUrl('/users');
-        }
-      })
-      
-    })
-  }
-
 }

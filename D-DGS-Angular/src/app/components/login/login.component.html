@@ -1,0 +1,12 @@
+<h1>PROVISIONAL LOGGIN</h1>
+<div>
+    <form ngNativeValidate (ngSubmit)="loggin()">
+        <p>Nickname: <input type="text" name="nickname" id="nickname" [(ngModel)]="inputNick" required></p>
+        <p>Password: <input type="text" name="password" id="password" [(ngModel)]="inputPass" required></p>
+        <p><input type="submit" value="Loggin!"></p>
+    </form>
+</div>
+<div class="alert" *ngIf="autenticationFailed">
+    <p>Authentication failed!</p>
+</div>
+

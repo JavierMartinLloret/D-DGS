@@ -13,6 +13,7 @@ import { UserComponent } from './components/user/user.component';
 import { TestDiagramComponent } from './components/test-diagram/test-diagram.component';
 import { DiagramCreationComponent } from './components/diagram-creation/diagram-creation.component';
 import { DiagramCreationLastComponent } from './components/diagram-creation-last/diagram-creation-last.component';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
   {path: 'users', component: ListOfUsersComponent},
@@ -20,6 +21,7 @@ const routes: Routes = [
   {path: 'insert_user', component: InsertUserComponent},
   {path: 'create_a_diagram', component: DiagramCreationComponent},
   {path: 'create_a_diagram/desing', component: DiagramCreationLastComponent},
+  {path: 'login', component: LoginComponent},
   {path: '', redirectTo: '/users', pathMatch: 'full'},
   {path: 'test', component: TestDiagramComponent},
   {path: '**', component: PageNotFoundComponent}
@@ -34,7 +36,8 @@ const routes: Routes = [
     UserComponent,
     TestDiagramComponent,
     DiagramCreationComponent,
-    DiagramCreationLastComponent
+    DiagramCreationLastComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
