@@ -39,9 +39,7 @@ userRouter.get('/users/:nick/:pass', async (req, res) => {
     if(userSought != null)
         res.status(200).send(JSON.stringify(userSought.domainIdentificator));
     else
-        res.status(200).send(JSON.stringify("FAILED"));  
-    
-    
+        res.status(200).send(JSON.stringify("FAILED"));    
 })
 // Post One
 userRouter.post('/users', async (req, res) => {

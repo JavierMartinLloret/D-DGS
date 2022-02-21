@@ -23,6 +23,9 @@ export class LoginComponent implements OnInit {
   constructor(private _userService: UsersService, private _router: Router) {
     if(sessionStorage.getItem(LOG_TOKEN) == "FAILED")
       this.autenticationFailed = true;
+    if(sessionStorage.getItem(LOG_TOKEN) != null)
+      this._router.navigateByUrl('/main')
+
   }
 
   ngOnInit(): void {}
@@ -32,7 +35,14 @@ export class LoginComponent implements OnInit {
   {
     this._userService.getUserDomainIdentificator(this.inputNick, this.inputPass).subscribe((domainKey: any) => {
       sessionStorage.setItem(LOG_TOKEN, domainKey);
-      this._router.navigateByUrl('/users')
+      if(domainKey != 'FAILED')
+        this._router.navigateByUrl('/main')
+      else
+      {
+        sessionStorage.setItem(LOG_TOKEN, 'FAILED');
+        window.location.reload();
+      }
+        
     })
   }  
 

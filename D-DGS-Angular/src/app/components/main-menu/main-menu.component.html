@@ -1,0 +1,18 @@
+<h1>Main Menu</h1>
+
+<div><a class="nav-link" [routerLink]="['/domain_craft_area']" (click)="goToDomainCreation()">
+    Edit your domain
+</a></div>
+<div>
+    <a class="nav-link" [routerLink]="['/desing_your_diagram']" (click)="goToDiagramDesing()">
+    Desing a new diagram
+</a></div>
+<div>
+    <a class="nav-link" [routerLink]="['/']" (click)="goToDiagramArchive()">
+    Already existing diagrams [NOT IMPLEMENTED YET]
+</a></div>
+<div>
+    <a class="nav-link" [routerLink]="['/login']" (click)="logOut()">
+    Log Out!
+    </a>
+</div>
