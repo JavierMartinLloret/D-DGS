@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema({
+    domain_key: String,
     name: String,
     description: String
 },  {

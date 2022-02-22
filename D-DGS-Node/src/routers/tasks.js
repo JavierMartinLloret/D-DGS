@@ -13,6 +13,18 @@ taskRouter.get('/tasks', async (req, res) => {
     }
 })
 
+taskRouter.get('/tasks/domain/:key', async (req, res) => {
+    try {
+        const domainKey = req.params.key;
+        const query = {"domain_key": domainKey};
+        const tasks = await TaskModel.find(query);
+
+        res.status(200).send(tasks);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 taskRouter.get('/tasks/:id', async (req, res) => {
     try {
         const taskID = req.params.id;
