@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const RewardSchema = new mongoose.Schema({
+    domain_key: String,
     name: String,
     description: String
 },  {

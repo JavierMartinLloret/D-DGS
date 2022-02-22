@@ -12,6 +12,18 @@ rewardRouter.get('/rewards', async (req, res) => {
     }
 })
 
+rewardRouter.get('/rewards/domain/:key', async (req, res) => {
+    try {
+        const domainKey = req.params.key;
+        const query = {"domain_key": domainKey};
+        const rewards = await RewardModel.find(query);
+
+        res.status(200).send(rewards);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 rewardRouter.get('/rewards/:id', async (req, res) => {
     try {
         const rewardID = req.params.id;
