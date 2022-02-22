@@ -13,6 +13,19 @@ activityRouter.get('/activities', async (req, res) => {
     }
 })
 
+// Get activities of one specific domain
+activityRouter.get('/activities/domain/:key', async (req, res) => {
+    try {
+        const domainKey = req.params.key;
+        const query = {"domain_key": domainKey}
+        const activities = await ActivityModel.find(query);
+
+        res.status(200).send(activities);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 // Get one activity
 activityRouter.get('/activities/:id', async (req, res) => {
     try {
