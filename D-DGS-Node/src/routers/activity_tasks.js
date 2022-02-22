@@ -11,6 +11,18 @@ activity_tasksRouter.get('/activities_tasks', async (req, res) => {
     }
 })
 
+activity_tasksRouter.get('/activities_tasks/domain/:key', async (req, res) => {
+    try {
+        const domainKey = req.params.key;
+        const query = {"domain_key": domainKey};
+        const relationships = await activity_tasksModel.find(query);
+
+        res.status(200).send(relationships);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 activity_tasksRouter.get('/activities_tasks/:id', async (req, res) => {
     try {
         /* THE ID THAT COMES IS THE ACTIVITY's ONE */

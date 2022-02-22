@@ -3,6 +3,7 @@ var ObjectId = mongoose.Schema.Types.ObjectId;
 
 
 const Activity_TasksSchema = new mongoose.Schema({
+    domain_key: String,
     activity: ObjectId,
     tasks:[ObjectId],
 }, {timestamps: true});
