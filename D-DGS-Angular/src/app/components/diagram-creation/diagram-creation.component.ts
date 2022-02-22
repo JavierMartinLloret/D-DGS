@@ -34,7 +34,6 @@ export class DiagramCreationComponent implements OnInit {
   public userInRewardFase: boolean = false;
 
   // Flags fase 1
-  public ActivitiesOnDB: boolean = false;
   public addNewActivityIsClicked: boolean = false;
   public addNewTaskIsClicked: boolean = false;
 
@@ -53,22 +52,26 @@ export class DiagramCreationComponent implements OnInit {
     {
       this.userInDomainFase = (sessionStorage.getItem("userInDomainFase") == "true") ? true: false;
       this.userInRewardFase = (sessionStorage.getItem("userInRewardFase") == "true") ? true: false; 
-    } 
+    }
 
-    this._diagramDomainService.getActivities().subscribe(activities => {
-      this.Activities = activities;
-    })
-    this._diagramDomainService.getTasks().subscribe(tasks => {
-      this.Tasks = tasks;
-    })
-    if(this.Activities)
-      this.ActivitiesOnDB;
-    this._diagramDomainService.getAllA_T().subscribe(relationships => {
-      this.Activities_Tasks = relationships;
-    })    
-    this._diagramDomainService.getRewards().subscribe(rewards => {
-      this.Rewards = rewards;
-    })
+    let aux = sessionStorage.getItem(LOG_TOKEN);
+    if(aux) // USER IS CORRECTLY LOGGED, OTHERWISE 
+    {
+      const domainKey: string = aux;
+
+      this._diagramDomainService.getActivitiesByDomain(domainKey).subscribe(activities => {
+        this.Activities = activities;
+      })
+      this._diagramDomainService.getA_TByDomain(domainKey).subscribe(relationships => {
+        this.Activities_Tasks = relationships;
+      }) 
+      this._diagramDomainService.getTasksByDomain(domainKey).subscribe(tasks => {
+        this.Tasks = tasks;
+      })
+      this._diagramDomainService.getRewardsByDomain(domainKey).subscribe(rewards => {
+        this.Rewards = rewards;
+      })
+    }
     if(this.Rewards)
       this.thereAreRewards = true;
   }

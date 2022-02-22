@@ -23,6 +23,11 @@ export class DiagramDomainService {
         return this._httpClient.get(this.activitiesURL);
     }
 
+    getActivitiesByDomain(domainKey: string)
+    {
+        return this._httpClient.get(this.activitiesURL+"/domain/"+domainKey);
+    }
+
     getAnActivity(activityID: string)
     {
         return this._httpClient.get(this.activitiesURL+"/"+activityID);
@@ -50,6 +55,10 @@ export class DiagramDomainService {
         return this._httpClient.get(this.tasksURL);
     }
 
+    getTasksByDomain(domainKey: string) {
+        return this._httpClient.get(this.tasksURL+"/domain/"+domainKey);
+    }
+
     getATask(taskID: string)
     {
         return this._httpClient.get(this.tasksURL+"/"+taskID);
@@ -70,6 +79,11 @@ export class DiagramDomainService {
     getAllA_T()
     {
         return this._httpClient.get(this.Activity_TasksURL);
+    }
+
+    getA_TByDomain(domainKey: string)
+    {
+        return this._httpClient.get(this.Activity_TasksURL+"/domain/"+domainKey);
     }
 
     getAnA_T(parentActivityID: string)
@@ -103,6 +117,10 @@ export class DiagramDomainService {
 
     getRewards() {
         return this._httpClient.get(this.rewardsURL);
+    }
+
+    getRewardsByDomain(domainKey: string) {
+        return this._httpClient.get(this.rewardsURL+"/domain/"+domainKey);
     }
 
     getAReward(rewardID: string) {
