@@ -24,7 +24,7 @@ export class DiagramCreationLastComponent implements OnInit {
   public Lines: Line[] = [];
 
   public currentLineActivities: Activity[] = new Array<Activity>(); //ProvActivities
-  public activitySelected: Activity = new Activity("","");
+  public activitySelected: Activity = new Activity("","","");
   public currentLineRewards: Reward[] = new Array<Reward>();
   public rewardSelected: Reward = new Reward("","");
   public newLine: Line = new Line(new Array<String>(), new Array<String>());

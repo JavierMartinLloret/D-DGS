@@ -16,12 +16,15 @@ const LOG_TOKEN: string = "LOG_TOKEN";
 })
 export class DiagramCreationComponent implements OnInit {
   
+  // Domain_Key
+  public DOMAIN_KEY: string="";
+
   // Variables fase 1
   public Activities: any = [];
   public Tasks: any = [];
   public Activities_Tasks: any = [];
   public newTasksArray: Task[] = new Array<Task>();
-  public activityToCreate: Activity = new Activity("","");
+  public activityToCreate: Activity = new Activity("","","");
   public taskToCreate: Task = new Task("","");
   public relationshipWhichWillBeUpdated: Activity_Tasks = new Activity_Tasks("",new Array<string>());
   
@@ -57,18 +60,18 @@ export class DiagramCreationComponent implements OnInit {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux) // USER IS CORRECTLY LOGGED, OTHERWISE 
     {
-      const domainKey: string = aux;
+      this.DOMAIN_KEY = aux;
 
-      this._diagramDomainService.getActivitiesByDomain(domainKey).subscribe(activities => {
+      this._diagramDomainService.getActivitiesByDomain(this.DOMAIN_KEY).subscribe(activities => {
         this.Activities = activities;
       })
-      this._diagramDomainService.getA_TByDomain(domainKey).subscribe(relationships => {
+      this._diagramDomainService.getA_TByDomain(this.DOMAIN_KEY).subscribe(relationships => {
         this.Activities_Tasks = relationships;
       }) 
-      this._diagramDomainService.getTasksByDomain(domainKey).subscribe(tasks => {
+      this._diagramDomainService.getTasksByDomain(this.DOMAIN_KEY).subscribe(tasks => {
         this.Tasks = tasks;
       })
-      this._diagramDomainService.getRewardsByDomain(domainKey).subscribe(rewards => {
+      this._diagramDomainService.getRewardsByDomain(this.DOMAIN_KEY).subscribe(rewards => {
         this.Rewards = rewards;
       })
     }
@@ -118,7 +121,7 @@ export class DiagramCreationComponent implements OnInit {
 
   getLocalActivity(id: string) // Because who cares about efficiency?
   {
-    let seekedActivity: Activity = new Activity("","");
+    let seekedActivity: Activity = new Activity("","","");
     this.Activities.forEach((activity: any) => {
       if(activity._id == id)
         seekedActivity = activity;
@@ -142,14 +145,10 @@ export class DiagramCreationComponent implements OnInit {
 
   addNewActivity()
   {
-    this._diagramDomainService.postANewActivity(this.activityToCreate).subscribe(newActivityID => {
-      // We also create an empty relationship table for the new activity.
-      let newRelationshipTable: Activity_Tasks = new Activity_Tasks(newActivityID.toString(), new Array<String>());
-
-      this._diagramDomainService.postANewA_T(newRelationshipTable).subscribe(newRelationship => {
-        window.location.reload(); // WARNING!: MUST BE CALLED *AFTER* THE CALLS AND IN THE DEEPEST LEVEL
-      })            
-    });
+    this.activityToCreate.domain_key = this.DOMAIN_KEY;
+    this._diagramDomainService.postANewActivity(this.activityToCreate).subscribe((newActivityID: any) => {
+      window.location.reload();
+    })
   }
 
   // Edit activity (?)

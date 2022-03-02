@@ -1,6 +1,7 @@
 const express = require("express");
 const Activity = require("../models/activity");
 const ActivityModel = require("../models/activity");
+const Activity_TasksModel = require("../models/activity_tasks");
 const activityRouter = new express.Router();
 
 // Get all activities in DB
@@ -39,11 +40,19 @@ activityRouter.get('/activities/:id', async (req, res) => {
     }
 })
 
-// Register an activity in DB
+// Register an activity in DB (Also creates an Act-Tasks)
 activityRouter.post('/activities', async (req, res) => {
     const activity = new Activity(req.body);
+    const aux = {
+        domain_key : activity.domain_key,
+        activity: activity._id,
+        tasks: []
+    };
+    const newRelationship = new Activity_TasksModel(aux);
+
     try {
         await activity.save();
+        await newRelationship.save();
         res.status(201).send(activity._id);
     } catch (error) {
         res.status(500).send(error);
@@ -71,14 +80,14 @@ activityRouter.put('/activities', async (req, res) => {
 })
 
 activityRouter.delete('/activities/:id', async (req, res) => {
+    const activityID = req.params.id;
+    const query = {"_id": activityID};
+    
     try {
-        const activityID = req.params.id;
-        const query = {"_id": activityID}
-
         await ActivityModel.deleteOne(query);
-
         res.status(200).send(true)
     } catch (error) {
+        console.log(error);
        res.status(500).send(error); 
     }
 })
