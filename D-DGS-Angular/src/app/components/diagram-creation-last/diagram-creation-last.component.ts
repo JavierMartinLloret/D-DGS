@@ -19,6 +19,9 @@ const LinesBuffer: string = "ProvLines";
 })
 export class DiagramCreationLastComponent implements OnInit {
 
+  // Domain_Key
+  public DOMAIN_KEY: string="";
+
   public Activities: any = [];
   public Rewards: any = [];
   public Lines: Line[] = [];
@@ -26,30 +29,37 @@ export class DiagramCreationLastComponent implements OnInit {
   public currentLineActivities: Activity[] = new Array<Activity>(); //ProvActivities
   public activitySelected: Activity = new Activity("","","");
   public currentLineRewards: Reward[] = new Array<Reward>();
-  public rewardSelected: Reward = new Reward("","");
-  public newLine: Line = new Line(new Array<String>(), new Array<String>());
-  public lineSelected: Line = new Line(new Array<String>(), new Array<String>());
+  public rewardSelected: Reward = new Reward("","","");
+  public newLine: Line = new Line("", new Array<String>(), new Array<String>());
+  public lineSelected: Line = new Line("", new Array<String>(), new Array<String>());
   public currentDiagramLines: Line[] = new Array<Line>();
-  public diagramToBeCreated: Diagram = new Diagram(new Array<String>());
+  public diagramToBeCreated: Diagram = new Diagram("", new Array<String>());
 
   // Flags
 
   constructor(private _diagramDomainService: DiagramDomainService, private _router: Router) {
-    this._diagramDomainService.getActivities().subscribe(a => {this.Activities = a;})
-    this._diagramDomainService.getRewards().subscribe(r => {this.Rewards = r;})
-    this._diagramDomainService.getLines().subscribe((lines: any) => {this.Lines = lines})
-    // Load activities buffer
-    let obj: string | null = sessionStorage.getItem(ActivitiesBuffer);
-    if(obj != null)
-    {this.currentLineActivities = JSON.parse(obj);}
-    // Load reward buffer
-    obj = sessionStorage.getItem(RewardsBuffer);
-    if(obj != null)
-    {this.currentLineRewards = JSON.parse(obj);}
-    // Load lines from buffer
-    obj = sessionStorage.getItem(LinesBuffer);
-    if(obj != null)
-    {this.currentDiagramLines = JSON.parse(obj);} 
+    let aux = sessionStorage.getItem(LOG_TOKEN);
+    if(aux) // USER IS CORRECTLY LOGGED, OTHERWISE
+    {
+      this.DOMAIN_KEY = aux;
+
+      this._diagramDomainService.getActivitiesByDomain(this.DOMAIN_KEY).subscribe(a => {this.Activities = a;})
+      this._diagramDomainService.getRewardsByDomain(this.DOMAIN_KEY).subscribe(r => {this.Rewards = r;})
+      this._diagramDomainService.getLinesByDomain(this.DOMAIN_KEY).subscribe((lines: any) => {this.Lines = lines})
+
+      // Load activities buffer
+      let obj: string | null = sessionStorage.getItem(ActivitiesBuffer);
+      if(obj != null)
+      {this.currentLineActivities = JSON.parse(obj);}
+      // Load reward buffer
+      obj = sessionStorage.getItem(RewardsBuffer);
+      if(obj != null)
+      {this.currentLineRewards = JSON.parse(obj);}
+      // Load lines from buffer
+      obj = sessionStorage.getItem(LinesBuffer);
+      if(obj != null)
+      {this.currentDiagramLines = JSON.parse(obj);} 
+    }
   }
 
   ngOnInit(): void {    
@@ -80,6 +90,8 @@ export class DiagramCreationLastComponent implements OnInit {
 
   createALine()
   {
+    this.newLine.domain_key = this.DOMAIN_KEY;
+
     // Añadimos a la línea los Ids de las actividades
     this.currentLineActivities.forEach((act: any) => {
       this.newLine.activities.push(act._id);
@@ -96,12 +108,15 @@ export class DiagramCreationLastComponent implements OnInit {
 
   createTheDiagram()
   {
+    this.diagramToBeCreated.domain_key = this.DOMAIN_KEY;
+
     this.currentDiagramLines.forEach((line: Line) => {
       if(line._id != null) // Siempre pasa por aquí...
         this.diagramToBeCreated.lines.push(line._id)
     })
 
     this._diagramDomainService.postADiagram(this.diagramToBeCreated).subscribe(d => {})
+    this.clearSessionStorage();
     window.location.reload();
   }
 

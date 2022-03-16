@@ -13,6 +13,18 @@ LineRouter.get('/lines', async (req, res) => {
         res.status(500).send(error);
     }
 })
+// Get By Domain
+LineRouter.get('/lines/domain/:key', async (req, res) => {
+    try {
+        const domainKey = req.params.key;
+        const query = {"domain_key": domainKey};
+        const lines = await LineModel.find(query);
+
+        res.status(200).send(lines);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
 // Get One
 LineRouter.get('/lines/:id', async (req, res) => {
     try {

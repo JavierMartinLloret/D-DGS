@@ -78,7 +78,7 @@
         </div>
         <button (click)="addNewRewardClicked()">Add a new reward</button>
         <div *ngIf="addNewRewardIsClicked==true">
-            <p>Complete the form to add a new activity</p>
+            <p>Complete the form to add a new reward</p>
             <form ngNativeValidate (ngSubmit)="addNewReward()">
                 <div>Rewards's name:<input type="text" id="reward_name" name="name" [(ngModel)]="rewardToCreate.name" required></div>
                 <div>Reward's description:<input type="text" id="reward_description" name="description" [(ngModel)]="rewardToCreate.description" required></div>

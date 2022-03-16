@@ -13,6 +13,19 @@ DiagramRouter.get('/diagrams', async (req, res) => {
         res.status(500).send(error);
     }
 })
+// Get by Domain
+DiagramRouter.get('/diagrams/domain/:key', async (req, res) => {
+    try {
+        const domainKey = req.params.key;
+        const query = {"domain_key": domainKey};
+        const diagrams = await DiagramModel.find(query);
+
+        res.status(200).send(diagrams);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 // Get One
 DiagramRouter.get('/diagrams/:id', async (req, res) => {
     try {

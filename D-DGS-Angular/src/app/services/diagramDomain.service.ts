@@ -144,6 +144,10 @@ export class DiagramDomainService {
         return this._httpClient.get(this.linesURL);
     }
 
+    getLinesByDomain(domainKey: string){
+        return this._httpClient.get(this.linesURL+"/domain/"+domainKey)
+    }
+
     getALine(LineID: string){
         return this._httpClient.get(this.linesURL+"/"+LineID);
     }
@@ -164,6 +168,10 @@ export class DiagramDomainService {
 
     getDiagrams(){
         return this._httpClient.get(this.diagramURL);
+    }
+
+    getDiagrmasByDomain(domainKey: string){
+        return this._httpClient.get(this.diagramURL+"/domain/"+domainKey);
     }
 
     getADiagram(DiagramID: string){

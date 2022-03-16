@@ -25,12 +25,12 @@ export class DiagramCreationComponent implements OnInit {
   public Activities_Tasks: any = [];
   public newTasksArray: Task[] = new Array<Task>();
   public activityToCreate: Activity = new Activity("","","");
-  public taskToCreate: Task = new Task("","");
+  public taskToCreate: Task = new Task("","","");
   public relationshipWhichWillBeUpdated: Activity_Tasks = new Activity_Tasks("",new Array<string>());
   
   // Variables fase 2
   public Rewards: any = [];
-  public rewardToCreate: Reward = new Reward("","");
+  public rewardToCreate: Reward = new Reward("","","");
 
   // Flags multifase
   public userInDomainFase: boolean = true;
@@ -132,7 +132,7 @@ export class DiagramCreationComponent implements OnInit {
 
   getLocalTask(id: string)
   {
-    let seekedTask: Task = new Task("","");
+    let seekedTask: Task = new Task("","","");
     this.Tasks.forEach((task: any) => {
       if(task._id == id)
         seekedTask = task;
@@ -174,6 +174,7 @@ export class DiagramCreationComponent implements OnInit {
 
   addNewTask()
   {
+    this.taskToCreate.domain_key = this.DOMAIN_KEY;
     this._diagramDomainService.postANewTask(this.taskToCreate).subscribe((newTask: any) => {
       let auxArray: Array<String> = this.relationshipWhichWillBeUpdated.tasks;
       auxArray.push(newTask._id);
@@ -210,6 +211,7 @@ export class DiagramCreationComponent implements OnInit {
 
   addNewReward()
   {
+    this.rewardToCreate.domain_key = this.DOMAIN_KEY;
     this._diagramDomainService.postANewReward(this.rewardToCreate).subscribe(reward => {})
     window.location.reload();
   }
