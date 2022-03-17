@@ -1,0 +1,10 @@
+<h1>PROVISIONAL REGISTRATION PROCESS</h1>
+<div>
+    <form ngNavigateValidate (ngSubmit)="registerUser()">
+        <p>Nickname: <input type="text" name="nickname" id="nickname" [(ngModel)]="userToCreate.nickname" required> </p>
+        <p>Password: <input type="text" name="password" id="password" [(ngModel)]="userToCreate.password" required> </p>
+        <p>Email: <input type="text" name="email" id="email" [(ngModel)]="userToCreate.email" required></p>
+        <p>Will this user be an administrator? <input type="checkbox" name="is_admin" id="is_admin" [(ngModel)]="userToCreate.is_admin"></p>
+        <p><input type="submit" value="ToRegister!"></p>
+    </form>
+</div>

@@ -1,26 +1,19 @@
 export class User {
 
     /*VALORES PROVISIONALES*/
-    id: number | undefined;
-    nickname: string | undefined;
-    email: string | undefined;
-    password: string | undefined;
-    is_active: boolean | undefined;
-    type_user: boolean | undefined;
+    _id: string | undefined;
+    nickname: string;
+    email: string;
+    password: string;
+    domainIdentificator: string;
+    is_admin: boolean;
     
-    constructor(id?: number, nickname?: string, email?: string,
-        password?: string, is_active?: boolean, type_user?: boolean){
-        if(id)
-            this.id = id;
-        if (nickname)
-            this.nickname = nickname;
-        if (email)
-            this.email = email;
-        if(password)
-            this.password = password;
-        if(is_active)
-            this.is_active = is_active;
-        if(type_user)
-            this.type_user = type_user;
+    constructor(nickname: string, email: string, password: string, domainIdentificator: string,  is_admin: boolean, _id?: string){
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+        this.domainIdentificator = domainIdentificator;
+        this.is_admin = is_admin;
+        this._id = _id;
     }
 }

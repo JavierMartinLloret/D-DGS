@@ -13,9 +13,11 @@ import { DiagramCreationComponent } from './components/diagram-creation/diagram-
 import { DiagramCreationLastComponent } from './components/diagram-creation-last/diagram-creation-last.component';
 import { LoginComponent } from './components/login/login.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
   {path: 'main', component: MainMenuComponent},
   {path: 'users', component: ListOfUsersComponent},
   {path: 'domain_craft_area', component: DiagramCreationComponent},
@@ -34,7 +36,8 @@ const routes: Routes = [
     DiagramCreationComponent,
     DiagramCreationLastComponent,
     LoginComponent,
-    MainMenuComponent
+    MainMenuComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

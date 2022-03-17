@@ -4,7 +4,8 @@ const userSchema = new mongoose.Schema({
     nickname: String,
     email: String,
     password: String,
-    domainIdentificator: String
+    domainIdentificator: String,
+    is_admin: Boolean
 }, {
     timestamps: true
 });
