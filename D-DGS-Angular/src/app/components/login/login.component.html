@@ -6,6 +6,12 @@
         <p><input type="submit" value="Loggin!"></p>
     </form>
 </div>
+<div>
+    <h2>Register here!</h2>
+    <div>
+        <a class="nav-link" [routerLink]="['/register']">Register</a>
+    </div>
+</div>
 <div class="alert" *ngIf="autenticationFailed">
     <p>Authentication failed!</p>
 </div>
