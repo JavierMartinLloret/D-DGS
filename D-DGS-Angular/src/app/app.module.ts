@@ -14,11 +14,15 @@ import { DiagramCreationLastComponent } from './components/diagram-creation-last
 import { LoginComponent } from './components/login/login.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { RegisterComponent } from './components/register/register.component';
+import { DiagramsComponent } from './components/diagrams/diagrams.component';
+import { DiagramDomainService } from './services/diagramDomain.service';
+import { UsersService } from './services/users.service';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'main', component: MainMenuComponent},
+  {path: 'diagrams', component: DiagramsComponent},
   {path: 'users', component: ListOfUsersComponent},
   {path: 'domain_craft_area', component: DiagramCreationComponent},
   {path: 'desing_your_diagram', component: DiagramCreationLastComponent},  
@@ -37,7 +41,8 @@ const routes: Routes = [
     DiagramCreationLastComponent,
     LoginComponent,
     MainMenuComponent,
-    RegisterComponent
+    RegisterComponent,
+    DiagramsComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +50,10 @@ const routes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [
+    DiagramDomainService,
+    UsersService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
