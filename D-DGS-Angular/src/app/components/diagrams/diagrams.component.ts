@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Diagram } from 'src/app/models/diagram';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
+import { FileRelatedService } from 'src/app/services/file-related.service';
 
 const LOG_TOKEN: string = "LOG_TOKEN";
 // LOG_TOKEN: null | FAILED | identificador del dominio del usuario
@@ -18,7 +19,7 @@ export class DiagramsComponent implements OnInit {
   public DOMAIN_KEY: string="";
   public userDiagrams: any[] = [];
 
-  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService) {
+  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _fileRelatedService: FileRelatedService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux)
     {
@@ -43,7 +44,10 @@ export class DiagramsComponent implements OnInit {
 
   downloadDiagram(diagramToDownload: Diagram)
   {
-    
+    if(diagramToDownload._id != undefined)
+    {
+      this._fileRelatedService.downloadFileExample(diagramToDownload._id.toString(), ".txt");
+    }
   }
 
 }

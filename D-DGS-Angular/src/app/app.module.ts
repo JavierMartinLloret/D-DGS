@@ -25,7 +25,7 @@ const routes: Routes = [
   {path: 'diagrams', component: DiagramsComponent},
   {path: 'users', component: ListOfUsersComponent},
   {path: 'domain_craft_area', component: DiagramCreationComponent},
-  {path: 'desing_your_diagram', component: DiagramCreationLastComponent},  
+  {path: 'desing_your_diagram', component: DiagramCreationLastComponent}, 
   {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: 'test', component: TestDiagramComponent},
   {path: '**', component: PageNotFoundComponent}

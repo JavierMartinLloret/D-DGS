@@ -78,4 +78,27 @@ DiagramRouter.delete('/diagrams/:id', async (req, res) => {
         res.status(500).send(error);
     }
 })
+
+// DOWNLOAD ENDPOINTS
+DiagramRouter.get('/diagrams/download/:name', async (req,res) => {
+    try {
+        const fileName = req.params.name;
+        const serverLocation = "/home/javier/TFG/D-DGS/D-DGS-Node"
+        const directoryPath = serverLocation + "/src/diagrams/";
+        res.download(directoryPath + fileName, "yourDiagram");
+
+        /*
+        const diagramID = req.params.id;
+        const query = {"_id": diagramID};
+
+        let diagramSought = await DiagramModel.findOne(query);
+
+        res.status(200).send(diagramSought);*/
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+})
+
 module.exports = DiagramRouter;
