@@ -11,15 +11,10 @@ export class FileRelatedService {
   private diagramURL: string = "http://localhost:3000/diagrams/download"
 
   downloadFileExample(fileName: string, format: string) {
-    const downloadInstance = document.createElement("a");
-      // Ruta del archivo a descargar
-      downloadInstance.href = this.diagramURL+"/"+fileName;
-      // Hace que el navegador no abra directamente la ruta
-      downloadInstance.target = '_blank';
-
-      document.body.appendChild(downloadInstance);
-      downloadInstance.click();
-      document.body.removeChild(downloadInstance);
+    this._httpClient.get(this.diagramURL+"/"+fileName).subscribe((response: any) => {
+      console.log(response);
+      
+    })
   }
 
   getAJSONDiagram(diagramID: string) {

@@ -85,7 +85,20 @@ DiagramRouter.get('/diagrams/download/:name', async (req,res) => {
         const fileName = req.params.name;
         const serverLocation = "/home/javier/TFG/D-DGS/D-DGS-Node"
         const directoryPath = serverLocation + "/src/diagrams/";
-        res.download(directoryPath + fileName, "yourDiagram");
+        console.log(JSON.parse(
+            '{"URL":'+"www.penis.com/holiwi"+'}'
+        ));
+        res.status(200).send(directoryPath)
+        //res.status(200).download(directoryPath + fileName, "yourDiagram");
+        /*const a = 
+        {
+            directoryPath,
+            style: "display:none",
+            download: "YourDiagram",
+        }
+        res.download(a);*/
+        
+        //URL.revokeObjectURL(blob);
 
         /*
         const diagramID = req.params.id;
