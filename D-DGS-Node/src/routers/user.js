@@ -16,7 +16,7 @@ userRouter.get('/users', async (req, res) => {
 userRouter.get('/users/:id', async (req, res) => {
     try {
         const userID = req.params.id;
-        const query = {"_id": DiagramID};
+        const query = {"_id": userID};
         const userSought = await UserModel.findOne(query);
 
         res.status(200).send(userSought);
@@ -40,6 +40,23 @@ userRouter.get('/users/:nick/:pass', async (req, res) => {
         res.status(200).send(JSON.stringify(userSought.domainIdentificator));
     else
         res.status(200).send(JSON.stringify("FAILED"));    
+})
+// Is this user an Administrator ?
+userRouter.get('/users/One/ByDomain/:domainIdentificator', async (req, res) => {
+    try {
+        const userIdentificator = req.params.domainIdentificator;
+        const query = {
+            "domainIdentificator": userIdentificator,
+            "is_admin": true
+        };
+        const queryResult = await UserModel.find(query);
+        if(JSON.stringify(queryResult) != "[]")
+            res.status(200).send(true);
+        else
+            res.status(200).send(false);
+    } catch (error) {
+        res.status(500).send(error);
+    }
 })
 // Post One
 userRouter.post('/users', async (req, res) => {

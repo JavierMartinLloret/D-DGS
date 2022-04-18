@@ -11,6 +11,10 @@
     <a class="nav-link" [routerLink]="['/diagrams']" (click)="goToDiagramArchive()">
     My diagrams
 </a></div>
+<div *ngIf="isAnAdministrator">
+    <a class="nav-link" [routerLink]="['/users']" (click)="goToListOfUsers()">
+    Administrar Usuarios
+</a></div>
 <div>
     <a class="nav-link" [routerLink]="['/login']" (click)="logOut()">
     Log Out!

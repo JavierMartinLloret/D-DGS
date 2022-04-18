@@ -23,10 +23,18 @@ export class ListOfUsersComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    if(sessionStorage.getItem(LOG_TOKEN) == null || sessionStorage.getItem(LOG_TOKEN) == "FAILED")
+    let aux = sessionStorage.getItem(LOG_TOKEN);
+    if(aux == null || aux == "FAILED")
     {
       sessionStorage.removeItem(LOG_TOKEN);  
       this._router.navigateByUrl('/login');
+    }
+    if(aux) // No es administrador
+    {
+      this._userService.isThisUserAnAdministrator(aux).subscribe((response: any) => {
+        if(!response)
+        this._router.navigateByUrl('/main');
+      })
     }
   }
 

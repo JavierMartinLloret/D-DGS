@@ -15,9 +15,14 @@ export class UsersService {
     return this._httpClient.get(this.baseURL);
   }
 
-  getUser(id: number)
+  getUserByID(id: string)
   {
     return this._httpClient.get(this.baseURL+"/"+id);
+  }
+
+  isThisUserAnAdministrator(domainIdentificator: String)
+  {
+    return this._httpClient.get(this.baseURL+"/One/ByDomain/"+domainIdentificator);
   }
 
   getUserDomainIdentificator(nickname: String, password: String)

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user';
 import { UsersService } from 'src/app/services/users.service';
 
 const LOG_TOKEN: string = "LOG_TOKEN";
@@ -12,9 +13,17 @@ const LOG_TOKEN: string = "LOG_TOKEN";
   styleUrls: ['./main-menu.component.css']
 })
 export class MainMenuComponent implements OnInit {
+  
+  public isAnAdministrator: boolean = false;
 
   constructor(private _router: Router, _userService: UsersService) {
-
+    let aux = sessionStorage.getItem(LOG_TOKEN);
+    if(aux)
+    {
+      _userService.isThisUserAnAdministrator(aux).subscribe((response: any) => {        
+        this.isAnAdministrator = response;
+      })
+    }
   }
 
   ngOnInit(): void {
@@ -22,7 +31,7 @@ export class MainMenuComponent implements OnInit {
     {
       sessionStorage.removeItem(LOG_TOKEN);  
       this._router.navigateByUrl('/login');
-    }
+    }    
   }
 
   goToDomainCreation()
@@ -30,6 +39,8 @@ export class MainMenuComponent implements OnInit {
   goToDiagramDesing()
   {}
   goToDiagramArchive()
+  {}
+  goToListOfUsers()
   {}
   logOut()
   {
