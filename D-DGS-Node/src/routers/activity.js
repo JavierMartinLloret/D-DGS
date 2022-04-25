@@ -14,11 +14,11 @@ activityRouter.get('/activities', async (req, res) => {
     }
 })
 
-// Get activities of one specific domain
-activityRouter.get('/activities/domain/:key', async (req, res) => {
+// Get activities of one specific context
+activityRouter.get('/activities/context/:contextID', async (req, res) => {
     try {
-        const domainKey = req.params.key;
-        const query = {"domain_key": domainKey}
+        const id = req.params.contextID;
+        const query = {"context_ID": id}
         const activities = await ActivityModel.find(query);
 
         res.status(200).send(activities);
