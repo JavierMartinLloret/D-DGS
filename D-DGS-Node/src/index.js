@@ -4,6 +4,7 @@ const express = require("express");
 const userRouter = require('./routers/user');
 const contextRouter = require('./routers/context');
 const activityRouter = require('./routers/activity');
+const activityPropertyRouter = require('./routers/activity_property');
 const taskRouter = require('./routers/tasks');
 const rewardRouter = require('./routers/reward');
 const activity_tasksRouter = require('./routers/activity_tasks');
@@ -30,6 +31,7 @@ app.all('/*', (req, res, next) => {
 app.use(userRouter);
 app.use(contextRouter);
 app.use(activityRouter);
+app.use(activityPropertyRouter);
 app.use(taskRouter);
 app.use(rewardRouter);
 app.use(activity_tasksRouter);
