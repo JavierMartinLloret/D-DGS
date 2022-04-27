@@ -87,7 +87,6 @@ activityRouter.delete('/activities/:id', async (req, res) => {
         await ActivityModel.deleteOne(query);
         res.status(200).send(true)
     } catch (error) {
-        console.log(error);
        res.status(500).send(error); 
     }
 })
