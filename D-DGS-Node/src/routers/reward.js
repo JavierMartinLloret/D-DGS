@@ -1,22 +1,23 @@
 const express = require("express");
 const Reward = require("../models/reward");
-const RewardModel = require("../models/reward");
 const rewardRouter = new express.Router();
 
+// Get all rewards
 rewardRouter.get('/rewards', async (req, res) => {
     try {
-        const rewards = await RewardModel.find({});
+        const rewards = await Reward.find({});
         res.status(200).send(rewards);
     } catch (error) {
         res.status(500).send(error);
     }
 })
 
-rewardRouter.get('/rewards/domain/:key', async (req, res) => {
+// Get all rewards form a certain set
+rewardRouter.get('/rewards/fromset/:id', async (req, res) => {
     try {
-        const domainKey = req.params.key;
-        const query = {"domain_key": domainKey};
-        const rewards = await RewardModel.find(query);
+        const id = req.params.id;
+        const query = {"parentSet": id};
+        const rewards = await Reward.find(query);
 
         res.status(200).send(rewards);
     } catch (error) {
@@ -24,11 +25,12 @@ rewardRouter.get('/rewards/domain/:key', async (req, res) => {
     }
 })
 
+// Get a reward from id
 rewardRouter.get('/rewards/:id', async (req, res) => {
     try {
         const rewardID = req.params.id;
         const query = {"_id": rewardID};
-        const reward = await RewardModel.findOne(query);
+        const reward = await Reward.findOne(query);
 
         res.status(200).send(reward);
     } catch (error) {
@@ -36,16 +38,18 @@ rewardRouter.get('/rewards/:id', async (req, res) => {
     }
 })
 
+// Post a new reward
 rewardRouter.post('/rewards', async (req, res) => {
     const reward = new Reward(req.body);
     try {
         await reward.save();
-        res.status(201).send(reward); // No habría por qué enviar la reward
+        res.status(201).send(reward._id);
     } catch (error) {
         res.status(500).send(error);
     }
 })
 
+// Update a reward
 rewardRouter.put('/rewards/:id', async (req, res) => {
     try {
         const rewardID = req.params.id;
@@ -53,11 +57,13 @@ rewardRouter.put('/rewards/:id', async (req, res) => {
         const updatedReward = new Reward(req.body);
 
         const update = {$set:{
+            "parentSet": updatedReward.parentSet,
             "name": updatedReward.name,
-            "description": updatedReward.description
+            "description": updatedReward.description,
+            "priority": updatedReward.priority
         }};
 
-        await RewardModel.updateOne(query, update);
+        await Reward.updateOne(query, update);
 
         res.status(200).send(true);
     } catch (error) {
@@ -65,12 +71,26 @@ rewardRouter.put('/rewards/:id', async (req, res) => {
     }
 })
 
+// Delete a reward
 rewardRouter.delete('/rewards/:id', async (req, res) => {
     try {
         const rewardID = req.params.id;
         const query = {"_id": rewardID};
         
-        await RewardModel.deleteOne(query);
+        await Reward.deleteOne(query);
+
+        res.status(200).send(true);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+// Delete all rewards from a certain set
+rewardRouter.delete('/rewards/fromset/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const query = {"parentSet": id};
+        await Reward.deleteMany(query);
 
         res.status(200).send(true);
     } catch (error) {

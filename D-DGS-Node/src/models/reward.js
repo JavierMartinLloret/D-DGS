@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 const RewardSchema = new mongoose.Schema({
-    domain_key: String,
+    parentSet: String,
     name: String,
-    description: String
+    description: String,
+    priority: Number
 },  {
     timestamps: true
 });
