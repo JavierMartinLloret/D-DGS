@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Context } from "../models/context";
 import { Activity } from "../models/activity";
 import { Task } from "../models/task";
 import { Activity_Tasks } from "../models/activity_tasks";
@@ -15,20 +15,42 @@ export class DiagramDomainService {
 
     constructor(private _httpClient: HttpClient) {}
     
-    /* DOMAIN FASE RELATED METHODS */
+    /* CONTEXT */
+    private contextURL: string = "http://localhost:3000/context";
+
+    getAllContexts() {
+        return this._httpClient.get(this.contextURL);
+    }
+
+    getContextsFromAUser(domain_key: string) {
+        return this._httpClient.get(this.contextURL+"/bydomain/"+domain_key);        
+    }
+
+    getContextFromId(id: string) {
+        return this._httpClient.get(this.contextURL+"/byid/"+id);
+    }
+
+    postANewContext(newContext: Context) {
+        return this._httpClient.post(this.contextURL, newContext);
+    }
+
+    deleteAContext(id: string) {
+        return this._httpClient.delete(this.contextURL+"/byid/"+id);
+    }
+
     /* ACTIVITIES */
     private activitiesURL: string = "http://localhost:3000/activities";
 
-    getActivities() {
+    getAllActivities() {
         return this._httpClient.get(this.activitiesURL);
     }
 
-    getActivitiesByDomain(domainKey: string)
+    getActivitiesFromAContext(contextID: string)
     {
-        return this._httpClient.get(this.activitiesURL+"/domain/"+domainKey);
+        return this._httpClient.get(this.activitiesURL+"/context/"+contextID);
     }
 
-    getAnActivity(activityID: string)
+    getActivityFromId(activityID: string)
     {
         return this._httpClient.get(this.activitiesURL+"/"+activityID);
     }
@@ -46,6 +68,31 @@ export class DiagramDomainService {
     deleteAnActivity(activityID: string)
     {
         return this._httpClient.delete(this.activitiesURL+"/"+activityID);
+    }
+
+    /* ACTIVITY_PROPERTIES */
+    private activityPropertyURL = "http://localhost:3000/activity_property";
+
+    getAllProperties() {
+        return this._httpClient.get(this.activityPropertyURL);
+    }
+
+    getPropertiesFromAnActivity(activityID: string) {
+        return this._httpClient.get(this.activityPropertyURL+"/fromactivity/"+activityID);
+    }
+
+    getPropertyFromID(propertyID: string) {
+        return this._httpClient.get(this.activityPropertyURL+"/"+propertyID);
+    }
+
+    //postANewProperty()
+
+    deleteAProperty(propertyID: string) {
+        return this._httpClient.delete(this.activityPropertyURL+"/"+propertyID)
+    }
+
+    deleteAllPropertiesFromAnActivity(activityID: string) {
+        return this._httpClient.delete(this.activityPropertyURL+"/fromactivity/"+activityID);
     }
 
     /* TASKS */

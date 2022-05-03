@@ -43,7 +43,7 @@ export class DiagramCreationLastComponent implements OnInit {
     {
       this.DOMAIN_KEY = aux;
 
-      this._diagramDomainService.getActivitiesByDomain(this.DOMAIN_KEY).subscribe(a => {this.Activities = a;})
+      this._diagramDomainService.getActivitiesFromAContext(this.DOMAIN_KEY).subscribe(a => {this.Activities = a;})
       this._diagramDomainService.getRewardsByDomain(this.DOMAIN_KEY).subscribe(r => {this.Rewards = r;})
       this._diagramDomainService.getLinesByDomain(this.DOMAIN_KEY).subscribe((lines: any) => {this.Lines = lines})
 
