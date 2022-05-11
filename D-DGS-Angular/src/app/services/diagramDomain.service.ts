@@ -7,6 +7,7 @@ import { Activity_Tasks } from "../models/activity_tasks";
 import { Reward } from "../models/reward";
 import { Line } from "../models/line";
 import { Diagram } from "../models/diagram";
+import { Activity_Property } from "../models/activity_property";
 
 @Injectable({
     providedIn: 'root'
@@ -85,7 +86,33 @@ export class DiagramDomainService {
         return this._httpClient.get(this.activityPropertyURL+"/"+propertyID);
     }
 
-    //postANewProperty()
+    postANewProperty_Numerical(property: Activity_Property, value: Number) {
+        let completeProperty = {
+            "activity_ID": property.activityID,
+            "name": property.name,
+            "value_Number": value
+        };
+        return this._httpClient.post(this.activityPropertyURL, completeProperty);
+    }
+
+    postANewProperty_Stringy(property: Activity_Property, value: String) {
+        let completeProperty = {
+            "activity_ID": property.activityID,
+            "name": property.name,
+            "value_String": value
+        };
+        return this._httpClient.post(this.activityPropertyURL, completeProperty);
+    }
+
+    postANewProperty_Date(property: Activity_Property, value: Date) {
+        let completeProperty = {
+            "activity_ID": property.activityID,
+            "name": property.name,
+            "value_Date": value
+        };
+        return this._httpClient.post(this.activityPropertyURL, completeProperty);
+    }
+
 
     deleteAProperty(propertyID: string) {
         return this._httpClient.delete(this.activityPropertyURL+"/"+propertyID)

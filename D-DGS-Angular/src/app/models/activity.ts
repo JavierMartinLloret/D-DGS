@@ -1,4 +1,5 @@
 export class Activity {
+    _id: String | undefined;
     domain_key: String;
     name: String;
     description: String;

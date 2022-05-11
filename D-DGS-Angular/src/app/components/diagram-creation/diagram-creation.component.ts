@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { Activity } from 'src/app/models/activity';
-import { Reward } from 'src/app/models/reward';
-import { Task } from 'src/app/models/task';
-import { Activity_Tasks} from 'src/app/models/activity_tasks'
+import { Activity_Property } from "src/app/models/activity_property";
+import { Context } from 'src/app/models/context';
 import { DiagramDomainService } from "src/app/services/diagramDomain.service";
 
 const LOG_TOKEN: string = "LOG_TOKEN";
@@ -19,207 +18,138 @@ export class DiagramCreationComponent implements OnInit {
   // Domain_Key
   public DOMAIN_KEY: string="";
 
-  // Variables fase 1
-  public Activities: any = [];
-  public Tasks: any = [];
-  public Activities_Tasks: any = [];
-  public newTasksArray: Task[] = new Array<Task>();
-  public activityToCreate: Activity = new Activity("","","");
-  public taskToCreate: Task = new Task("","","");
-  public relationshipWhichWillBeUpdated: Activity_Tasks = new Activity_Tasks("",new Array<string>());
-  
-  // Variables fase 2
-  public Rewards: any = [];
-  public rewardToCreate: Reward = new Reward("","","");
+  // Containers
+  public userContexts: any = [];
+  public contextActivities: any = [];
+  public ActivitiesProperties: Array<any> = [];
 
-  // Flags multifase
-  public userInDomainFase: boolean = true;
-  public userInRewardFase: boolean = false;
+  // Local variables
+  public activityIDForTheNewProperty: String = "";
+  public newPropertyName: String = "";
+  public newPropertyValueType: String = "";
+  public newPropertyValue: any = "";
 
-  // Flags fase 1
-  public addNewActivityIsClicked: boolean = false;
-  public addNewTaskIsClicked: boolean = false;
+  // Objects
+  public contextSelected: Context = new Context("","");
+  public newProperty: Activity_Property = new Activity_Property("","");
 
-  // Flags fase 2
-  public thereAreRewards: boolean = false;
-  public addNewRewardIsClicked: boolean = false;
-  
+  // Flags
+  public isContextSelected: boolean = false;
+  public isAddNewPropertySelected:boolean = false;
+  public isNewPropertyValueString: boolean = false;
+  public isNewPropertyValueNumeric: boolean = false;
+  public isNewPropertyValueDate: boolean = false;
 
-  constructor(private _diagramDomainService: DiagramDomainService, private _router: Router) {
-    if(sessionStorage.getItem("userInDomainFase") == null)
-    {
-      sessionStorage.setItem("userInDomainFase", "true");
-      sessionStorage.setItem("userInRewardFase", "false");
-    }
-    else
-    {
-      this.userInDomainFase = (sessionStorage.getItem("userInDomainFase") == "true") ? true: false;
-      this.userInRewardFase = (sessionStorage.getItem("userInRewardFase") == "true") ? true: false; 
-    }
+  //
 
+  constructor(private _diagramDomainService: DiagramDomainService, private _router: Router) { 
     let aux = sessionStorage.getItem(LOG_TOKEN);
-    if(aux) // USER IS CORRECTLY LOGGED, OTHERWISE 
+    if(aux)
     {
       this.DOMAIN_KEY = aux;
 
-      this._diagramDomainService.getActivitiesByDomain(this.DOMAIN_KEY).subscribe(activities => {
-        this.Activities = activities;
-      })
-      this._diagramDomainService.getA_TByDomain(this.DOMAIN_KEY).subscribe(relationships => {
-        this.Activities_Tasks = relationships;
-      }) 
-      this._diagramDomainService.getTasksByDomain(this.DOMAIN_KEY).subscribe(tasks => {
-        this.Tasks = tasks;
-      })
-      this._diagramDomainService.getRewardsByDomain(this.DOMAIN_KEY).subscribe(rewards => {
-        this.Rewards = rewards;
-      })
+      this._diagramDomainService.getContextsFromAUser(this.DOMAIN_KEY).subscribe(a => {this.userContexts = a;})
     }
-    if(this.Rewards)
-      this.thereAreRewards = true;
   }
 
   ngOnInit(): void {
-    if(sessionStorage.getItem(LOG_TOKEN) == null || sessionStorage.getItem(LOG_TOKEN) == "FAILED")
+    let aux = sessionStorage.getItem(LOG_TOKEN);
+    if(aux == null || aux == "FAILED")
     {
       sessionStorage.removeItem(LOG_TOKEN);  
       this._router.navigateByUrl('/login');
     }
   }
 
-  loadSection1()
+  contextIsSelected()
   {
-    this.userInDomainFase = true;
-    this.userInRewardFase = false;
-    sessionStorage.setItem("userInDomainFase", "true");
-    sessionStorage.setItem("userInRewardFase", "false");
-  }
+    if(this.contextSelected._id != null) // User has picked a context in the menu
+    {
+      this._diagramDomainService.getActivitiesFromAContext(this.contextSelected._id.toString()).subscribe((activities: any) => {
+        this.contextActivities = activities;
 
-  loadSection2()
-  {
-    this.userInDomainFase = false;
-    this.userInRewardFase = true;
-    sessionStorage.setItem("userInDomainFase", "false");
-    sessionStorage.setItem("userInRewardFase", "true");
-  }
+        /*  TODA ESTA LÓGICA DEBERÍA ESTAR ENCAPSULADA EN UN MÉTODO DEL SERVICIO */
+        activities.forEach((activity:Activity) => {
+          if(activity._id != undefined)
+          {
+            let activityID: String = activity._id;
+            this._diagramDomainService.getPropertiesFromAnActivity(activityID.toString()).subscribe((properties: any) => {
+              properties.forEach((property: Activity_Property) => {
+                this.ActivitiesProperties.push(property);
+              });
+            })
+          }
+        });
+        /*  TODA ESTA LÓGICA DEBERÍA ESTAR ENCAPSULADA EN UN MÉTODO DEL SERVICIO */
 
-  addNewActivityClicked()
-  {
-    this.addNewActivityIsClicked = (this.addNewActivityIsClicked) ? false: true;
-  }
-
-  addNewTaskClicked(relationshipToUpdate: Activity_Tasks)
-  {
-    this.relationshipWhichWillBeUpdated = relationshipToUpdate;
-    this.addNewTaskIsClicked = (this.addNewTaskIsClicked) ? false: true;
-  }
-
-  addNewRewardClicked()
-  {
-    this.addNewRewardIsClicked = (this.addNewRewardIsClicked) ? false: true;
-  }
-
-  getLocalActivity(id: string) // Because who cares about efficiency?
-  {
-    let seekedActivity: Activity = new Activity("","","");
-    this.Activities.forEach((activity: any) => {
-      if(activity._id == id)
-        seekedActivity = activity;
-    });
-
-    return seekedActivity;
-  }
-
-  getLocalTask(id: string)
-  {
-    let seekedTask: Task = new Task("","","");
-    this.Tasks.forEach((task: any) => {
-      if(task._id == id)
-        seekedTask = task;
-    });
-
-    return seekedTask;
-  }
-
-  /* ACTIVITY */
-
-  addNewActivity()
-  {
-    this.activityToCreate.domain_key = this.DOMAIN_KEY;
-    this._diagramDomainService.postANewActivity(this.activityToCreate).subscribe((newActivityID: any) => {
-      window.location.reload();
-    })
-  }
-
-  // Edit activity (?)
-
-  removeActivity(activityID: string)
-  {
-    this._diagramDomainService.getAnA_T(activityID).subscribe(rel => {
-    let relationReference: any = rel;
-    let tasks: Array<string> = relationReference.tasks;
-    tasks.forEach(ID => {       //Si no hay tareas asociadas no entra aquí    
-      this._diagramDomainService.deleteATask(ID).subscribe(res => {})
-    });
-    // Borrar la propia relación
-    this._diagramDomainService.deleteAnA_T(relationReference._id).subscribe(val => {})
-    // Borrar la actividad
-    this._diagramDomainService.deleteAnActivity(activityID).subscribe(val => {})
-      
-    window.location.reload();
-    })
-  }
-
-  /* TASK */
-
-  addNewTask()
-  {
-    this.taskToCreate.domain_key = this.DOMAIN_KEY;
-    this._diagramDomainService.postANewTask(this.taskToCreate).subscribe((newTask: any) => {
-      let auxArray: Array<String> = this.relationshipWhichWillBeUpdated.tasks;
-      auxArray.push(newTask._id);
-      this.relationshipWhichWillBeUpdated.tasks = auxArray;
-      this._diagramDomainService.updateAnA_T(this.relationshipWhichWillBeUpdated).subscribe(rel => {window.location.reload();})
-    })
-  }
-
-  removeTask(parentActivityID: string, taskID: string)
-  {
-    /*Eliminar del array de tareas de la A_Ts el ID de la tarea a eliminar
-        Actualizar la relación en BDD
-      Eliminar la propia tarea de la BDD 
-    */
-    this._diagramDomainService.getAnA_T(parentActivityID).subscribe((relation: any) => {
-      let tasksAttached: Array<String> = relation.tasks;
-      let newTaskArray: Array<String> = new Array<String>();
-      tasksAttached.forEach((task: String) => {
-        if(task != taskID)
-          newTaskArray.push(task);
+        this.isContextSelected = true;
       })
-      relation.tasks = newTaskArray;
+    }    
+  }
 
-      this._diagramDomainService.updateAnA_TAny(relation).subscribe((result:any) => {
-        window.location.reload();
-      })
-    })
-    this._diagramDomainService.deleteATask(taskID).subscribe((result:any) => {
-    })
+  addANewPropertyClicked(activity: Activity)
+  {
+    this.isAddNewPropertySelected = this.isAddNewPropertySelected ? false: true;
+    if(activity._id != undefined)
+      this.activityIDForTheNewProperty = activity._id;
+  }
+
+  propertyTypeValueSelected()
+  {
+    this.newPropertyValueType= (document.getElementById("property_value_type_selector") as HTMLTextAreaElement).value;
+
+    // Un saludo a Paco de Discreta
+    switch (this.newPropertyValueType) {
+      case "String":
+        this.isNewPropertyValueString = true;
+        this.isNewPropertyValueNumeric = false;
+        this.isNewPropertyValueDate = false;
+        break;
+      case "Number":
+        this.isNewPropertyValueString = false;
+        this.isNewPropertyValueNumeric = true;
+        this.isNewPropertyValueDate = false;
+        break;
+      case "Date":
+        this.isNewPropertyValueString = false;
+        this.isNewPropertyValueNumeric = false;
+        this.isNewPropertyValueDate = true;
+        break;
+      default:
+        this.isNewPropertyValueString = false;
+        this.isNewPropertyValueNumeric = false;
+        this.isNewPropertyValueDate = false;
+        break;
+    }
     
   }
 
-  /* REWARD */
-
-  addNewReward()
+  postNewProperty()
   {
-    this.rewardToCreate.domain_key = this.DOMAIN_KEY;
-    this._diagramDomainService.postANewReward(this.rewardToCreate).subscribe(reward => {})
-    window.location.reload();
-  }
+    let property = new Activity_Property(this.activityIDForTheNewProperty, this.newPropertyName);
+    let value : any;
+    let endProduct: any;
 
-  deleteReward(rewardToDelete: any)
-  {    
-    this._diagramDomainService.deleteAReward(rewardToDelete._id).subscribe(reward => {})
-    window.location.reload();
-  }
+    switch (this.newPropertyValueType) {
+      case "String":
+        this._diagramDomainService.postANewProperty_Stringy(property, new String(this.newPropertyValue)).subscribe(res => {});
+        break;
+      case "Number":
+        this._diagramDomainService.postANewProperty_Numerical(property, new Number(this.newPropertyValue)).subscribe(res => {});
+        break;
+      case "Date":
+        this._diagramDomainService.postANewProperty_Date(property, new Date(this.newPropertyValue)).subscribe(res => {});
+        break;
+      default:
+        break;
+    }
 
+    window.location.reload();
+  }  
+
+  debugmethod()
+  {
+    console.log(this.ActivitiesProperties);
+    
+  }
 }
