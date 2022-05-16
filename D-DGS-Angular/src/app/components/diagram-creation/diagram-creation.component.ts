@@ -24,6 +24,8 @@ export class DiagramCreationComponent implements OnInit {
   public ActivitiesProperties: Array<any> = [];
 
   // Local variables
+  public newActivityName: String = "";
+  public newActivityDescription: String = "";
   public activityIDForTheNewProperty: String = "";
   public newPropertyName: String = "";
   public newPropertyValueType: String = "";
@@ -35,6 +37,7 @@ export class DiagramCreationComponent implements OnInit {
 
   // Flags
   public isContextSelected: boolean = false;
+  public isAddNewActivitySelected: boolean = false;
   public isAddNewPropertySelected:boolean = false;
   public isNewPropertyValueString: boolean = false;
   public isNewPropertyValueNumeric: boolean = false;
@@ -94,6 +97,11 @@ export class DiagramCreationComponent implements OnInit {
       this.activityIDForTheNewProperty = activity._id;
   }
 
+  addANewActivityClicked()
+  {
+    this.isAddNewActivitySelected = this.isAddNewActivitySelected ? false: true;
+  }
+
   propertyTypeValueSelected()
   {
     this.newPropertyValueType= (document.getElementById("property_value_type_selector") as HTMLTextAreaElement).value;
@@ -124,6 +132,15 @@ export class DiagramCreationComponent implements OnInit {
     
   }
 
+  postNewActivity()
+  {
+    if(this.contextSelected._id != undefined)
+    {
+      let activityToCreate = new Activity(this.contextSelected._id.toString(), this.newActivityName, this.newActivityDescription);
+      this._diagramDomainService.postANewActivity(activityToCreate).subscribe(result => {window.location.reload();});
+    }    
+  }
+
   postNewProperty()
   {
     let property = new Activity_Property(this.activityIDForTheNewProperty, this.newPropertyName);
@@ -145,7 +162,26 @@ export class DiagramCreationComponent implements OnInit {
     }
 
     window.location.reload();
-  }  
+  }
+
+  deleteActivity(activity: Activity)
+  {
+    if(activity._id != undefined)
+    {
+      this._diagramDomainService.deleteAllPropertiesFromAnActivity(activity._id.toString()).subscribe(res => {
+        if (activity._id != undefined) {
+          this._diagramDomainService.deleteAnActivity(activity._id.toString()).subscribe(res => {window.location.reload();});
+        }
+      })
+    }
+  }
+
+  deleteProperty(property: Activity_Property)
+  {
+    if(property._id != undefined)
+      this._diagramDomainService.deleteAProperty(property._id.toString()).subscribe(result => {window.location.reload();});
+        
+  }
 
   debugmethod()
   {

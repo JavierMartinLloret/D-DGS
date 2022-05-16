@@ -68,6 +68,16 @@ export class DiagramDomainService {
 
     deleteAnActivity(activityID: string)
     {
+        /* ELIMINAR LAS PROPIEDADES ASOCIADAS 
+        allProperties.forEach(property => {
+            if(property.activityID == activityID)
+            {
+                console.log(property);
+                return this._httpClient.delete()                
+            }         
+        });*/
+        //this.deleteAllPropertiesFromAnActivity(activityID);
+
         return this._httpClient.delete(this.activitiesURL+"/"+activityID);
     }
 

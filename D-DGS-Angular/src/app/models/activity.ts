@@ -1,13 +1,13 @@
 export class Activity {
     _id: String | undefined;
-    domain_key: String;
+    context_ID: String;
     name: String;
     description: String;
 
-    constructor(domain_key: String, name: String, description: String)
+    constructor(context_ID: String, name: String, description: String)
     {
         this.name = (name) ? name : "";
         this.description = (description) ? description : "";
-        this.domain_key = domain_key;
+        this.context_ID = context_ID;
     }
 }

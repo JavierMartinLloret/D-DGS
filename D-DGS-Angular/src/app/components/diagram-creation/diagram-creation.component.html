@@ -10,23 +10,40 @@
         </p>
     </div>
     <div *ngIf="isContextSelected">
-        <h3>Current Activities of this context:</h3>
+        <h3>Current Activities of this context: <button (click)="addANewActivityClicked()">Add another</button></h3>
         
         <ul *ngFor="let a of contextActivities">
             <li>
                 {{a.name}}
             </li>
-            <li>
-                <h4>Properties: </h4>
-                <ul *ngFor="let p of ActivitiesProperties">
-                    <li *ngIf="a._id == p.activity_ID">
-                        {{p.name}}
-                    </li>
-                </ul>
-            </li>
+            <ul>
+                <li>
+                    <a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteActivity(a)">Delete this Activity (Will delete all properties!)</a>
+                </li>
+                <li>
+                    <h4>Properties: </h4>
+                    <ul *ngFor="let p of ActivitiesProperties">
+                        <li *ngIf="a._id == p.activity_ID">
+                            {{p.name}}
+                            <ul>
+                                <li><a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteProperty(p)">Delete this property</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
             <button (click)="addANewPropertyClicked(a)">Add a new property</button>
         </ul>        
     </div>
+    <div *ngIf="isAddNewActivitySelected">
+        <h3>Adding new Activity</h3>
+        <form ngNativeValidate (ngSubmit)="postNewActivity()">
+            <p>Activity's name:<input type="text" name="Activity_name" [(ngModel)]="newActivityName" required></p>
+            <p>Activitiy's description:<input type="text" name="Description" [(ngModel)]="newActivityDescription" required></p>
+            <p><input type="submit" value="Create the Activity"></p>
+        </form>
+    </div>
+
     <div *ngIf="isAddNewPropertySelected">
         <h3>Adding new Property</h3>
         <form ngNativeValidate>
