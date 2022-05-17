@@ -1,11 +1,14 @@
 export class Reward {
-    domain_key: String;
+    _id: String | undefined;
+    parent_set: String;
     name: String;
     description: String;
+    priority: Number;
 
-    constructor(domain_key: String, name: String, description: String) {
-        this.domain_key = (domain_key) ? domain_key : "";
+    constructor(parent_set: String, name: String, description: String, priority: Number) {
+        this.parent_set = parent_set
         this.name = name;
         this.description = description;
+        this.priority = priority;
     }
 }

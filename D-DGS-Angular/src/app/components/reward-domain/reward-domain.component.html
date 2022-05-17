@@ -1,0 +1,44 @@
+<div>
+    <h1>Reward Creation</h1>
+    <h2>Set</h2>
+    <div>
+        <p>Select a reward Set:
+            <select name="RewardSets" id="RewardSets" [(ngModel)]="setSelected" (ngModelChange)="setIsSelected()">
+                <option value="null_value" selected disabled hidden></option>
+                <option *ngFor="let s of userSets" [ngValue]="s">{{s.name}}</option>
+            </select>
+        </p>
+    </div>
+    <div *ngIf="isSetIsSelected">
+        <h3>Current Rewards in this set:</h3>
+        <a class="link" [routerLink]="['/reward_craft_area']" (click)="addNewRewardIsClicked()">Add another reward</a>
+        <div *ngIf="isNewRewardSelected">
+            <h4>Creating a new Reward</h4>
+            <form ngNativeValidate  name="newRewardForm" (ngSubmit)="addNewReward()">
+                <p>Reward name: <input type="text" name="newRewardName" [(ngModel)]="newRewardName"></p>
+                <p>Reward description: <input type="text" name="newRewardDesc" [(ngModel)]="newRewardDescription"></p>
+                <p>Priority (0 = MAX): <input type="number" [(ngModel)]="newRewardPriority" min="0" max="{{currentMaxPriority}}"></p>
+                <p><button type="submit">Create the Reward</button></p>
+            </form>
+        </div>
+        <ul *ngFor="let r of setRewards">
+            <li>
+                <h4>{{r.name}}</h4>
+                <ul>
+                    <li>
+                        <p>Description: {{r.description}}</p>
+                    </li>
+                    <li>
+                        <p>Priority: {{r.priority}}</p>
+                    </li>
+                    <li>
+                        <a class="link" [routerLink]="['/reward_craft_area']" (click)="deleteAReward(r)">Delete this Reward</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<div>
+    <button (click)="debugmethod()">Debug</button>
+</div>

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const RewardSchema = new mongoose.Schema({
-    parentSet: String,
+    parent_set: String,
     name: String,
     description: String,
     priority: Number

@@ -29,7 +29,7 @@ export class DiagramCreationLastComponent implements OnInit {
   public currentLineActivities: Activity[] = new Array<Activity>(); //ProvActivities
   public activitySelected: Activity = new Activity("","","");
   public currentLineRewards: Reward[] = new Array<Reward>();
-  public rewardSelected: Reward = new Reward("","","");
+  public rewardSelected: Reward = new Reward("","","",0);
   public newLine: Line = new Line("", new Array<String>(), new Array<String>());
   public lineSelected: Line = new Line("", new Array<String>(), new Array<String>());
   public currentDiagramLines: Line[] = new Array<Line>();
@@ -44,7 +44,6 @@ export class DiagramCreationLastComponent implements OnInit {
       this.DOMAIN_KEY = aux;
 
       this._diagramDomainService.getActivitiesFromAContext(this.DOMAIN_KEY).subscribe(a => {this.Activities = a;})
-      this._diagramDomainService.getRewardsByDomain(this.DOMAIN_KEY).subscribe(r => {this.Rewards = r;})
       this._diagramDomainService.getLinesByDomain(this.DOMAIN_KEY).subscribe((lines: any) => {this.Lines = lines})
 
       // Load activities buffer

@@ -36,6 +36,8 @@ export class MainMenuComponent implements OnInit {
 
   goToDomainCreation()
   {}
+  goToRewardCreation()
+  {}
   goToDiagramDesing()
   {}
   goToDiagramArchive()

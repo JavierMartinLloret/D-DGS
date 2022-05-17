@@ -8,6 +8,7 @@ import { Reward } from "../models/reward";
 import { Line } from "../models/line";
 import { Diagram } from "../models/diagram";
 import { Activity_Property } from "../models/activity_property";
+import { Reward_Set } from "../models/reward_set";
 
 @Injectable({
     providedIn: 'root'
@@ -68,16 +69,6 @@ export class DiagramDomainService {
 
     deleteAnActivity(activityID: string)
     {
-        /* ELIMINAR LAS PROPIEDADES ASOCIADAS 
-        allProperties.forEach(property => {
-            if(property.activityID == activityID)
-            {
-                console.log(property);
-                return this._httpClient.delete()                
-            }         
-        });*/
-        //this.deleteAllPropertiesFromAnActivity(activityID);
-
         return this._httpClient.delete(this.activitiesURL+"/"+activityID);
     }
 
@@ -132,67 +123,37 @@ export class DiagramDomainService {
         return this._httpClient.delete(this.activityPropertyURL+"/fromactivity/"+activityID);
     }
 
-    /* TASKS */
-    private tasksURL: string = "http://localhost:3000/tasks";
+    /* REWARD_SET */
 
-    getTasks() {
-        return this._httpClient.get(this.tasksURL);
+    private rewardSetsURL: string ="http://localhost:3000/reward_set";
+
+    getAllRewardSets() {
+        return this._httpClient.get(this.rewardSetsURL);
     }
 
-    getTasksByDomain(domainKey: string) {
-        return this._httpClient.get(this.tasksURL+"/domain/"+domainKey);
-    }
-
-    getATask(taskID: string)
+    getAllRewardSetsFromACertainUser(userDomain: string)
     {
-        return this._httpClient.get(this.tasksURL+"/"+taskID);
-    } 
-
-    postANewTask(taskToPost: Task) {
-        return this._httpClient.post(this.tasksURL, taskToPost);
+        return this._httpClient.get(this.rewardSetsURL+"/fromdomain/"+userDomain);
     }
 
-    deleteATask(taskID: string)
+    getARewardSet(rewardSetID: string)
     {
-        return this._httpClient.delete(this.tasksURL+"/"+taskID);
+        return this._httpClient.get(this.rewardSetsURL+"/"+rewardSetID);
     }
 
-    /* ACTIVITY - REWARDS */
-    private Activity_TasksURL: string = "http://localhost:3000/activities_tasks"
-
-    getAllA_T()
+    postANewRewardSet(newRewardSet: Reward_Set)
     {
-        return this._httpClient.get(this.Activity_TasksURL);
+        return this._httpClient.post(this.rewardSetsURL, newRewardSet);
     }
 
-    getA_TByDomain(domainKey: string)
+    deleteARewardSet(rewardSetID: string)
     {
-        return this._httpClient.get(this.Activity_TasksURL+"/domain/"+domainKey);
+        return this._httpClient.delete(this.rewardSetsURL+"/"+rewardSetID);
     }
 
-    getAnA_T(parentActivityID: string)
+    deleteAllRewardSetsFromASpecificUser(userDomain: string)
     {
-        return this._httpClient.get(this.Activity_TasksURL+"/"+parentActivityID);
-    }
-
-    postANewA_T(relationship: Activity_Tasks)
-    {
-        return this._httpClient.post(this.Activity_TasksURL, relationship);
-    }
-
-    updateAnA_T(relationship: Activity_Tasks)
-    {
-        return this._httpClient.put(this.Activity_TasksURL+"/"+relationship.activity, relationship);
-    }
-
-    updateAnA_TAny(relationship: any)
-    {
-        return this._httpClient.put(this.Activity_TasksURL+"/"+relationship.activity, relationship);
-    }
-
-    deleteAnA_T(parentActivityID: string)
-    {
-        return this._httpClient.delete(this.Activity_TasksURL+"/"+parentActivityID);
+        return this._httpClient.delete(this.rewardSetsURL+"/fromdomain/"+userDomain);
     }
 
     /* REWARDS */
@@ -203,8 +164,8 @@ export class DiagramDomainService {
         return this._httpClient.get(this.rewardsURL);
     }
 
-    getRewardsByDomain(domainKey: string) {
-        return this._httpClient.get(this.rewardsURL+"/domain/"+domainKey);
+    getRewardsOfACertainSet(parentSetID: string) {
+        return this._httpClient.get(this.rewardsURL+"/fromset/"+parentSetID);
     }
 
     getAReward(rewardID: string) {
@@ -218,6 +179,11 @@ export class DiagramDomainService {
 
     deleteAReward(rewardID: string) {
         return this._httpClient.delete(this.rewardsURL+"/"+rewardID);
+    }
+
+    deleteAllRewardsFromACertainSet(parentSetID: string)
+    {
+        return this._httpClient.delete(this.rewardsURL+"/fromset/"+parentSetID);
     }
 
     /* LINE */

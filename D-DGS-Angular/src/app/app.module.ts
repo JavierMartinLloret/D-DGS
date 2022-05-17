@@ -17,6 +17,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { DiagramsComponent } from './components/diagrams/diagrams.component';
 import { DiagramDomainService } from './services/diagramDomain.service';
 import { UsersService } from './services/users.service';
+import { RewardDomainComponent } from './components/reward-domain/reward-domain.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -25,6 +26,7 @@ const routes: Routes = [
   {path: 'diagrams', component: DiagramsComponent},
   {path: 'users', component: ListOfUsersComponent},
   {path: 'domain_craft_area', component: DiagramCreationComponent},
+  {path: 'reward_craft_area', component: RewardDomainComponent},
   {path: 'desing_your_diagram', component: DiagramCreationLastComponent}, 
   {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: 'test', component: TestDiagramComponent},
@@ -42,7 +44,8 @@ const routes: Routes = [
     LoginComponent,
     MainMenuComponent,
     RegisterComponent,
-    DiagramsComponent
+    DiagramsComponent,
+    RewardDomainComponent
   ],
   imports: [
     BrowserModule,
