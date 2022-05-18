@@ -6,6 +6,7 @@ import { Context } from 'src/app/models/context';
 import { DiagramDomainService } from "src/app/services/diagramDomain.service";
 
 const LOG_TOKEN: string = "LOG_TOKEN";
+const DEFAULT_CONTEXT_NAME: string = "Default Context";
 // LOG_TOKEN: null | FAILED | identificador del dominio del usuario
 
 @Component({
@@ -24,6 +25,7 @@ export class DiagramCreationComponent implements OnInit {
   public ActivitiesProperties: Array<any> = [];
 
   // Local variables
+  public newContextName: String = "";
   public newActivityName: String = "";
   public newActivityDescription: String = "";
   public activityIDForTheNewProperty: String = "";
@@ -37,6 +39,8 @@ export class DiagramCreationComponent implements OnInit {
 
   // Flags
   public isContextSelected: boolean = false;
+  public isContextSelectedDefault: boolean = false;
+  public isCreateANewContextSelected: boolean = false;
   public isAddNewActivitySelected: boolean = false;
   public isAddNewPropertySelected:boolean = false;
   public isNewPropertyValueString: boolean = false;
@@ -86,8 +90,15 @@ export class DiagramCreationComponent implements OnInit {
         /*  TODA ESTA LÓGICA DEBERÍA ESTAR ENCAPSULADA EN UN MÉTODO DEL SERVICIO */
 
         this.isContextSelected = true;
+        if(this.contextSelected.name == DEFAULT_CONTEXT_NAME)
+          this.isContextSelectedDefault = true;
       })
     }    
+  }
+
+  createANewContextSelected()
+  {
+    this.isCreateANewContextSelected = this.isCreateANewContextSelected ? false : true;
   }
 
   addANewPropertyClicked(activity: Activity)
@@ -130,6 +141,32 @@ export class DiagramCreationComponent implements OnInit {
         break;
     }
     
+  }
+
+  createNewContext()
+  {
+    let newContext = new Context(this.newContextName, this.DOMAIN_KEY);
+    this._diagramDomainService.postANewContext(newContext).subscribe(res => {window.location.reload();});
+  }
+
+  deleteSelectedContext()
+  {
+    if(this.contextSelected._id != undefined)
+    {
+      let contextID : string = this.contextSelected._id.toString();
+      if(contextID != undefined)
+        this._diagramDomainService.deleteAContext(contextID).subscribe(res => {
+        this._diagramDomainService.deleteAllActivitiesFromAContext(contextID).subscribe(res => {
+          this.contextActivities.forEach((activity: Activity) => {
+            if(activity._id != undefined)
+            {
+              this._diagramDomainService.deleteAllPropertiesFromAnActivity(activity._id.toString()).subscribe(res => {});
+            }
+            window.location.reload();
+          });
+        })
+      });
+    }
   }
 
   postNewActivity()
@@ -185,7 +222,7 @@ export class DiagramCreationComponent implements OnInit {
 
   debugmethod()
   {
-    console.log(this.ActivitiesProperties);
+    console.log(this.isContextSelectedDefault);
     
   }
 }

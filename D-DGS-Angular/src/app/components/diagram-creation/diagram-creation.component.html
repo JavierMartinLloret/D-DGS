@@ -9,6 +9,19 @@
             </select>
         </p>
     </div>
+    <div>
+        <a class="link" [routerLink]="['/domain_craft_area']" (click)="createANewContextSelected()">Create a new context</a>
+        <div *ngIf="isCreateANewContextSelected">
+            <h3>Creating new context:</h3>
+            <form ngNativeValidate (ngSubmit)="createNewContext()" name="newContextForm">
+                <p>New Context name: <input type="text" name="newContextName" [(ngModel)]="newContextName" required></p>
+                <p><button type="submit">Create the Context</button></p>
+            </form>
+        </div>
+    </div>
+    <div *ngIf="isContextSelected && !isContextSelectedDefault">
+        <a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteSelectedContext()">Delete this context (Will delete all activities & properties associated!)</a>        
+    </div>
     <div *ngIf="isContextSelected">
         <h3>Current Activities of this context: <button (click)="addANewActivityClicked()">Add another</button></h3>
         
@@ -31,8 +44,10 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <button (click)="addANewPropertyClicked(a)">Add a new property</button>
+                </li>
             </ul>
-            <button (click)="addANewPropertyClicked(a)">Add a new property</button>
         </ul>        
     </div>
     <div *ngIf="isAddNewActivitySelected">
@@ -77,4 +92,7 @@
         </div>
     </div>
     
+</div>
+<div>
+    <button (click)="debugmethod()">Debug</button>
 </div>

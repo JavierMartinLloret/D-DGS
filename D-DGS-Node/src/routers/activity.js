@@ -79,6 +79,18 @@ activityRouter.put('/activities', async (req, res) => {
     }
 })
 
+activityRouter.delete('/activities/context/:contextID', async (req, res) => {
+    const contextID = req.params.contextID;
+    const query = {"context_ID": contextID};
+
+    try {
+        await ActivityModel.deleteMany(query);
+        res.status(200).send(true);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 activityRouter.delete('/activities/:id', async (req, res) => {
     const activityID = req.params.id;
     const query = {"_id": activityID};

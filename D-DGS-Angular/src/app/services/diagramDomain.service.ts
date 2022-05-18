@@ -72,6 +72,11 @@ export class DiagramDomainService {
         return this._httpClient.delete(this.activitiesURL+"/"+activityID);
     }
 
+    deleteAllActivitiesFromAContext(contextID: string)
+    {
+        return this._httpClient.delete(this.activitiesURL+"/context/"+contextID);
+    }
+
     /* ACTIVITY_PROPERTIES */
     private activityPropertyURL = "http://localhost:3000/activity_property";
 
