@@ -16,7 +16,7 @@ rewardRouter.get('/rewards', async (req, res) => {
 rewardRouter.get('/rewards/fromset/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const query = {"parentSet": id};
+        const query = {"parent_set": id};
         const rewards = await Reward.find(query);
 
         res.status(200).send(rewards);
@@ -89,7 +89,7 @@ rewardRouter.delete('/rewards/:id', async (req, res) => {
 rewardRouter.delete('/rewards/fromset/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const query = {"parentSet": id};
+        const query = {"parent_set": id};
         await Reward.deleteMany(query);
 
         res.status(200).send(true);

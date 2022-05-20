@@ -92,6 +92,8 @@ export class DiagramCreationComponent implements OnInit {
         this.isContextSelected = true;
         if(this.contextSelected.name == DEFAULT_CONTEXT_NAME)
           this.isContextSelectedDefault = true;
+        else
+          this.isContextSelectedDefault = false;
       })
     }    
   }

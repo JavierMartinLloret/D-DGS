@@ -9,6 +9,19 @@
             </select>
         </p>
     </div>
+    <div>
+        <a class="link" [routerLink]="['/reward_craft_area']" (click)="createANewSetIsSelected()">Create a new Set</a>
+        <div *ngIf="isCreateANewSetSelected">
+            <h3>Creating new set:</h3>
+            <form ngNativeValidate (ngSubmit)="createANewSet()" name="newSetForm">
+                <p>New Set name: <input type="text" name="newSetName" [(ngModel)]="newSetName" required></p>
+                <p><button type="submit">Create the Set</button></p>
+            </form>
+        </div>
+    </div>
+    <div *ngIf="isSetIsSelected && !isSetSelectedDefault">
+        <a class="link" [routerLink]="['/reward_craft_area']" (click)="deleteSelectedSet()">Delete this Set (Will delete all rewards associated!)</a>        
+    </div>
     <div *ngIf="isSetIsSelected">
         <h3>Current Rewards in this set:</h3>
         <a class="link" [routerLink]="['/reward_craft_area']" (click)="addNewRewardIsClicked()">Add another reward</a>
