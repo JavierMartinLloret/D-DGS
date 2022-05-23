@@ -25,17 +25,17 @@ export class UsersService {
     return this._httpClient.get(this.baseURL+"/One/ByDomain/"+domainIdentificator);
   }
 
-  getUserDomainIdentificator(nickname: String, password: String)
+  getUserDomain_Key(nickname: String, password: String)
   {
     return this._httpClient.get(this.baseURL+"/"+nickname+"/"+password);
   }
 
-  updateUser(id: number, user: User)
+  updateUser(user: User)
   {
-    return this._httpClient.put(this.baseURL+"/"+id, user);
+    return this._httpClient.put(this.baseURL+"/"+user._id, user);
   }
 
-  deleteUser(id: number)
+  deleteUser(id: string)
   {
     return this._httpClient.delete(this.baseURL+"/"+id);
   }

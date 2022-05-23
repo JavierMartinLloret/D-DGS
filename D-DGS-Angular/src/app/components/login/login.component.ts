@@ -33,9 +33,9 @@ export class LoginComponent implements OnInit {
   /*  if user is registered, a token will be added to SessionStorage allowin him to navigate */
   loggin()
   {
-    this._userService.getUserDomainIdentificator(this.inputNick, this.inputPass).subscribe((domainKey: any) => {
-      sessionStorage.setItem(LOG_TOKEN, domainKey);
-      if(domainKey != 'FAILED')
+    this._userService.getUserDomain_Key(this.inputNick, this.inputPass).subscribe((res: any) => {
+      sessionStorage.setItem(LOG_TOKEN, res);
+      if(res != 'FAILED')
         this._router.navigateByUrl('/main')
       else
       {

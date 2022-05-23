@@ -24,22 +24,22 @@ userRouter.get('/users/:id', async (req, res) => {
         res.status(500).send(error);
     }
 })
-// Get DomainID
+// Get domain_key
 userRouter.get('/users/:nick/:pass', async (req, res) => {
-    const query = {
-        "nickname": req.params.nick,
-        "password": req.params.pass
+    let query = 
+    {
+        "nickname" : req.params.nick,
+        "password" : req.params.pass
     };
-    let userSought;
+    console.log(query);
+
     try {
-        userSought = await UserModel.findOne(query);        
+        const user = await UserModel.findOne(query);
+        let domain_key = JSON.stringify(user.domain_key);
+        res.status(200).send(domain_key);
     } catch (error) {
         res.status(500).send(error);
     }
-    if(userSought != null)
-        res.status(200).send(JSON.stringify(userSought.domainIdentificator));
-    else
-        res.status(200).send(JSON.stringify("FAILED"));    
 })
 // Is this user an Administrator ?
 userRouter.get('/users/One/ByDomain/:domainIdentificator', async (req, res) => {
@@ -77,7 +77,7 @@ userRouter.put('/users/:id', async (req, res) => {
             "nickname": updatedUser.nickname,
             "email": updatedUser.email,
             "password": updatedUser.password,
-            "domainIdentificator": updatedUser.domainIdentificator
+            "is_admin": updatedUser.is_admin
         }}
 
         await UserModel.updateOne(query, update);

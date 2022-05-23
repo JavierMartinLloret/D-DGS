@@ -13,11 +13,24 @@
                 <li *ngFor="let user of users">
                     <div>Nickname: {{user.nickname}}</div>
                     <div>Email: {{user.email}}</div>
-                    <div><a [routerLink]="['/users/', user.id]">Edit the user</a></div>
-                    <div><button (click)="deleteUserFromMenu(user.id)">Delete this user</button></div>
+                    <div><a [routerLink]="['/users']" (click)="editUserIsSelected(user)">Edit the user</a></div>
+                    <div><button (click)="deleteUser(user)">Delete this user</button></div>
                 </li>
             </ul>
+            <div *ngIf="isEditUserSelected">
+              <form ngNativeValidate name="editingUserForm" (ngSubmit)="editUser()">
+                <p>Nickname: <input type="text"  name="editingUserNickname" placeholder="{{userToEdit.nickname}}" [(ngModel)]="newEditedUser.nickname" required></p>
+                <p>Email: <input type="text" name="editingUserEmail" placeholder="{{userToEdit.email}}" [(ngModel)]="newEditedUser.email" required></p>
+                <p>Password: <input type="text" name="editingUserPassword" placeholder="{{userToEdit.password}}" [(ngModel)]="newEditedUser.password" required></p>
+                <p>Is an administrator? :<input type="checkbox" name="editingUserIs_admin" placeholder="{{userToEdit.is_admin}}" [(ngModel)]="newEditedUser.is_admin"></p>
+                <p><input type="submit" value="Edit the user"></p>
+              </form>
+            </div>
           </div>
       </div>
+    </div>
+    <div>
+      <button (click)="debugmethod()">UserToEdit</button>
+      <button (click)="debugmethod2()">newUser</button>
     </div>
   </div>

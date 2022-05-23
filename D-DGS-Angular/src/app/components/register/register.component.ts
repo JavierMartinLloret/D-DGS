@@ -34,11 +34,11 @@ export class RegisterComponent implements OnInit {
   registerUser() {
     /*HAY QUE CREAR UN IDENTIFICADOR DE DOMINIO PARA EL NUEVO USUARIO REGISTRADO 
       A SER POSIBLE CON ALGO QUE NO SEA ESTA BASURILLA */    
-    this.userToCreate.domainIdentificator = this.userToCreate.nickname+"IDENTIFICATOR";
+    this.userToCreate.domain_key = this.userToCreate.nickname+"IDENTIFICATOR";
         
     this._userService.postUser(this.userToCreate).subscribe((state: any) => {
-      this._diagramDomainService.postANewContext(new Context(DEFAULT_CONTEXT_NAME, this.userToCreate.domainIdentificator)).subscribe(res => {
-        this._diagramDomainService.postANewRewardSet(new Reward_Set(DEFAULT_SET_NAME, this.userToCreate.domainIdentificator)).subscribe(res => {
+      this._diagramDomainService.postANewContext(new Context(DEFAULT_CONTEXT_NAME, this.userToCreate.domain_key)).subscribe(res => {
+        this._diagramDomainService.postANewRewardSet(new Reward_Set(DEFAULT_SET_NAME, this.userToCreate.domain_key)).subscribe(res => {
           this._router.navigateByUrl('/login');
         })
       })

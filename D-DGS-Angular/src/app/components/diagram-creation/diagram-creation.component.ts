@@ -224,7 +224,7 @@ export class DiagramCreationComponent implements OnInit {
 
   debugmethod()
   {
-    console.log(this.isContextSelectedDefault);
+    console.log(this.DOMAIN_KEY);
     
   }
 }

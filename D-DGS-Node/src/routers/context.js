@@ -13,10 +13,10 @@ contexRouter.get('/context', async (req, res) => {
 })
 
 // Get all contexts associated with one user
-contexRouter.get('/context/bydomain/:domainIdentificator', async (req, res) => {
+contexRouter.get('/context/bydomain/:domain_key', async (req, res) => {
     try {
-        const domainKey = req.params.domainIdentificator;
-        const query = {"domain_key": domainKey};
+        const domain_key = req.params.domain_key;
+        const query = {"domain_key": domain_key};
         const contexts = await Context.find(query);
 
         res.status(200).send(contexts);
@@ -50,8 +50,8 @@ contexRouter.post('/context', async (req, res) => {
 })
 
 // Delete all contexts associated with one user
-contexRouter.delete('/context/bydomain/:domainIdentificator', async (req, res) => {
-    const domainKey = req.params.domainIdentificator;
+contexRouter.delete('/context/bydomain/:domain_key', async (req, res) => {
+    const domainKey = req.params.domain_key;
     const query = {"domain_key": domainKey};
 
     try {
