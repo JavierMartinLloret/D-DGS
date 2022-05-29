@@ -31,7 +31,6 @@ userRouter.get('/users/:nick/:pass', async (req, res) => {
         "nickname" : req.params.nick,
         "password" : req.params.pass
     };
-    console.log(query);
 
     try {
         const user = await UserModel.findOne(query);

@@ -9,8 +9,7 @@ import { AppComponent } from './app.component';
 import { ListOfUsersComponent } from './components/list-of-users/list-of-users.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { TestDiagramComponent } from './components/test-diagram/test-diagram.component';
-import { DiagramCreationComponent } from './components/diagram-creation/diagram-creation.component';
-import { DiagramCreationLastComponent } from './components/diagram-creation-last/diagram-creation-last.component';
+import { DiagramCreationComponent } from './components/domain_creation/diagram-creation.component';
 import { LoginComponent } from './components/login/login.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -18,16 +17,17 @@ import { DiagramsComponent } from './components/diagrams/diagrams.component';
 import { DiagramDomainService } from './services/diagramDomain.service';
 import { UsersService } from './services/users.service';
 import { RewardDomainComponent } from './components/reward-domain/reward-domain.component';
+import { DiagramDesingComponent } from './components/diagram-desing/diagram-desing.component';
 
 const routes: Routes = [
-  {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
+  {path: 'login', component: LoginComponent},
   {path: 'main', component: MainMenuComponent},
-  {path: 'diagrams', component: DiagramsComponent},
-  {path: 'users', component: ListOfUsersComponent},
   {path: 'domain_craft_area', component: DiagramCreationComponent},
   {path: 'reward_craft_area', component: RewardDomainComponent},
-  {path: 'desing_your_diagram', component: DiagramCreationLastComponent}, 
+  {path: 'diagram_desing', component: DiagramDesingComponent},
+  {path: 'diagrams', component: DiagramsComponent},  
+  {path: 'users', component: ListOfUsersComponent},
   {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: 'test', component: TestDiagramComponent},
   {path: '**', component: PageNotFoundComponent}
@@ -40,12 +40,12 @@ const routes: Routes = [
     PageNotFoundComponent,
     TestDiagramComponent,
     DiagramCreationComponent,
-    DiagramCreationLastComponent,
     LoginComponent,
     MainMenuComponent,
     RegisterComponent,
     DiagramsComponent,
-    RewardDomainComponent
+    RewardDomainComponent,
+    DiagramDesingComponent
   ],
   imports: [
     BrowserModule,

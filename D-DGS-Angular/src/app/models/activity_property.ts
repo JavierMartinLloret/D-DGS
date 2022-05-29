@@ -1,12 +1,12 @@
 export class Activity_Property {
     _id: String | undefined;
-    activityID: String;
+    activity_ID: String;
     name: String;
     
 
     constructor(activtyID: String, name: String, _id?: String)
     {
-        this.activityID = activtyID;
+        this.activity_ID = activtyID;
         this.name = name;
         this._id = _id;
     }

@@ -225,6 +225,6 @@ export class DiagramCreationComponent implements OnInit {
   debugmethod()
   {
     console.log(this.DOMAIN_KEY);
-    
+    console.log(this.userContexts)
   }
 }

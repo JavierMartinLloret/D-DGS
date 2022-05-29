@@ -99,7 +99,7 @@ export class DiagramDomainService {
 
     postANewProperty_Numerical(property: Activity_Property, value: Number) {
         let completeProperty = {
-            "activity_ID": property.activityID,
+            "activity_ID": property.activity_ID,
             "name": property.name,
             "value_Number": value
         };
@@ -108,7 +108,7 @@ export class DiagramDomainService {
 
     postANewProperty_Stringy(property: Activity_Property, value: String) {
         let completeProperty = {
-            "activity_ID": property.activityID,
+            "activity_ID": property.activity_ID,
             "name": property.name,
             "value_String": value
         };
@@ -117,7 +117,7 @@ export class DiagramDomainService {
 
     postANewProperty_Date(property: Activity_Property, value: Date) {
         let completeProperty = {
-            "activity_ID": property.activityID,
+            "activity_ID": property.activity_ID,
             "name": property.name,
             "value_Date": value
         };
