@@ -1,13 +1,2 @@
 <h1>Your current Diagrams</h1>
-<div *ngIf="userHasDiagramas">
-    <ul *ngFor="let d of userDiagrams">
-        <li>
-            <p>{{d._id}}</p>
-            <a class="nav-link" [routerLink]="['/diagrams']" (click)="downloadDiagram(d)">Download the diagram [DOESN'T WORK]</a>
-        </li>
-        
-    </ul>
-</div>
-<div *ngIf="!userHasDiagramas">
-    <p>You currently have no diagrams, go make one <a class="nav-link" [routerLink]="['/desing_your_diagram']">here!</a></p>
-</div>
+

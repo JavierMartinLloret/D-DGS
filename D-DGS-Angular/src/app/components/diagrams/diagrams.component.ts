@@ -25,9 +25,6 @@ export class DiagramsComponent implements OnInit {
     {
       this.DOMAIN_KEY = aux;
 
-      _diagramDomainService.getDiagrmasByDomain(this.DOMAIN_KEY).subscribe((diagrams: any) => {
-        this.userDiagrams = diagrams;
-      })
     }
     if(this.userDiagrams)
       this.userHasDiagramas = true;
@@ -41,13 +38,4 @@ export class DiagramsComponent implements OnInit {
       this._router.navigateByUrl('/login');
     }
   }
-
-  downloadDiagram(diagramToDownload: Diagram)
-  {
-    if(diagramToDownload._id != undefined)
-    {
-      this._fileRelatedService.downloadFileExample(diagramToDownload._id.toString(), ".txt");
-    }
-  }
-
 }

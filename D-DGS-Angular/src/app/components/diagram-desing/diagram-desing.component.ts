@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
 import { Activity_Property } from 'src/app/models/activity_property';
 import { Context } from 'src/app/models/context';
+import { Diagram } from 'src/app/models/diagram';
+import { edge } from 'src/app/models/edge';
+import { node } from 'src/app/models/node';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
 import { DataSet } from "vis-data";
 import { Network } from 'vis-network';
@@ -17,20 +20,6 @@ interface node_state {
   type: string,
   value: boolean
 };
-interface node {
-  id: string|undefined,
-  label: string,
-  type: string
-  shape: string,
-  color: string
-};
-interface edge {
-  id: string,
-  from: string,
-  to: string,
-  value: number,
-  arrows: string
-}
 
 
 
@@ -56,9 +45,10 @@ export class DiagramDesingComponent implements OnInit {
 
   // Local variables
   public contextSelected: Context = new Context("","");
-  public linkerSelected: any;
+  public linkerSelected: node = new node("","","","","","",undefined);
   private nodeIDCounter: number = 0;
   private newEdge: edge = {
+    _id: undefined,
     id: "",
     from: "",
     to: "",
@@ -71,6 +61,7 @@ export class DiagramDesingComponent implements OnInit {
   public isAddRewardClicked: boolean = false;
   public isAddLinkerClicked: boolean = false;
   public isContextSelected: boolean = false;
+  public isSaveDiagramClicked: boolean = false;
 
   public isLinkModeActivated: boolean = false; // Linker is selected
 
@@ -84,27 +75,36 @@ export class DiagramDesingComponent implements OnInit {
 
   public nodeTrigger: Array<node_state> = new Array<node_state>();
   public edgesIdsRegister: Set<string> = new Set<string>();
+  public diagramNodes: Array<node> = new Array<node>();
+  public diagramEdges: Array<edge> = new Array<edge>();
+  public newDiagram: Diagram = new Diagram("", "", this.diagramNodes, this.diagramEdges, undefined);
 
   public EQUALITY_LINKER: node = {
+    _id: undefined,
     id: "-1",
     label: "=",
     type: "Linker",
-   shape: "square",
-   color: "#C5000B"
+    shape: "square",
+    color: "#C5000B",
+    base_element_id: "Ole ole los caracole"
   };
   public LESS_THAN_LINKER: node = {
+    _id: undefined,
     id: "-2",
     label: "<",
     type: "Linker",
-   shape: "square",
-   color: "#C5000B"
+    shape: "square",
+    color: "#C5000B",
+    base_element_id: "Ole ole los caracole"
   };
   public GREATER_THAN_LINKER: node = {
+    _id: undefined,
     id: "-3",
     label: ">",
     type: "Linker",
-   shape: "square",
-   color: "#C5000B"
+    shape: "square",
+    color: "#C5000B",
+    base_element_id: "Ole ole los caracole"
   };
 
   public LINKERS: Array<node> = [this.EQUALITY_LINKER, this.GREATER_THAN_LINKER, this.LESS_THAN_LINKER];
@@ -151,6 +151,10 @@ export class DiagramDesingComponent implements OnInit {
     this.isAddLinkerClicked = this.isAddLinkerClicked ? false: true;
   }
 
+  saveDiagramClicked(): void{
+    this.isSaveDiagramClicked = this.isSaveDiagramClicked ? false: true;
+  }
+
   contextIsSelected(): void {
     if(this.contextSelected._id != undefined)
     {
@@ -178,16 +182,21 @@ export class DiagramDesingComponent implements OnInit {
       let auxEdge: edge;
 
       /* Crear el nodo principal (Actividad) y nodos hijos (Propiedades) */
-      auxNode = {
-        id: this.nodeIDCounter.toString(),
-        label: activity.name.toString(),
-        type: "Default",
-        shape: "Default",
-        color: ACTIVITY_NODE_COLOR
-      };
-      activtyNodeID = this.nodeIDCounter;
-      this.nodeIDCounter++;
-      nodesToAdd.push(auxNode);
+      if(activity._id != undefined)
+      {
+        auxNode = new node(
+        this.nodeIDCounter.toString(),
+        activity.name.toString(),
+        "Default",
+        ACTIVITY_NODE_COLOR,
+        "Default",
+        activity._id?.toString(),
+        undefined
+        );
+        activtyNodeID = this.nodeIDCounter;
+        this.nodeIDCounter++;
+        nodesToAdd.push(auxNode);
+      }
 
       this.userA_P.forEach((property: Activity_Property) => {      
         
@@ -195,20 +204,23 @@ export class DiagramDesingComponent implements OnInit {
         {
           if(property.activity_ID == activity._id.toString())
           {          
-            auxNode = {
-              id: this.nodeIDCounter.toString(),
-              label: property.name.toString(),
-              type: "Default",
-              shape: "Default",
-              color: PROPERTY_NODE_COLOR
-            };
-            auxEdge = {
-              id: this.nodeIDCounter.toString()+"-"+activtyNodeID.toString(),
-              from: activtyNodeID.toString(),
-              to: this.nodeIDCounter.toString(),
-              value: 3,
-              arrows: "from"
-            };
+            auxNode = new node (
+              this.nodeIDCounter.toString(),
+              property.name.toString(),
+              "Default",
+              PROPERTY_NODE_COLOR,
+              "Default",
+              activity._id?.toString(),
+              undefined
+            );
+            auxEdge = new edge(
+              this.nodeIDCounter.toString()+"-"+activtyNodeID.toString(),
+              activtyNodeID.toString(),
+              this.nodeIDCounter.toString(),
+              "from",
+              3,
+              undefined
+            );
             
             this.nodeIDCounter++;
             nodesToAdd.push(auxNode);
@@ -217,6 +229,8 @@ export class DiagramDesingComponent implements OnInit {
         }
       });
 
+      nodesToAdd.forEach(nodeToAdd => {this.diagramNodes.push(nodeToAdd);})
+      edgesToAdd.forEach(edgeToAdd => {this.diagramEdges.push(edgeToAdd);})
       this.nodes.add(nodesToAdd);
       this.edges.add(edgesToAdd);
 
@@ -245,9 +259,10 @@ export class DiagramDesingComponent implements OnInit {
 
   addLinkerToTheDiagram()
   {
-    console.log(this.linkerSelected);
-    
-    this.nodes.add(this.linkerSelected);
+    let auxNode : node = new node(this.linkerSelected.id, this.linkerSelected.label, this.linkerSelected.shape, this.linkerSelected.color, this.linkerSelected.type, "THERE IS NO SUCH ELEMENT NOW", undefined);
+    this.nodes.add(auxNode);
+    this.diagramNodes.push(auxNode);
+
     let newTrigger: node_state =
     {
       id: this.linkerSelected.id,
@@ -257,6 +272,15 @@ export class DiagramDesingComponent implements OnInit {
     this.nodeTrigger.push(newTrigger);
   }
 
+  saveDiagram(): void
+  {
+    this.newDiagram.domain_key = this.DOMAIN_KEY;
+    this.newDiagram.nodes = this.diagramNodes;
+    this.newDiagram.edges = this.diagramEdges;
+    console.log(this.newDiagram);
+    
+  }
+  
   diagramIsClicked()
   {
     if(this.nodeTrigger.length != 0) // Siempre y cuando haya elementos en el diagrama
@@ -329,11 +353,23 @@ export class DiagramDesingComponent implements OnInit {
               {
                 this.edges.remove(this.newEdge.id);
                 this.edgesIdsRegister.delete(this.newEdge.id)
+                
+                let aux: Array<edge> = new Array<edge>();
+                this.diagramEdges.forEach((e: edge) => {
+                  if(e.id != this.newEdge.id)
+                    aux.push(e);
+                })
+                this.diagramEdges = aux;
               }
               else
               {
-                this.edges.add(this.newEdge);
+                let auxedge : edge = new edge(this.newEdge.id, this.newEdge.from, this.newEdge.to, "", 1, undefined);
+                /*
+                console.log(this.newEdge);
+                this.diagramEdges.push(this.newEdge);*/
+                this.diagramEdges.push(auxedge);
                 this.edgesIdsRegister.add(this.newEdge.id);
+                this.edges.add(this.newEdge);
               }
 
 
@@ -355,7 +391,11 @@ export class DiagramDesingComponent implements OnInit {
   debugmethod()
   {
     //console.log(this.network.body.edges);
-    console.log(this.edgesIdsRegister);
+    console.log("Nodes:");
+    console.log(this.diagramNodes);
+    console.log("Edges:");
+    console.log(this.diagramEdges);
+
     
   }
 }

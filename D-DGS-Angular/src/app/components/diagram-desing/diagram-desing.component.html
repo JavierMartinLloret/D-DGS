@@ -28,6 +28,15 @@
 <div id="diagramID" (click)="diagramIsClicked()">
     Diagrama
 </div>
+<div *ngIf="nodes.length != 0">
+    <button (click)="saveDiagramClicked()">Save Diagram!</button>
+    <div *ngIf="isSaveDiagramClicked">
+        <form ngNativeValidate (ngSubmit)="saveDiagram()" name="newDiagramForm">
+            <p>New diagram name: <input type="text" name="newDiagramName" [(ngModel)]="newDiagram.name"></p>
+            <input type="submit" value="Save it!">
+        </form>
+    </div>
+</div>
 <div>
     <button (click)="debugmethod()">Debug</button>
 </div>

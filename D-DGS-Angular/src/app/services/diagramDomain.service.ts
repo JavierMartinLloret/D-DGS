@@ -224,6 +224,7 @@ export class DiagramDomainService {
 
     /* DIAGRAM */
 
+    /*
     private diagramURL: string ="http://localhost:3000/diagrams"
 
     getDiagrams(){
@@ -248,7 +249,7 @@ export class DiagramDomainService {
 
     deleteADiagram(DiagramID: string){
         return this._httpClient.delete(this.diagramURL+"/"+DiagramID);
-    }
+    }*/
 
 
 

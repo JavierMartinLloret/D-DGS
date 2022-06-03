@@ -1,12 +1,19 @@
-export class Diagram {
-    _id: String | undefined;
-    domain_key: String;
-    lines: String[];
+import { edge } from "./edge";
+import { node } from "./node";
 
-    constructor(domain_key: String, lines: String[], _id?: String)
+export class Diagram {
+    _id: string | undefined;
+    domain_key: string;
+    name: string;
+    nodes: Array<node>;
+    edges: Array<edge>;
+
+    constructor(domain_key: string, name: string, nodes: Array<node>, edges: Array<edge>, _id?: string)
     {
-        this.domain_key = domain_key;
-        this.lines = lines;
         this._id = _id;
+        this.domain_key = domain_key;
+        this.name = name;
+        this.nodes = nodes;
+        this.edges = edges;
     }
 }
