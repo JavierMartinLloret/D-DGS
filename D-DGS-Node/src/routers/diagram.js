@@ -1,6 +1,5 @@
 const express = require("express");
 const DiagramModel = require("../models/diagram");
-const Diagram = require("../models/diagram");
 
 const DiagramRouter = new express.Router();
 
@@ -75,41 +74,6 @@ DiagramRouter.delete('/diagrams/:id', async (req, res) => {
 
         res.status(200).send(true);
     } catch (error) {
-        res.status(500).send(error);
-    }
-})
-
-// DOWNLOAD ENDPOINTS
-DiagramRouter.get('/diagrams/download/:name', async (req,res) => {
-    try {
-        const fileName = req.params.name;
-        const serverLocation = "/home/javier/TFG/D-DGS/D-DGS-Node"
-        const directoryPath = serverLocation + "/src/diagrams/";
-        console.log(JSON.parse(
-            '{"URL":'+"www.penis.com/holiwi"+'}'
-        ));
-        res.status(200).send(directoryPath)
-        //res.status(200).download(directoryPath + fileName, "yourDiagram");
-        /*const a = 
-        {
-            directoryPath,
-            style: "display:none",
-            download: "YourDiagram",
-        }
-        res.download(a);*/
-        
-        //URL.revokeObjectURL(blob);
-
-        /*
-        const diagramID = req.params.id;
-        const query = {"_id": diagramID};
-
-        let diagramSought = await DiagramModel.findOne(query);
-
-        res.status(200).send(diagramSought);*/
-
-    } catch (error) {
-        console.log(error);
         res.status(500).send(error);
     }
 })

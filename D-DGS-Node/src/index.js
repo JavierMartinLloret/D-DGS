@@ -5,11 +5,9 @@ const userRouter = require('./routers/user');
 const contextRouter = require('./routers/context');
 const activityRouter = require('./routers/activity');
 const activityPropertyRouter = require('./routers/activity_property');
-const taskRouter = require('./routers/tasks');
 const rewardSetRouter = require('./routers/reward_set');
 const rewardRouter = require('./routers/reward');
 const activity_tasksRouter = require('./routers/activity_tasks');
-const lineRouter = require('./routers/line');
 const diagramRouter = require('./routers/diagram');
 const mongoose = require('./db/mongoose');
 
@@ -33,11 +31,9 @@ app.use(userRouter);
 app.use(contextRouter);
 app.use(activityRouter);
 app.use(activityPropertyRouter);
-app.use(taskRouter);
 app.use(rewardSetRouter);
 app.use(rewardRouter);
 app.use(activity_tasksRouter);
-app.use(lineRouter);
 app.use(diagramRouter);
 
 

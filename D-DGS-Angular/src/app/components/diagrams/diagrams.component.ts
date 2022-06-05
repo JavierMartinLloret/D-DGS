@@ -15,19 +15,21 @@ const LOG_TOKEN: string = "LOG_TOKEN";
 })
 export class DiagramsComponent implements OnInit {
 
-  public userHasDiagramas: boolean = false;
+  public userHasDiagrams: boolean = false;
   public DOMAIN_KEY: string="";
-  public userDiagrams: any[] = [];
 
-  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _fileRelatedService: FileRelatedService) {
+  public userDiagrams: any = [];
+
+  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux)
     {
       this.DOMAIN_KEY = aux;
-
+      this._diagramDomainService.getAllDiagramsOfAnUser(this.DOMAIN_KEY).subscribe(res => {
+        console.log(res);
+        this.userDiagrams = res;
+      })
     }
-    if(this.userDiagrams)
-      this.userHasDiagramas = true;
     
   }
 
@@ -37,5 +39,33 @@ export class DiagramsComponent implements OnInit {
       sessionStorage.removeItem(LOG_TOKEN);  
       this._router.navigateByUrl('/login');
     }
+    if(this.userDiagrams.length != 0)
+      this.userHasDiagrams = true;
+  }
+
+  visualizeDiagram(): void
+  {
+    console.log("TRABAJO EN CURSO");
+    
+  }
+
+  downloadDiagram(): void
+  {
+    console.log("TRABAJO EN CURSO");
+    
+  }
+
+  deleteDiagram(diagram: Diagram): void
+  {
+    if(diagram._id != undefined)
+      this._diagramDomainService.deleteADiagram(diagram._id.toString()).subscribe(res => {window.location.reload();})
+  }
+
+  debugmethod()
+  {
+    //console.log(this.userDiagrams != undefined);
+    console.log(this.userHasDiagrams);
+    
+    //this.userHasDiagrams = this.userHasDiagrams ? false : true;
   }
 }

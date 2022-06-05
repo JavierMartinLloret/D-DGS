@@ -196,43 +196,17 @@ export class DiagramDomainService {
         return this._httpClient.delete(this.rewardsURL+"/fromset/"+parentSetID);
     }
 
-    /* LINE */
-
-    private linesURL: string ="http://localhost:3000/lines";
-
-    getLines(){
-        return this._httpClient.get(this.linesURL);
-    }
-
-    getLinesByDomain(domainKey: string){
-        return this._httpClient.get(this.linesURL+"/domain/"+domainKey)
-    }
-
-    getALine(LineID: string){
-        return this._httpClient.get(this.linesURL+"/"+LineID);
-    }
-
-    postALine(lineToPost: Line){
-        return this._httpClient.post(this.linesURL, lineToPost);
-    }
-
-    // updateALine
-
-    deleteALine(LineID: string){
-        return this._httpClient.delete(this.linesURL);
-    }
 
     /* DIAGRAM */
 
-    /*
     private diagramURL: string ="http://localhost:3000/diagrams"
 
     getDiagrams(){
         return this._httpClient.get(this.diagramURL);
     }
 
-    getDiagrmasByDomain(domainKey: string){
-        return this._httpClient.get(this.diagramURL+"/domain/"+domainKey);
+    getAllDiagramsOfAnUser(domain_key: string){
+        return this._httpClient.get(this.diagramURL+"/domain/"+domain_key);
     }
 
     getADiagram(DiagramID: string){
@@ -249,7 +223,7 @@ export class DiagramDomainService {
 
     deleteADiagram(DiagramID: string){
         return this._httpClient.delete(this.diagramURL+"/"+DiagramID);
-    }*/
+    }
 
 
 
