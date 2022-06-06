@@ -10,6 +10,8 @@ import { DataSet } from "vis-data";
 import { Network } from 'vis-network';
 
 const LOG_TOKEN: string = "LOG_TOKEN";
+const PASSING_DIAGRAM: string = "PASSING_DIAGRAM_KEY";
+
 const ACTIVITY_NODE_COLOR: string = "#C9FFE5";
 const PROPERTY_NODE_COLOR: string = "#5D8AA8";
 
@@ -133,9 +135,23 @@ export class DiagramDesingComponent implements OnInit {
       edges: this.edges
     };
     this.options = {};
+    /* LOS DIAGRAMAS CARGADOS DE ESTA MANERA NO ESTÁN EN EL NODE TRIGGER! OJO */
+    if(sessionStorage.getItem(PASSING_DIAGRAM)=="true")
+    {
+      this.newDiagram = this._diagramDomainService.loadDiagramToBeEdited();
+      this.nodes.add(this.newDiagram.nodes);
+      this.edges.add(this.newDiagram.edges);
+      this.options = {
+        manipulation: {
+          enabled: false
+        }
+      };
+      sessionStorage.removeItem(PASSING_DIAGRAM);
+    }
     if (this.diagram != null) {
       this.network = new Network(this.diagram, this.data, this.options);
     }
+    
   }
 
   addActivityClicked(): void{
@@ -277,7 +293,9 @@ export class DiagramDesingComponent implements OnInit {
     this.newDiagram.domain_key = this.DOMAIN_KEY;
     this.newDiagram.nodes = this.diagramNodes;
     this.newDiagram.edges = this.diagramEdges;
-    console.log(this.newDiagram);
+    this._diagramDomainService.postADiagram(this.newDiagram).subscribe((res: any) =>{
+      window.alert("Diagram created! Keep modifing this one to make another!")
+    })
     
   }
   
@@ -390,11 +408,14 @@ export class DiagramDesingComponent implements OnInit {
 
   debugmethod()
   {
+    console.log(this.options);
+    
     //console.log(this.network.body.edges);
+    /*
     console.log("Nodes:");
     console.log(this.diagramNodes);
     console.log("Edges:");
-    console.log(this.diagramEdges);
+    console.log(this.diagramEdges);*/
 
     
   }

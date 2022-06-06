@@ -5,6 +5,7 @@ import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
 import { FileRelatedService } from 'src/app/services/file-related.service';
 
 const LOG_TOKEN: string = "LOG_TOKEN";
+const PASSING_DIAGRAM: string = "PASSING_DIAGRAM_KEY";
 // LOG_TOKEN: null | FAILED | identificador del dominio del usuario
 // * DEBE SUSTITUIRSE EN ALGÚN MOMENTO POR ALGO CIFRADO
 
@@ -39,14 +40,14 @@ export class DiagramsComponent implements OnInit {
       sessionStorage.removeItem(LOG_TOKEN);  
       this._router.navigateByUrl('/login');
     }
-    if(this.userDiagrams.length != 0)
+    if(this.userDiagrams.length < 1)
       this.userHasDiagrams = true;
   }
 
-  visualizeDiagram(): void
+  visualizeDiagram(diagram: Diagram): void
   {
-    console.log("TRABAJO EN CURSO");
-    
+    this._diagramDomainService.saveDiagramToBeEdited(diagram);
+    sessionStorage.setItem(PASSING_DIAGRAM, "true");
   }
 
   downloadDiagram(): void

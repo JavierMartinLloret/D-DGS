@@ -9,6 +9,8 @@ import { Line } from "../models/line";
 import { Diagram } from "../models/diagram";
 import { Activity_Property } from "../models/activity_property";
 import { Reward_Set } from "../models/reward_set";
+import { node } from "../models/node";
+import { edge } from "../models/edge";
 
 @Injectable({
     providedIn: 'root'
@@ -199,7 +201,9 @@ export class DiagramDomainService {
 
     /* DIAGRAM */
 
-    private diagramURL: string ="http://localhost:3000/diagrams"
+    private diagramURL: string ="http://localhost:3000/diagrams";
+
+    private diagramToBeShowed: Diagram = new Diagram("","",new Array<node>(), new Array<edge>(), undefined);
 
     getDiagrams(){
         return this._httpClient.get(this.diagramURL);
@@ -225,8 +229,13 @@ export class DiagramDomainService {
         return this._httpClient.delete(this.diagramURL+"/"+DiagramID);
     }
 
+    saveDiagramToBeEdited(diagram: Diagram): void
+    {
+        this.diagramToBeShowed = diagram;
+    }
 
-
-
-
+    loadDiagramToBeEdited(): Diagram
+    {
+        return this.diagramToBeShowed;
+    }
 }

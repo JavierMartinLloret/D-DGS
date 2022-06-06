@@ -8,7 +8,7 @@
     <h2>Your current Diagrams</h2>
     <ul *ngFor="let d of userDiagrams">
         <li>
-            <a class="nav-link" [routerLink]="['/diagram_desing']" (click)="visualizeDiagram()">{{d.name}}  </a>
+            <a class="nav-link" [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">{{d.name}}  </a>
             <button>Download in XML (En curso)</button>
             <button (click)="deleteDiagram(d)">Delete this Diagram</button>
         </li>
