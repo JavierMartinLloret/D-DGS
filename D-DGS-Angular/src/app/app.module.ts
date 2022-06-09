@@ -18,6 +18,14 @@ import { DiagramDomainService } from './services/diagramDomain.service';
 import { UsersService } from './services/users.service';
 import { RewardDomainComponent } from './components/reward-domain/reward-domain.component';
 import { DiagramDesingComponent } from './components/diagram-desing/diagram-desing.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+/* ANGULAR MATERIAL */
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatDividerModule } from "@angular/material/divider";
 
 const routes: Routes = [
   {path: 'register', component: RegisterComponent},
@@ -51,7 +59,13 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule
   ],
   providers: [
     DiagramDomainService,

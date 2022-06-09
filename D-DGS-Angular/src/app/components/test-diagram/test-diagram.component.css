@@ -1,5 +1,47 @@
-#idDiagrama {
-    width: 600px;
-    height: 400px;
-    border: 1px solid lightgray;
+mat-toolbar {
+    background: #141eb6;
+    color: white;
+}
+mat-sidenav {
+    margin: 16px;
+    width: 240px;
+    border-right: none;
+    background: darkblue;
+    color: white;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    font-size: large;
+    line-height: 1em;
+}
+
+.content {
+    height: calc(100vh - 98px);
+    margin: 16px;
+    margin-left: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2rem;
+    color: darkgray;
+    border-radius: 10px;
+}
+
+mat-sidenav-container {
+    height: calc(100vh - 65px);
+}
+
+mat-divider {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    background-color: lightgray;
+}
+
+.nav-link {
+    color: white;
+}
+
+.menuButton {
+    font-size: large;
 }

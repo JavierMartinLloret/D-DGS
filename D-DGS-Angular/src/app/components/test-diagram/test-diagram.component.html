@@ -1,2 +1,59 @@
-<h1>Diagrama de ejemplo</h1>
-<div id="idDiagrama" (click)="showNodes()"></div>
+<mat-toolbar>
+    <a class="nav-link" [routerLink]="['/']">D&DGS</a>
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened">
+            menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+            close
+        </mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav">
+        <h1>Test</h1>
+        <mat-divider></mat-divider>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']">
+                <span>Home</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/domain_craft_area']">
+                <span>Domain Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/reward_craft_area']">
+                <span>Reward Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagram_desing']">
+                <span>Desing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagrams']">
+                <span>Diagrams</span>    
+            </button>
+        </div>
+        <div *ngIf="userIsAdmin">
+            <button mat-button  class="menuButton" [routerLink]="['/users']">
+                <span>User's Administration</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']" (click)="unlogUser()">
+                <span>Log Out</span>    
+            </button>
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="content mat-elevation-z4">
+            Page content
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

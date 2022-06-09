@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DataSet } from 'vis-data';
-import { Network } from 'vis-network';
+
+const LOG_TOKEN: string = "LOG_TOKEN";
 
 @Component({
   selector: 'app-test-diagram',
@@ -9,43 +9,23 @@ import { Network } from 'vis-network';
 })
 export class TestDiagramComponent implements OnInit {
 
-  public container: any;
-  public nodes: any;
-  public edges: any;
-  public data: any;
-  public options: any;
-  public network: any;
+  
+
+  public userIsAdmin: boolean = true;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.container = document.getElementById("idDiagrama");
-    this.nodes = document.getElementById("idNodos");
-
-    this.nodes = new DataSet([
-      { id: 1, label: "Nodo 1" },
-      { id: 2, label: "Nodo 2" }
-    ]);
-
-    this.edges = new DataSet([
-      { id:1, from: 1, to: 2 }
-    ]);
-
-    var data = {
-      nodes: this.nodes,
-      edges: this.edges
-    }
-
-    this.options = {  };
-
-    if(this.container != null)
-    {
-      this.network = new Network(this.container, data, this.options);
-    }
+    
   }
 
-  showNodes()
+  unlogUser()
   {
-    console.log(this.nodes);
+    sessionStorage.removeItem(LOG_TOKEN)
+  }
+
+  debug()
+  {
+    this.userIsAdmin = this.userIsAdmin ? false: true;
   }
 }
