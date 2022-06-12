@@ -45,3 +45,10 @@ mat-divider {
 .menuButton {
     font-size: large;
 }
+
+.contact-info {
+    position: absolute;
+    bottom: 3px;
+    align-self: center;
+    color: white;
+}

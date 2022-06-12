@@ -1,27 +1,77 @@
-h1 {text-align: center;}
-p {text-align: center;}
+mat-toolbar {
+    background: #141eb6;
+    color: white;
+}
+mat-sidenav {
+    margin: 16px;
+    width: 240px;
+    border-right: none;
+    background: darkblue;
+    color: white;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    font-size: large;
+    line-height: 1em;
+}
 
-/* The alert message box */
-.alert {
-    padding: 20px;
-    background-color: #f44336; /* Red */
+
+mat-sidenav-container {
+    height: calc(100vh - 65px);
+}
+
+mat-divider {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    background-color: lightgray;
+}
+
+.nav-link {
     color: white;
-    margin-bottom: 15px;
-  }
-  
-  /* The close button */
-  .closebtn {
-    margin-left: 15px;
+}
+
+.menuButton {
+    font-size: large;
+}
+
+.contact-info {
+    position: absolute;
+    bottom: 3px;
+    align-self: center;
     color: white;
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  /* When moving the mouse over the close button */
-  .closebtn:hover {
-    color: black;
-  }
+}
+
+.content {
+    height: 15%;
+    margin: 16px;
+    margin-left: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 3rem;
+    color: darkblue;
+    border-radius: 10px;
+}
+
+.Panel {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  overflow-x: hidden;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.Left {
+  left : 0;
+}
+
+.Right {
+  right: 0;
+}
+
+.nav-link-black{
+  color: black;
+}

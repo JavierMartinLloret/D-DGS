@@ -1,18 +1,49 @@
-<h1>PROVISIONAL LOGGIN</h1>
-<div>
-    <form ngNativeValidate (ngSubmit)="loggin()">
-        <p>Nickname: <input type="text" name="nickname" id="nickname" [(ngModel)]="inputNick" required></p>
-        <p>Password: <input type="text" name="password" id="password" [(ngModel)]="inputPass" required></p>
-        <p><input type="submit" value="Loggin!"></p>
-    </form>
-</div>
-<div>
-    <h2>Register here!</h2>
-    <div>
-        <a class="nav-link" [routerLink]="['/register']">Register</a>
-    </div>
-</div>
-<div class="alert" *ngIf="autenticationFailed">
-    <p>Authentication failed!</p>
-</div>
+<mat-toolbar>
+    <a class="nav-link" [routerLink]="['/']">D&DGS</a>
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened">
+            menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+            close
+        </mat-icon>
+    </button>
+</mat-toolbar>
 
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav">
+        <h1>Welcome!</h1>
+        <mat-divider></mat-divider>
+        This area will be usefull later
+        <div class="contact-info">
+            <p>
+                <i>Javier Martín Lloret ©</i>
+            </p>
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="mainContentBox">
+        <div class="content">
+            <h1>Welcome to D&DGS!</h1>
+        </div>
+        <div>
+            <div class="Panel Left" (mouseleave)="signInIsOpen = false" (mouseover)="signInIsOpen = true">
+                <h2>Sign in!</h2>
+                <div *ngIf="signInIsOpen">
+                    <form ngNativeValidate (ngSubmit)="loggin()">
+                        <p>Nickname: <input type="text" name="nickname" id="nickname" [(ngModel)]="inputNick" required></p>
+                        <p>Password: <input type="text" name="password" id="password" [(ngModel)]="inputPass" required></p>
+                        <p><input type="submit" value="Sign in!"></p>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="Panel Right" (mouseleave)="signUpIsOpen = false" (mouseover)="signUpIsOpen = true">
+                <h2 >Sign up!</h2>
+                <div *ngIf="signUpIsOpen">
+                    <button [routerLink]="['/register']">Go to register</button>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

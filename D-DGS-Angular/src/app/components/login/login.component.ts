@@ -13,6 +13,9 @@ const LOG_TOKEN: string = "LOG_TOKEN";
 })
 export class LoginComponent implements OnInit {
 
+  public signInIsOpen: boolean = false;
+  public signUpIsOpen: boolean = false;
+  
   public inputNick: String = new String();
   public inputPass : String = new String();
   
