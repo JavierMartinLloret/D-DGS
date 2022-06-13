@@ -44,10 +44,6 @@ export class ListOfUsersComponent implements OnInit {
     if(aux) // No es administrador
     {
       this.DOMAIN_KEY = aux;
-      this._userService.isThisUserAnAdministrator(aux).subscribe((response: any) => {
-        if(!response)
-        this._router.navigateByUrl('/main');
-      })
     }
   }
 

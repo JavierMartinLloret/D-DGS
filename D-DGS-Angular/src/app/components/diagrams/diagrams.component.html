@@ -1,21 +1,79 @@
-<div>
-    <h1>Diagrams</h1>
-</div>
-<div *ngIf="!userHasDiagrams">
-    <p>You haven't made any diagram so far, <a class="nav-link" [routerLink]="['/diagram_desing']">create one now!</a></p>
-</div>
-<div *ngIf="userHasDiagrams">
-    <h2>Your current Diagrams</h2>
-    <ul *ngFor="let d of userDiagrams">
-        <li>
-            <a class="nav-link" [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">{{d.name}}  </a>
-            <button>Download in XML (En curso)</button>
-            <button (click)="deleteDiagram(d)">Delete this Diagram</button>
-        </li>
+<mat-toolbar>
+    <a class="nav-link-toolbar" [routerLink]="['/']">D&DGS</a>
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened">
+            menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+            close
+        </mat-icon>
+    </button> <button (click)="debugmethod()">Debug</button>
+    <!-- -->
+</mat-toolbar>
 
-    </ul>
-</div>
-<div>
-    <button (click)="debugmethod()">Debug</button>
-</div>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav">
+        <h1>Diagrams</h1>
+        <mat-divider></mat-divider>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']">
+                <span>Home</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/domain_craft_area']">
+                <span>Domain Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/reward_craft_area']">
+                <span>Reward Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagram_desing']">
+                <span>Desing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagrams']">
+                <span>Diagrams</span>    
+            </button>
+        </div>
+        <div *ngIf="userIsAdmin">
+            <button mat-button  class="menuButton" [routerLink]="['/users']">
+                <span>User's Administration</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']" (click)="unlogUser()">
+                <span>Log Out</span>    
+            </button>
+        </div>
+        <div class="contact-info">
+            <p>
+                <i>Javier Martín Lloret ©</i>
+            </p>
+        </div>
+    </mat-sidenav>
 
+    <mat-sidenav-content>
+        <div>
+            <h1 class="ContentBox Title">Diagrams</h1>
+            <div class="ContentBox DiagramUnlist" *ngIf="!userHasDiagrams">
+                <p>You haven't made any diagram so far, <a class="nav-link" [routerLink]="['/diagram_desing']">create one now!</a></p>
+            </div>
+            <div class="ContentBox DiagramList" *ngIf="userHasDiagrams">
+                <ul *ngFor="let d of userDiagrams">
+                    <li>
+                        <a class="nav-link" [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">{{d.name}}  </a>
+                        <button>Download in XML (En curso)</button>
+                        <button (click)="deleteDiagram(d)">Delete this Diagram</button>
+                        <button [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">See it in the editor</button>
+                    </li>        
+                </ul>
+            </div>
+        </div>
+       
+    </mat-sidenav-content>
+</mat-sidenav-container>

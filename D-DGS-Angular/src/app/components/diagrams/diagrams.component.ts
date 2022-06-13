@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Diagram } from 'src/app/models/diagram';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
 import { FileRelatedService } from 'src/app/services/file-related.service';
+import { UsersService } from 'src/app/services/users.service';
 
 const LOG_TOKEN: string = "LOG_TOKEN";
 const PASSING_DIAGRAM: string = "PASSING_DIAGRAM_KEY";
@@ -21,7 +22,9 @@ export class DiagramsComponent implements OnInit {
 
   public userDiagrams: any = [];
 
-  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService) {
+  public userIsAdmin: boolean = false;
+
+  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _usersService: UsersService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux)
     {
@@ -29,6 +32,8 @@ export class DiagramsComponent implements OnInit {
       this._diagramDomainService.getAllDiagramsOfAnUser(this.DOMAIN_KEY).subscribe(res => {
         console.log(res);
         this.userDiagrams = res;
+        if(this.userDiagrams.length > 0)
+          this.userHasDiagrams = true;
       })
     }
     
@@ -39,9 +44,7 @@ export class DiagramsComponent implements OnInit {
     {
       sessionStorage.removeItem(LOG_TOKEN);  
       this._router.navigateByUrl('/login');
-    }
-    if(this.userDiagrams.length < 1)
-      this.userHasDiagrams = true;
+    }      
   }
 
   visualizeDiagram(diagram: Diagram): void
@@ -62,10 +65,18 @@ export class DiagramsComponent implements OnInit {
       this._diagramDomainService.deleteADiagram(diagram._id.toString()).subscribe(res => {window.location.reload();})
   }
 
+  unlogUser()
+  {
+    sessionStorage.removeItem(LOG_TOKEN)
+  }
+
   debugmethod()
   {
-    //console.log(this.userDiagrams != undefined);
+    console.log(this.userDiagrams);
     console.log(this.userHasDiagrams);
+    console.log(this.userDiagrams.length);
+    
+    
     
     //this.userHasDiagrams = this.userHasDiagrams ? false : true;
   }

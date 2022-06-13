@@ -18,12 +18,7 @@ export class MainMenuComponent implements OnInit {
 
   constructor(private _router: Router, _userService: UsersService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
-    if(aux)
-    {
-      _userService.isThisUserAnAdministrator(aux).subscribe((response: any) => {        
-        this.isAnAdministrator = response;
-      })
-    }
+    
   }
 
   ngOnInit(): void {
