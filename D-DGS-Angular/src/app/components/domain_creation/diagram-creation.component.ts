@@ -4,6 +4,7 @@ import { Activity } from 'src/app/models/activity';
 import { Activity_Property } from "src/app/models/activity_property";
 import { Context } from 'src/app/models/context';
 import { DiagramDomainService } from "src/app/services/diagramDomain.service";
+import { UsersService } from 'src/app/services/users.service';
 
 const LOG_TOKEN: string = "LOG_TOKEN";
 const DEFAULT_CONTEXT_NAME: string = "Default Context";
@@ -46,16 +47,21 @@ export class DiagramCreationComponent implements OnInit {
   public isNewPropertyValueString: boolean = false;
   public isNewPropertyValueNumeric: boolean = false;
   public isNewPropertyValueDate: boolean = false;
+  public userIsAdmin: boolean = false;
 
   //
 
-  constructor(private _diagramDomainService: DiagramDomainService, private _router: Router) { 
+  constructor(private _diagramDomainService: DiagramDomainService,private _usersService: UsersService, private _router: Router) { 
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux)
     {
       this.DOMAIN_KEY = aux;
 
       this._diagramDomainService.getContextsFromAUser(this.DOMAIN_KEY).subscribe(a => {this.userContexts = a;})
+      this._usersService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
+        if(res)
+          this.userIsAdmin = true;
+      })
     }
   }
 
@@ -222,9 +228,13 @@ export class DiagramCreationComponent implements OnInit {
         
   }
 
+  unlogUser()
+  {
+    sessionStorage.removeItem(LOG_TOKEN)
+  }
+
   debugmethod()
   {
-    console.log(this.DOMAIN_KEY);
-    console.log(this.userContexts)
+    console.log(this.userContexts);
   }
 }

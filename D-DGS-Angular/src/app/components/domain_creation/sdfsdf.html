@@ -1,0 +1,98 @@
+<div>
+    <h1>Diagram Creation</h1>
+    <h2>Context</h2>
+    <div>
+        <p>Select a context:
+            <select name="contexts" id="contexts" [(ngModel)]="contextSelected" (ngModelChange)="contextIsSelected()">
+            <option value="null_value" selected disabled hidden></option>
+            <option *ngFor="let c of userContexts" [ngValue]="c">{{c.name}}</option>
+            </select>
+        </p>
+    </div>
+    <div>
+        <a class="link" [routerLink]="['/domain_craft_area']" (click)="createANewContextSelected()">Create a new context</a>
+        <div *ngIf="isCreateANewContextSelected">
+            <h3>Creating new context:</h3>
+            <form ngNativeValidate (ngSubmit)="createNewContext()" name="newContextForm">
+                <p>New Context name: <input type="text" name="newContextName" [(ngModel)]="newContextName" required></p>
+                <p><button type="submit">Create the Context</button></p>
+            </form>
+        </div>
+    </div>
+    <div *ngIf="isContextSelected && !isContextSelectedDefault">
+        <a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteSelectedContext()">Delete this context (Will delete all activities & properties associated!)</a>        
+    </div>
+    <div *ngIf="isContextSelected">
+        <h3>Current Activities of this context: <button (click)="addANewActivityClicked()">Add another</button></h3>
+        
+        <ul *ngFor="let a of contextActivities">
+            <li>
+                {{a.name}}
+            </li>
+            <ul>
+                <li>
+                    <a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteActivity(a)">Delete this Activity (Will delete all properties!)</a>
+                </li>
+                <li>
+                    <h4>Properties: </h4>
+                    <ul *ngFor="let p of ActivitiesProperties">
+                        <li *ngIf="a._id == p.activity_ID">
+                            {{p.name}}
+                            <ul>
+                                <li><a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteProperty(p)">Delete this property</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <button (click)="addANewPropertyClicked(a)">Add a new property</button>
+                </li>
+            </ul>
+        </ul>        
+    </div>
+    <div *ngIf="isAddNewActivitySelected">
+        <h3>Adding new Activity</h3>
+        <form ngNativeValidate (ngSubmit)="postNewActivity()">
+            <p>Activity's name:<input type="text" name="Activity_name" [(ngModel)]="newActivityName" required></p>
+            <p>Activitiy's description:<input type="text" name="Description" [(ngModel)]="newActivityDescription" required></p>
+            <p><input type="submit" value="Create the Activity"></p>
+        </form>
+    </div>
+
+    <div *ngIf="isAddNewPropertySelected">
+        <h3>Adding new Property</h3>
+        <form ngNativeValidate>
+            <p>Property name: <input type="text" name="property_name" id="property_name" [(ngModel)]="newPropertyName" required></p>
+            <p>Property value type:
+                <select name="property_value_type_selector" id="property_value_type_selector" [(ngModel)]="newProperty" (ngModelChange)="propertyTypeValueSelected()">
+                <option value="null_value" selected disabled hidden></option>
+                <option value="String">Text (Eg: An identification code)</option>
+                <option value="Number">Numeric (Eg: A minimun score on a text)</option>
+                <option value="Date">Date (Eg: An expiration date)</option>
+            </select></p>
+            
+        </form>
+        <div *ngIf="isNewPropertyValueString">
+            <form ngNativeValidate (ngSubmit)="postNewProperty()">
+                <p><input type="text" name="property_value" id="property_value_String" [(ngModel)]="newPropertyValue"></p>
+                <input type="submit" value="Create the property">
+            </form>
+        </div>
+        <div *ngIf="isNewPropertyValueNumeric">
+            <form ngNativeValidate (ngSubmit)="postNewProperty()">
+                <p><input type="number" name="property_value" id="property_value_Number" [(ngModel)]="newPropertyValue"></p>
+                <input type="submit" value="Create the property">
+            </form>
+        </div>
+        <div *ngIf="isNewPropertyValueDate">
+            <form ngNativeValidate (ngSubmit)="postNewProperty()">
+                <p><input type="date" name="property_value" id="property_value_Number" [(ngModel)]="newPropertyValue"></p>
+                <input type="submit" value="Create the property">
+            </form>
+        </div>
+    </div>
+    
+</div>
+<div>
+    <button (click)="debugmethod()">Debug</button>
+</div>

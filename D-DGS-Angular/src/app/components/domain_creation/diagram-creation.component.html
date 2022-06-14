@@ -1,98 +1,170 @@
-<div>
-    <h1>Diagram Creation</h1>
-    <h2>Context</h2>
-    <div>
-        <p>Select a context:
-            <select name="contexts" id="contexts" [(ngModel)]="contextSelected" (ngModelChange)="contextIsSelected()">
-            <option value="null_value" selected disabled hidden></option>
-            <option *ngFor="let c of userContexts" [ngValue]="c">{{c.name}}</option>
-            </select>
-        </p>
-    </div>
-    <div>
-        <a class="link" [routerLink]="['/domain_craft_area']" (click)="createANewContextSelected()">Create a new context</a>
-        <div *ngIf="isCreateANewContextSelected">
-            <h3>Creating new context:</h3>
-            <form ngNativeValidate (ngSubmit)="createNewContext()" name="newContextForm">
-                <p>New Context name: <input type="text" name="newContextName" [(ngModel)]="newContextName" required></p>
-                <p><button type="submit">Create the Context</button></p>
-            </form>
-        </div>
-    </div>
-    <div *ngIf="isContextSelected && !isContextSelectedDefault">
-        <a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteSelectedContext()">Delete this context (Will delete all activities & properties associated!)</a>        
-    </div>
-    <div *ngIf="isContextSelected">
-        <h3>Current Activities of this context: <button (click)="addANewActivityClicked()">Add another</button></h3>
-        
-        <ul *ngFor="let a of contextActivities">
-            <li>
-                {{a.name}}
-            </li>
-            <ul>
-                <li>
-                    <a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteActivity(a)">Delete this Activity (Will delete all properties!)</a>
-                </li>
-                <li>
-                    <h4>Properties: </h4>
-                    <ul *ngFor="let p of ActivitiesProperties">
-                        <li *ngIf="a._id == p.activity_ID">
-                            {{p.name}}
-                            <ul>
-                                <li><a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteProperty(p)">Delete this property</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <button (click)="addANewPropertyClicked(a)">Add a new property</button>
-                </li>
-            </ul>
-        </ul>        
-    </div>
-    <div *ngIf="isAddNewActivitySelected">
-        <h3>Adding new Activity</h3>
-        <form ngNativeValidate (ngSubmit)="postNewActivity()">
-            <p>Activity's name:<input type="text" name="Activity_name" [(ngModel)]="newActivityName" required></p>
-            <p>Activitiy's description:<input type="text" name="Description" [(ngModel)]="newActivityDescription" required></p>
-            <p><input type="submit" value="Create the Activity"></p>
-        </form>
-    </div>
-
-    <div *ngIf="isAddNewPropertySelected">
-        <h3>Adding new Property</h3>
-        <form ngNativeValidate>
-            <p>Property name: <input type="text" name="property_name" id="property_name" [(ngModel)]="newPropertyName" required></p>
-            <p>Property value type:
-                <select name="property_value_type_selector" id="property_value_type_selector" [(ngModel)]="newProperty" (ngModelChange)="propertyTypeValueSelected()">
-                <option value="null_value" selected disabled hidden></option>
-                <option value="String">Text (Eg: An identification code)</option>
-                <option value="Number">Numeric (Eg: A minimun score on a text)</option>
-                <option value="Date">Date (Eg: An expiration date)</option>
-            </select></p>
-            
-        </form>
-        <div *ngIf="isNewPropertyValueString">
-            <form ngNativeValidate (ngSubmit)="postNewProperty()">
-                <p><input type="text" name="property_value" id="property_value_String" [(ngModel)]="newPropertyValue"></p>
-                <input type="submit" value="Create the property">
-            </form>
-        </div>
-        <div *ngIf="isNewPropertyValueNumeric">
-            <form ngNativeValidate (ngSubmit)="postNewProperty()">
-                <p><input type="number" name="property_value" id="property_value_Number" [(ngModel)]="newPropertyValue"></p>
-                <input type="submit" value="Create the property">
-            </form>
-        </div>
-        <div *ngIf="isNewPropertyValueDate">
-            <form ngNativeValidate (ngSubmit)="postNewProperty()">
-                <p><input type="date" name="property_value" id="property_value_Number" [(ngModel)]="newPropertyValue"></p>
-                <input type="submit" value="Create the property">
-            </form>
-        </div>
-    </div>
+<mat-toolbar>
+    <a class="nav-link-main" [routerLink]="['/']">
+        <span>D&DGS</span>
+        <img src="./../../../assets/images/LOGO.png" alt="D&DGS Logo" style="vertical-align: middle; width:32px; height: 32px; margin-left: 10px;">
+    </a>
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened">
+            menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+            close
+        </mat-icon>
+    </button>
     
-</div>
-<div>
-    <button (click)="debugmethod()">Debug</button>
-</div>
+    <!-- <button (click)="debugmethod()">debug</button> -->
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav">
+        <h1>Domain Editing</h1>
+        <mat-divider></mat-divider>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']">
+                <span>Home</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/domain_craft_area']">
+                <span>Domain Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/reward_craft_area']">
+                <span>Reward Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagram_desing']">
+                <span>Desing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagrams']">
+                <span>Diagrams</span>    
+            </button>
+        </div>
+        <div *ngIf="userIsAdmin">
+            <button mat-button  class="menuButton" [routerLink]="['/users']">
+                <span>User's Administration</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']" (click)="unlogUser()">
+                <span>Log Out</span>    
+            </button>
+        </div>
+        <div class="contact-info">
+            <p>
+                <i>Javier Martín Lloret ©</i>
+            </p>
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="content mat-elevation-z4">
+                <h2 class="content Title">Context Creation Area</h2>
+                <div class="content">
+                    <p>Select a context:</p>
+                    <mat-select class="ContextSelector" name="contexts" id="contexts" [(ngModel)]="contextSelected" (ngModelChange)="contextIsSelected()" placeholder="Select a context" title="Context selector">
+                        <mat-option *ngFor="let c of userContexts" [value]="c">{{c.name}}</mat-option>
+                    </mat-select>
+                </div>
+                <div class="content">
+                    <button class="link" [routerLink]="['/domain_craft_area']" (click)="createANewContextSelected()" title="Create a new context!">
+                        <mat-icon style="vertical-align: middle">add_circle</mat-icon>
+                        <span>Create a new context</span>
+                    </button>
+                    <div *ngIf="isCreateANewContextSelected">
+                        <h3>Creating new context:</h3>
+                        <form ngNativeValidate (ngSubmit)="createNewContext()" name="newContextForm">
+                            <p>New Context name: <input type="text" name="newContextName" [(ngModel)]="newContextName" required></p>
+                            <p><button type="submit">Create the Context</button></p>
+                        </form>
+                    </div>
+                </div>
+                <div *ngIf="isContextSelected && !isContextSelectedDefault" class="content">
+                    <a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteSelectedContext()">Delete this context (Will delete all activities & properties associated!)</a>        
+                </div>
+                <div *ngIf="isContextSelected" class="content">
+                    <h3>Current Activities of this context: </h3>
+                        <button (click)="addANewActivityClicked()">
+                            <mat-icon style="vertical-align: middle">add_circle</mat-icon>
+                            <span>Add another</span>
+                        </button>
+                    
+                    <ul *ngFor="let a of contextActivities">
+                        <li>
+                            <h4>{{a.name}}
+                            <button style="margin-left: 5px;" [routerLink]="['/domain_craft_area']" (click)="deleteActivity(a)">
+                                <mat-icon style="vertical-align: middle;">remove_circle</mat-icon>
+                                <span>Delete this Activity (Will delete all properties!)</span>
+                            </button>
+                            </h4>
+                        </li>
+                        <ul>
+                            <li>
+                                <h4 style="text-decoration: underline;">Properties: </h4>
+                                <ul *ngFor="let p of ActivitiesProperties">
+                                    <li *ngIf="a._id == p.activity_ID">
+                                        <p>{{p.name}}
+                                            <button style="margin-left: 5px;" [routerLink]="['/domain_craft_area']" (click)="deleteProperty(p)">
+                                            <mat-icon style="vertical-align: middle;">remove_circle</mat-icon>
+                                            <span>Delete this Property</span>
+                                        </button></p>
+                                        
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button (click)="addANewPropertyClicked(a)">
+                                    <mat-icon style="vertical-align: middle">add_circle</mat-icon>
+                                    <span>Add a new property</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </ul>        
+                </div>
+                <div class="content" *ngIf="isAddNewActivitySelected">
+                    <h3>Adding new Activity</h3>
+                    <form ngNativeValidate (ngSubmit)="postNewActivity()">
+                        <p>Activity's name:<input type="text" name="Activity_name" [(ngModel)]="newActivityName" required></p>
+                        <p>Activitiy's description:<input type="text" name="Description" [(ngModel)]="newActivityDescription" required></p>
+                        <p><input type="submit" value="Create the Activity"></p>
+                    </form>
+                </div>
+                <div *ngIf="isAddNewPropertySelected">
+                    <h3>Adding new Property</h3>
+                    <form ngNativeValidate>
+                        <p>Property name: <input type="text" name="property_name" id="property_name" [(ngModel)]="newPropertyName" required></p>
+                        <p>Property value type:
+                            <select name="property_value_type_selector" id="property_value_type_selector" [(ngModel)]="newProperty" (ngModelChange)="propertyTypeValueSelected()">
+                            <option value="null_value" selected disabled hidden></option>
+                            <option value="String">Text (Eg: An identification code)</option>
+                            <option value="Number">Numeric (Eg: A minimun score on a text)</option>
+                            <option value="Date">Date (Eg: An expiration date)</option>
+                        </select></p>
+                        
+                    </form>
+                    <div *ngIf="isNewPropertyValueString">
+                        <form ngNativeValidate (ngSubmit)="postNewProperty()">
+                            <p><input type="text" name="property_value" id="property_value_String" [(ngModel)]="newPropertyValue"></p>
+                            <input type="submit" value="Create the property">
+                        </form>
+                    </div>
+                    <div *ngIf="isNewPropertyValueNumeric">
+                        <form ngNativeValidate (ngSubmit)="postNewProperty()">
+                            <p><input type="number" name="property_value" id="property_value_Number" [(ngModel)]="newPropertyValue"></p>
+                            <input type="submit" value="Create the property">
+                        </form>
+                    </div>
+                    <div *ngIf="isNewPropertyValueDate">
+                        <form ngNativeValidate (ngSubmit)="postNewProperty()">
+                            <p><input type="date" name="property_value" id="property_value_Number" [(ngModel)]="newPropertyValue"></p>
+                            <input type="submit" value="Create the property">
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

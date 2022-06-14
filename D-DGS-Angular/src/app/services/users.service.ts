@@ -11,6 +11,11 @@ export class UsersService {
 
   constructor(private _httpClient: HttpClient) { }
 
+  isAnAdmin(domainKey: string)
+  {
+    return this._httpClient.get(this.baseURL+"/isAdmin/"+domainKey)
+  }
+
   getUsers() {
     return this._httpClient.get(this.baseURL);
   }

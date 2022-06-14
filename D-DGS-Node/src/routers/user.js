@@ -24,6 +24,25 @@ userRouter.get('/users/:id', async (req, res) => {
         res.status(500).send(error);
     }
 })
+
+// Is this user an Administrator ?
+userRouter.get('/users/isAdmin/:domain_key', async (req, res) => {
+    console.log("Consultado");
+    let query = {
+        "domain_key": req.params.domain_key
+    };
+    
+    try {
+        const user = await UserModel.findOne(query)
+        if(user.is_admin)
+            res.status(200).send(true);
+        else
+            res.status(200).send(false);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 // Get domain_key
 userRouter.get('/users/:nick/:pass', async (req, res) => {
     let query = 
@@ -36,23 +55,6 @@ userRouter.get('/users/:nick/:pass', async (req, res) => {
         const user = await UserModel.findOne(query);
         let domain_key = JSON.stringify(user.domain_key);
         res.status(200).send(domain_key);
-    } catch (error) {
-        res.status(500).send(error);
-    }
-})
-// Is this user an Administrator ?
-userRouter.get('/users/One/ByDomain/:domainIdentificator', async (req, res) => {
-    try {
-        const userIdentificator = req.params.domainIdentificator;
-        const query = {
-            "domainIdentificator": userIdentificator,
-            "is_admin": true
-        };
-        const queryResult = await UserModel.find(query);
-        if(JSON.stringify(queryResult) != "[]")
-            res.status(200).send(true);
-        else
-            res.status(200).send(false);
     } catch (error) {
         res.status(500).send(error);
     }
