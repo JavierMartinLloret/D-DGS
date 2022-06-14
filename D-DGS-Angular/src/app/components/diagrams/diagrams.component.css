@@ -50,3 +50,14 @@ mat-divider {
     text-align: center;
     font-size: 2rem;
 }
+
+.DiagramList {
+    text-align:left;
+    margin-left: 25rem;
+    list-style-type: none;
+}
+
+.diagramButton {
+    display: inline-flex;
+    align-items: flex-end; 
+}

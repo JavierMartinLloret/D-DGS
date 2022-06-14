@@ -7,8 +7,8 @@
         <mat-icon *ngIf="sidenav.opened">
             close
         </mat-icon>
-    </button> <button (click)="debugmethod()">Debug</button>
-    <!-- -->
+    </button> 
+    <!-- <button (click)="debugmethod()">Debug</button> -->
 </mat-toolbar>
 
 <mat-sidenav-container>
@@ -60,16 +60,16 @@
     <mat-sidenav-content>
         <div>
             <h1 class="ContentBox Title">Diagrams</h1>
-            <div class="ContentBox DiagramUnlist" *ngIf="!userHasDiagrams">
+            <div class="ContentBox DiagramList" *ngIf="!userHasDiagrams">
                 <p>You haven't made any diagram so far, <a class="nav-link" [routerLink]="['/diagram_desing']">create one now!</a></p>
             </div>
-            <div class="ContentBox DiagramList" *ngIf="userHasDiagrams">
-                <ul *ngFor="let d of userDiagrams">
+            <div *ngIf="userHasDiagrams">
+                <ul *ngFor="let d of userDiagrams" class="ContentBox DiagramList" >
                     <li>
                         <a class="nav-link" [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">{{d.name}}  </a>
-                        <button>Download in XML (En curso)</button>
-                        <button (click)="deleteDiagram(d)">Delete this Diagram</button>
-                        <button [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">See it in the editor</button>
+                        <button class="diagramButton"><mat-icon> insert_drive_file</mat-icon></button>
+                        <button (click)="deleteDiagram(d)"><mat-icon>delete_forever</mat-icon></button>
+                        <button [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)"><mat-icon>remove_red_eye</mat-icon></button>
                     </li>        
                 </ul>
             </div>
