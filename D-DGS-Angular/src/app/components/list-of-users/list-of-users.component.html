@@ -1,36 +1,97 @@
-<nav class="navbar navbar-dark bg-primary">
-    <a class="navbar-brand" href="/">
-      D&DGS
-    </a>
-  </nav>
-  
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8 mt-4">
-          <div class="card-title">
-            <h1>Currently users on DB</h1>
-            <ul>
-                <li *ngFor="let user of users">
-                    <div>Nickname: {{user.nickname}}</div>
-                    <div>Email: {{user.email}}</div>
-                    <div><a [routerLink]="['/users']" (click)="editUserIsSelected(user)">Edit the user</a></div>
-                    <div><button (click)="deleteUser(user)">Delete this user</button></div>
-                </li>
-            </ul>
-            <div *ngIf="isEditUserSelected">
-              <form ngNativeValidate name="editingUserForm" (ngSubmit)="editUser()">
-                <p>Nickname: <input type="text"  name="editingUserNickname" placeholder="{{userToEdit.nickname}}" [(ngModel)]="newEditedUser.nickname" required></p>
-                <p>Email: <input type="text" name="editingUserEmail" placeholder="{{userToEdit.email}}" [(ngModel)]="newEditedUser.email" required></p>
-                <p>Password: <input type="text" name="editingUserPassword" placeholder="{{userToEdit.password}}" [(ngModel)]="newEditedUser.password" required></p>
-                <p>Is an administrator? :<input type="checkbox" name="editingUserIs_admin" placeholder="{{userToEdit.is_admin}}" [(ngModel)]="newEditedUser.is_admin"></p>
-                <p><input type="submit" value="Edit the user"></p>
-              </form>
-            </div>
-          </div>
+<mat-toolbar>
+  <a class="nav-link-main" [routerLink]="['/']">
+      <span>D&DGS</span>
+      <img src="./../../../assets/images/LOGO.png" alt="D&DGS Logo" style="vertical-align: middle; width:32px; height: 32px; margin-left: 10px;">
+  </a>
+  <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+      <mat-icon *ngIf="!sidenav.opened">
+          menu
+      </mat-icon>
+      <mat-icon *ngIf="sidenav.opened">
+          close
+      </mat-icon>
+  </button>
+  <!-- <button (click)="debugmethod()">debug</button> -->
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav="matSidenav">
+      <h1>User's Administration</h1>
+      <mat-divider></mat-divider>
+      <div>
+          <button mat-button class="menuButton" [routerLink]="['/']">
+              <span>Home</span>    
+          </button>
       </div>
-    </div>
-    <div>
-      <button (click)="debugmethod()">UserToEdit</button>
-      <button (click)="debugmethod2()">newUser</button>
-    </div>
-  </div>
+      <div>
+          <button mat-button class="menuButton" [routerLink]="['/domain_craft_area']">
+              <span>Domain Editing</span>    
+          </button>
+      </div>
+      <div>
+          <button mat-button class="menuButton" [routerLink]="['/reward_craft_area']">
+              <span>Reward Editing</span>    
+          </button>
+      </div>
+      <div>
+          <button mat-button class="menuButton" [routerLink]="['/diagram_desing']">
+              <span>Desing</span>    
+          </button>
+      </div>
+      <div>
+          <button mat-button class="menuButton" [routerLink]="['/diagrams']">
+              <span>Diagrams</span>    
+          </button>
+      </div>
+      <div *ngIf="userIsAdmin">
+          <button mat-button  class="menuButton" [routerLink]="['/users']">
+              <span>User's Administration</span>    
+          </button>
+      </div>
+      <div>
+          <button mat-button class="menuButton" [routerLink]="['/']" (click)="unlogUser()">
+              <span>Log Out</span>    
+          </button>
+      </div>
+      <div class="contact-info">
+          <p>
+              <i>Javier Martín Lloret ©</i>
+          </p>
+      </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+      <div class="content mat-elevation-z4">
+        <h2 class="content Title">Current user's on DB</h2>
+        <div class="content">
+          <ul>
+            <li *ngFor="let user of users">
+                <p>Nickname: {{user.nickname}}</p>
+                <p>Email: {{user.email}}</p>
+                <button [routerLink]="['/users']" (click)="editUserIsSelected(user)">
+                  <mat-icon style="vertical-align: middle;">edit</mat-icon>
+                  <span>Edit the user</span>
+                </button>
+                <button (click)="deleteUser(user)">
+                  <mat-icon style="vertical-align: middle;">remove_circle</mat-icon>
+                  <span>Delete this user</span>
+                </button>
+            </li>
+        </ul>
+
+        <div *ngIf="isEditUserSelected">
+          <form ngNativeValidate name="editingUserForm" (ngSubmit)="editUser()">
+            <p>Nickname: <input type="text"  name="editingUserNickname" placeholder="{{userToEdit.nickname}}" [(ngModel)]="newEditedUser.nickname" required></p>
+            <p>Email: <input type="text" name="editingUserEmail" placeholder="{{userToEdit.email}}" [(ngModel)]="newEditedUser.email" required></p>
+            <p>Password: <input type="password" name="editingUserPassword" placeholder="{{userToEdit.password}}" [(ngModel)]="newEditedUser.password" required></p>
+            <p>Is an administrator? :<input type="checkbox" name="editingUserIs_admin" placeholder="{{userToEdit.is_admin}}" [(ngModel)]="newEditedUser.is_admin"></p>
+            <button type="submit">
+              <mat-icon style="vertical-align: middle;">check_circle</mat-icon>
+              <span>Edit it!</span>
+            </button>
+          </form>
+        </div>
+        </div>
+      </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

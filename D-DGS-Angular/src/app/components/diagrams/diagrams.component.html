@@ -61,9 +61,9 @@
         </div>
     </mat-sidenav>
 
-    <mat-sidenav-content>
+    <mat-sidenav-content class="content mat-elevation-z4">
         <div>
-            <h1 class="ContentBox Title">Diagrams</h1>
+            <h2 class="ContentBox Title">Diagrams</h2>
             <div class="ContentBox DiagramList" *ngIf="!userHasDiagrams">
                 <p>You haven't made any diagram so far, <a class="nav-link" [routerLink]="['/diagram_desing']">create one now!</a></p>
             </div>

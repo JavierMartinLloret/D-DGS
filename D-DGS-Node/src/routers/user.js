@@ -27,7 +27,6 @@ userRouter.get('/users/:id', async (req, res) => {
 
 // Is this user an Administrator ?
 userRouter.get('/users/isAdmin/:domain_key', async (req, res) => {
-    console.log("Consultado");
     let query = {
         "domain_key": req.params.domain_key
     };

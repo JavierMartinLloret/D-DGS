@@ -27,12 +27,22 @@ export class ListOfUsersComponent implements OnInit {
 
   // Flags
   public isEditUserSelected: boolean = false;
+  public userIsAdmin: boolean = false;
 
   constructor(private _router: Router, private _userService: UsersService, private _diagramDomainService: DiagramDomainService) {
+    let aux = sessionStorage.getItem(LOG_TOKEN);
+    if(aux)
+    {
+      this.DOMAIN_KEY = aux;
       this._userService.getUsers().subscribe(users => {
         this.users = users;
       })
+      this._userService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
+        if(res)
+          this.userIsAdmin = true;
+      })
     }
+  }
 
   ngOnInit(): void {
     let aux = sessionStorage.getItem(LOG_TOKEN);
@@ -70,15 +80,15 @@ export class ListOfUsersComponent implements OnInit {
     });    
   }
 
-  debugmethod()
+  unlogUser()
   {
-    console.log(this.userToEdit);
-    
-  }
-  debugmethod2()
-  {
-    console.log(this.newEditedUser);
-    
+    sessionStorage.removeItem(LOG_TOKEN)
   }
 
+  debugmethod()
+  {
+    console.log(this.userIsAdmin);
+    console.log(this.DOMAIN_KEY);
+        
+  }
 }
