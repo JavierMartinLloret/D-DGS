@@ -1,0 +1,97 @@
+mat-toolbar {
+    background: #141eb6;
+    color: white;
+}
+mat-sidenav {
+    margin: 16px;
+    width: 240px;
+    border-right: none;
+    background: darkblue;
+    color: white;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    font-size: large;
+    line-height: 1em;
+}
+
+mat-sidenav-container {
+    height: calc(100vh - 65px);
+}
+
+mat-divider {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    background-color: lightgray;
+}
+
+.nav-link-main {
+    color: white;
+}
+
+.menuButton {
+    font-size: large;
+}
+
+.contact-info {
+    position: absolute;
+    bottom: 3px;
+    align-self: center;
+    color: white;
+}
+
+.contentWrapper {
+    height: calc(98vh - 98px);
+    margin: 16px;
+    margin-left: 32px;
+    margin-right: 32;
+    margin-top: 16px;
+    padding-bottom: 16px;
+    justify-content: center;
+    align-items: center;
+
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+}
+
+.Title {
+    text-align: center;
+    color: black;
+}
+
+.PadGrid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    height: 90%;
+}
+
+.Pad {
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.TopLeft {
+    background-color: red;
+}
+
+.TopCenter {
+    background-color: orange;
+}
+
+.TopRight {
+    background-color: yellow;
+}
+
+.BotomLeft {
+    background-color: blue;
+}
+
+.BotomCenter {
+    background-color: violet;
+}
+
+.BotomRight {
+    background-color: purple;
+}

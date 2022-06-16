@@ -1,0 +1,26 @@
+<h1>Main Menu</h1>
+
+<div><a class="nav-link" [routerLink]="['/domain_craft_area']" (click)="goToDomainCreation()">
+    Edit your domain
+</a></div>
+<div>
+    <a class="nav-link" [routerLink]="['/reward_craft_area']" (click)="goToRewardCreation()">
+    Edit your rewards
+</a></div>
+<div>
+    <a class="nav-link" [routerLink]="['/diagram_desing']" (click)="goToDiagramDesing()">
+    Desing a new diagram
+</a></div>
+<div>
+    <a class="nav-link" [routerLink]="['/diagrams']" (click)="goToDiagramArchive()">
+    My diagrams
+</a></div>
+<div *ngIf="isAnAdministrator">
+    <a class="nav-link" [routerLink]="['/users']" (click)="goToListOfUsers()">
+    Manage users
+</a></div>
+<div>
+    <a class="nav-link" [routerLink]="['/login']" (click)="logOut()">
+    Log Out!
+    </a>
+</div>

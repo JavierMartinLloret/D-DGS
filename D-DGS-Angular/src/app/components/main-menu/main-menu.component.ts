@@ -7,6 +7,8 @@ const LOG_TOKEN: string = "LOG_TOKEN";
 // LOG_TOKEN: null | FAILED | identificador del dominio del usuario
 // * DEBE SUSTITUIRSE EN ALGÚN MOMENTO POR ALGO CIFRADO
 
+
+
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
@@ -14,19 +16,31 @@ const LOG_TOKEN: string = "LOG_TOKEN";
 })
 export class MainMenuComponent implements OnInit {
   
-  public isAnAdministrator: boolean = false;
+  // Domain_Key
+  public DOMAIN_KEY: string="";
 
-  constructor(private _router: Router, _userService: UsersService) {
+  // Flags
+  public userIsAdmin: boolean = false;
+
+  constructor(private _router: Router, private _usersService: UsersService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
-    
-  }
-
-  ngOnInit(): void {
     if(sessionStorage.getItem(LOG_TOKEN) == null || sessionStorage.getItem(LOG_TOKEN) == "FAILED")
     {
       sessionStorage.removeItem(LOG_TOKEN);  
       this._router.navigateByUrl('/login');
-    }    
+    } 
+    if(aux)
+    {
+      this.DOMAIN_KEY = aux;
+      this._usersService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
+        if(res)
+          this.userIsAdmin = true;
+      })
+    }
+  }
+
+  ngOnInit(): void {
+      
   }
 
   goToDomainCreation()
@@ -39,6 +53,10 @@ export class MainMenuComponent implements OnInit {
   {}
   goToListOfUsers()
   {}
+  unlogUser()
+  {
+    sessionStorage.removeItem(LOG_TOKEN)
+  }
   logOut()
   {
     sessionStorage.removeItem(LOG_TOKEN);
