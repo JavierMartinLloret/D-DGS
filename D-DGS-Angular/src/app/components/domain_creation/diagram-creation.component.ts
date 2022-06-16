@@ -167,10 +167,8 @@ export class DiagramCreationComponent implements OnInit {
         this._diagramDomainService.deleteAllActivitiesFromAContext(contextID).subscribe(res => {
           this.contextActivities.forEach((activity: Activity) => {
             if(activity._id != undefined)
-            {
               this._diagramDomainService.deleteAllPropertiesFromAnActivity(activity._id.toString()).subscribe(res => {});
-            }
-            window.location.reload();
+              window.location.reload();
           });
         })
       });

@@ -1,57 +1,137 @@
-<div>
-    <h1>Reward Creation</h1>
-    <h2>Set</h2>
-    <div>
-        <p>Select a reward Set:
-            <select name="RewardSets" id="RewardSets" [(ngModel)]="setSelected" (ngModelChange)="setIsSelected()">
-                <option value="null_value" selected disabled hidden></option>
-                <option *ngFor="let s of userSets" [ngValue]="s">{{s.name}}</option>
-            </select>
-        </p>
-    </div>
-    <div>
-        <a class="link" [routerLink]="['/reward_craft_area']" (click)="createANewSetIsSelected()">Create a new Set</a>
-        <div *ngIf="isCreateANewSetSelected">
-            <h3>Creating new set:</h3>
-            <form ngNativeValidate (ngSubmit)="createANewSet()" name="newSetForm">
-                <p>New Set name: <input type="text" name="newSetName" [(ngModel)]="newSetName" required></p>
-                <p><button type="submit">Create the Set</button></p>
-            </form>
+<mat-toolbar>
+    <a class="nav-link-main" [routerLink]="['/']">
+        <span>D&DGS</span>
+        <img src="./../../../assets/images/LOGO.png" alt="D&DGS Logo" style="vertical-align: middle; width:32px; height: 32px; margin-left: 10px;">
+    </a>
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened">
+            menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+            close
+        </mat-icon>
+    </button>
+    
+    <!-- <button (click)="debugmethod()">debug</button> -->
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav">
+        <h1>Reward Editing</h1>
+        <mat-divider></mat-divider>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']">
+                <span>Home</span>    
+            </button>
         </div>
-    </div>
-    <div *ngIf="isSetIsSelected && !isSetSelectedDefault">
-        <a class="link" [routerLink]="['/reward_craft_area']" (click)="deleteSelectedSet()">Delete this Set (Will delete all rewards associated!)</a>        
-    </div>
-    <div *ngIf="isSetIsSelected">
-        <h3>Current Rewards in this set:</h3>
-        <a class="link" [routerLink]="['/reward_craft_area']" (click)="addNewRewardIsClicked()">Add another reward</a>
-        <div *ngIf="isNewRewardSelected">
-            <h4>Creating a new Reward</h4>
-            <form ngNativeValidate  name="newRewardForm" (ngSubmit)="addNewReward()">
-                <p>Reward name: <input type="text" name="newRewardName" [(ngModel)]="newRewardName"></p>
-                <p>Reward description: <input type="text" name="newRewardDesc" [(ngModel)]="newRewardDescription"></p>
-                <p>Priority (0 = MAX): <input type="number" [(ngModel)]="newRewardPriority" min="0" max="{{currentMaxPriority}}"></p>
-                <p><button type="submit">Create the Reward</button></p>
-            </form>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/domain_craft_area']">
+                <span>Domain Editing</span>    
+            </button>
         </div>
-        <ul *ngFor="let r of setRewards">
-            <li>
-                <h4>{{r.name}}</h4>
-                <ul>
-                    <li>
-                        <p>Description: {{r.description}}</p>
-                    </li>
-                    <li>
-                        <p>Priority: {{r.priority}}</p>
-                    </li>
-                    <li>
-                        <a class="link" [routerLink]="['/reward_craft_area']" (click)="deleteAReward(r)">Delete this Reward</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
-<div>
-    <button (click)="debugmethod()">Debug</button>
-</div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/reward_craft_area']">
+                <span>Reward Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagram_desing']">
+                <span>Desing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagrams']">
+                <span>Diagrams</span>    
+            </button>
+        </div>
+        <div *ngIf="userIsAdmin">
+            <button mat-button  class="menuButton" [routerLink]="['/users']">
+                <span>User's Administration</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']" (click)="unlogUser()">
+                <span>Log Out</span>    
+            </button>
+        </div>
+        <div class="contact-info">
+            <p>
+                <i>Javier Martín Lloret ©</i>
+            </p>
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="content mat-elevation-z4">
+            <h2 class="content Title">Reward Creation Area</h2>
+            <div class="content">
+                <p>Select a Reward Set:</p>
+                <mat-select class="SetSelector" name="RewardSets" id="RewardSets" [(ngModel)]="setSelected" (ngModelChange)="setIsSelected()" placeholder="Select a Set">
+                    <mat-option *ngFor="let s of userSets" [value]="s">{{s.name}}</mat-option>
+                </mat-select>
+            </div>
+            <div class="content">
+                <button class="link" [routerLink]="['/reward_craft_area']" (click)="createANewSetIsSelected()" title="Create a new context!">
+                    <mat-icon style="vertical-align: middle">add_circle</mat-icon>
+                    <span>Create a new Set</span>
+                </button>
+                <div *ngIf="isCreateANewSetSelected">
+                    <h3>Creating new set:</h3>
+                    <form ngNativeValidate (ngSubmit)="createANewSet()" name="newSetForm">
+                        <p>New Set name: <input type="text" name="newSetName" [(ngModel)]="newSetName" required></p>
+                        <button type="submit">
+                            <mat-icon style="vertical-align: middle;">check_circle</mat-icon>
+                            <span>Create it!</span>
+                        </button>
+                    </form>
+                </div>
+                <div *ngIf="isSetIsSelected && !isSetSelectedDefault" title="Will delete all rewards associated with this one!" style="margin-top: 10px">
+                    <button [routerLink]="['/reward_craft_area']" (click)="deleteSelectedSet()">
+                        <mat-icon style="vertical-align: middle;">remove_circle</mat-icon>
+                        <span>Delete this set</span>
+                    </button>    
+                </div>
+                <div *ngIf="isSetIsSelected" class="content">
+                    <h3>Current Rewards in this set:</h3>
+                    <button [routerLink]="['/reward_craft_area']" (click)="addNewRewardIsClicked()">
+                        <mat-icon style="vertical-align: middle;">add_circle</mat-icon>
+                        <span>Add another reward</span>
+                    </button>  
+
+                    <div *ngIf="isNewRewardSelected" class="content">
+                        <h4>Creating a new Reward</h4>
+                        
+                        <form ngNativeValidate (ngSubmit)="addNewReward()" name="newRewardForm" >
+                            <p>Reward name: <input type="text" name="newRewardName" [(ngModel)]="newRewardName"></p>
+                            <p>Reward description: <input type="text" name="newRewardDesc" [(ngModel)]="newRewardDescription"></p>
+                            <p>Priority (0 = MAX): <input type="number" name="newRewardPriority" [(ngModel)]="newRewardPriority" min="0" max="{{currentMaxPriority}}"></p>
+                            <button type="submit">
+                                <mat-icon style="vertical-align: middle;">check_circle</mat-icon>
+                                <span>Create it!</span>
+                            </button>
+                        </form>
+                    </div>
+                    <ul *ngFor="let r of setRewards">
+                        <li>
+                            <h4>{{r.name}}</h4>
+                            <ul>
+                                <li>
+                                    <p>Description: {{r.description}}</p>
+                                </li>
+                                <li>
+                                    <p>Priority: {{r.priority}}</p>
+                                </li>
+                                <li>
+                                    <button [routerLink]="['/reward_craft_area']" (click)="deleteAReward(r)">
+                                        <mat-icon style="vertical-align: middle;">remove_circle</mat-icon>
+                                        <span>Delete this Reward</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

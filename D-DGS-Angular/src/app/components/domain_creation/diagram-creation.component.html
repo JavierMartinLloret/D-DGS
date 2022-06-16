@@ -84,7 +84,10 @@
                     </div>
                 </div>
                 <div *ngIf="isContextSelected && !isContextSelectedDefault" class="content">
-                    <a class="link" [routerLink]="['/domain_craft_area']" (click)="deleteSelectedContext()">Delete this context (Will delete all activities & properties associated!)</a>        
+                    <button [routerLink]="['/domain_craft_area']" (click)="deleteSelectedContext()" title="Will delete all activities & properties associated!">
+                        <mat-icon style="vertical-align: middle;">remove_circle</mat-icon>
+                        <span>Delete this Context</span>
+                    </button>       
                 </div>
                 <div *ngIf="isContextSelected" class="content">
                     <h3>Current Activities of this context: </h3>

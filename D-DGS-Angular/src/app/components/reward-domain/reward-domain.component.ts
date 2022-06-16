@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Reward } from 'src/app/models/reward';
 import { Reward_Set } from 'src/app/models/reward_set';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
+import { UsersService } from 'src/app/services/users.service';
 
 const LOG_TOKEN: string = "LOG_TOKEN";
 const DEFAULT_SET_NAME: string = "Default Reward Set";
@@ -37,8 +38,9 @@ export class RewardDomainComponent implements OnInit {
   public isSetSelectedDefault: Boolean = false;
   public isCreateANewSetSelected: Boolean = false;
   public isNewRewardSelected: Boolean = false;
+  public userIsAdmin: boolean = false;
 
-  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService) {
+  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _usersService: UsersService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux)
     {
@@ -49,11 +51,20 @@ export class RewardDomainComponent implements OnInit {
 
   ngOnInit(): void {
     let aux = sessionStorage.getItem(LOG_TOKEN);
+    this._usersService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
+      if(res)
+        this.userIsAdmin = true;
+    })
     if(aux == null || aux == "FAILED")
     {
       sessionStorage.removeItem(LOG_TOKEN);  
       this._router.navigateByUrl('/login');
     }
+  }
+
+  unlogUser()
+  {
+    sessionStorage.removeItem(LOG_TOKEN)
   }
 
   setIsSelected()
@@ -128,7 +139,7 @@ export class RewardDomainComponent implements OnInit {
 
   debugmethod()
   {
-    console.log(this.setSelected);
+    console.log(this.userIsAdmin);
   }
 
 }

@@ -35,6 +35,10 @@ export class DiagramsComponent implements OnInit {
         if(this.userDiagrams.length > 0)
           this.userHasDiagrams = true;
       })
+      this._usersService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
+        if(res)
+          this.userIsAdmin = true;
+      })
     }
     
   }
