@@ -62,7 +62,7 @@ mat-divider {
 .PadGrid {
     display: grid;
     grid-template-columns: auto auto auto;
-    height: 90%;
+    height: 100%;
 }
 
 .Pad {
@@ -73,25 +73,79 @@ mat-divider {
 }
 
 .TopLeft {
-    background-color: red;
+    position: relative;
+}
+
+.TopLeft button {
+    padding: 20px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 38%;
+    transform: translateY(-50%);
 }
 
 .TopCenter {
-    background-color: orange;
+    color: darkgray;
+    padding-top: 100px;
+    padding-bottom: 10px;
+}
+
+.TopCenter img {
+    vertical-align: middle;
+    width:160px;
+    height: 160px;
+    filter: opacity(50%);
 }
 
 .TopRight {
-    background-color: yellow;
+    position: relative;
+}
+
+.TopRight button {
+    padding: 20px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 38%;
+    transform: translateY(-50%);
 }
 
 .BotomLeft {
-    background-color: blue;
+    position: relative;
+}
+
+.BotomLeft button {
+    padding: 20px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 38%;
+    transform: translateY(-50%);
 }
 
 .BotomCenter {
-    background-color: violet;
+    position: relative;
+}
+
+.BotomCenter button {
+    padding: 20px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 38%;
+    transform: translateY(-50%);
 }
 
 .BotomRight {
-    background-color: purple;
+    position: relative;
+}
+
+.BotomRight button {
+    padding: 20px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 38%;
+    transform: translateY(-50%);
 }

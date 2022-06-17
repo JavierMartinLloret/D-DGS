@@ -62,34 +62,42 @@
   
     <mat-sidenav-content>
         <div class="contentWrapper mat-elevation-z4">
-          <h2 class="Title">Home</h2>
+          <!--<h2 class="Title">Home</h2>-->
           <div class="PadGrid">
             <div class="Pad TopLeft">
-                <button>
+                <button [routerLink]="['/domain_craft_area']">
                     <mat-icon style="vertical-align: middle;">storage</mat-icon>
                     <span>Domain</span>
                 </button>
             </div>
             <div class="Pad TopCenter">
-                
+                <h3 style="font-size: 2rem; font-style: italic;">
+                    Welcome back to D&DGS!
+                </h3>
+                <img src="./../../../assets/images/LOGO.png" alt="D&DGS Logo">
             </div>
             <div class="Pad TopRight">
-                <button>
+                <button [routerLink]="['/reward_craft_area']">
                     <mat-icon style="vertical-align: middle;"> attach_money</mat-icon>
                     <span>Rewards</span>
                 </button>
             </div>
             <div class="Pad BotomLeft">
-                <button>
+                <button [routerLink]="['/diagram_desing']">
                     <mat-icon style="vertical-align: middle;">edit</mat-icon>
                     <span>Desing</span>
                 </button>
             </div>
             <div class="Pad BotomCenter">
-
+                <div *ngIf="userIsAdmin">
+                    <button [routerLink]="['/users']">
+                        <mat-icon style="vertical-align: middle;">supervised_user_circle</mat-icon>
+                        <span>User's Administration</span>
+                    </button>
+                </div>
             </div>
             <div class="Pad BotomRight">
-                <button>
+                <button [routerLink]="['/diagrams']">
                     <mat-icon style="vertical-align: middle;">collections</mat-icon>
                     <span>Diagrams</span>
                 </button>
