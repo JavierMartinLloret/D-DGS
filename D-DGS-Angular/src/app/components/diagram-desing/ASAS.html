@@ -1,0 +1,42 @@
+<div>
+    <h1>Desing Area</h1>
+    <h2>Press any button to add a new element</h2>
+    
+    <p><button (click)="addActivityClicked()" >Activity</button></p>
+    <div *ngIf="isAddActivitiyClicked">
+        <p>Context:<select name="contextSelectId" id="contextSelectId" [(ngModel)]="contextSelected" (ngModelChange)="contextIsSelected()">
+            <option value="null_value" selected disabled hidden></option>
+            <option *ngFor="let c of userContexts" [ngValue]="c">{{c.name}}</option>
+        </select></p>
+        <div *ngIf="isContextSelected">
+            <ul *ngFor="let a of userActivities">
+                <li><a class="link" [routerLink]="['/diagram_desing']" (click)="addActivityToTheDiagram(a)">{{a.name}}</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <p><button>Reward</button></p>
+    
+    <p><button (click)="addLinkerClicked()">Linker</button></p>
+    <div *ngIf="isAddLinkerClicked">
+        <p>Selec the type of linker: <select name="LinkerSelectID" id="LinkerSelectID" [(ngModel)]="linkerSelected" (ngModelChange)="addLinkerToTheDiagram()">
+            <option value="null_value" selected disabled hidden></option>
+            <option *ngFor="let l of LINKERS" [ngValue]="l"> {{l.label}}</option>
+        </select> </p>
+    </div>
+</div>
+<div id="diagramID" (click)="diagramIsClicked()">
+    Diagrama
+</div>
+<div *ngIf="nodes.length != 0">
+    <button (click)="saveDiagramClicked()">Save Diagram!</button>
+    <div *ngIf="isSaveDiagramClicked">
+        <form ngNativeValidate (ngSubmit)="saveDiagram()" name="newDiagramForm">
+            <p>New diagram name: <input type="text" name="newDiagramName" [(ngModel)]="newDiagram.name"></p>
+            <input type="submit" value="Save it!">
+        </form>
+    </div>
+</div>
+<div>
+    <button (click)="debugmethod()">Debug</button>
+</div>

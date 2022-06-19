@@ -42,9 +42,8 @@ mat-divider {
 
 .contentWrapper {
     height: calc(98vh - 98px);
-    margin: 16px;
     margin-left: 32px;
-    margin-right: 32;
+    margin-right: 32px;
     margin-top: 16px;
     padding-bottom: 16px;
     justify-content: center;

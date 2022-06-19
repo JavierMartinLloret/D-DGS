@@ -1,42 +1,99 @@
-<div>
-    <h1>Desing Area</h1>
-    <h2>Press any button to add a new element</h2>
-    
-    <p><button (click)="addActivityClicked()" >Activity</button></p>
-    <div *ngIf="isAddActivitiyClicked">
-        <p>Context:<select name="contextSelectId" id="contextSelectId" [(ngModel)]="contextSelected" (ngModelChange)="contextIsSelected()">
-            <option value="null_value" selected disabled hidden></option>
-            <option *ngFor="let c of userContexts" [ngValue]="c">{{c.name}}</option>
-        </select></p>
-        <div *ngIf="isContextSelected">
-            <ul *ngFor="let a of userActivities">
-                <li><a class="link" [routerLink]="['/diagram_desing']" (click)="addActivityToTheDiagram(a)">{{a.name}}</a></li>
-            </ul>
+<mat-toolbar>
+    <a class="nav-link-main" [routerLink]="['/']">
+        <span>D&DGS</span>
+        <img src="./../../../assets/images/LOGO.png" alt="D&DGS Logo" style="vertical-align: middle; width:32px; height: 32px; margin-left: 10px;">
+    </a>
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened">
+            menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+            close
+        </mat-icon>
+    </button>
+    <!-- <button (click)="debugmethod()">debug</button> -->
+  </mat-toolbar>
+
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav">
+        <h1>Desing</h1>
+        <mat-divider></mat-divider>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']">
+                <span>Home</span>    
+            </button>
         </div>
-    </div>
-    
-    <p><button>Reward</button></p>
-    
-    <p><button (click)="addLinkerClicked()">Linker</button></p>
-    <div *ngIf="isAddLinkerClicked">
-        <p>Selec the type of linker: <select name="LinkerSelectID" id="LinkerSelectID" [(ngModel)]="linkerSelected" (ngModelChange)="addLinkerToTheDiagram()">
-            <option value="null_value" selected disabled hidden></option>
-            <option *ngFor="let l of LINKERS" [ngValue]="l"> {{l.label}}</option>
-        </select> </p>
-    </div>
-</div>
-<div id="diagramID" (click)="diagramIsClicked()">
-    Diagrama
-</div>
-<div *ngIf="nodes.length != 0">
-    <button (click)="saveDiagramClicked()">Save Diagram!</button>
-    <div *ngIf="isSaveDiagramClicked">
-        <form ngNativeValidate (ngSubmit)="saveDiagram()" name="newDiagramForm">
-            <p>New diagram name: <input type="text" name="newDiagramName" [(ngModel)]="newDiagram.name"></p>
-            <input type="submit" value="Save it!">
-        </form>
-    </div>
-</div>
-<div>
-    <button (click)="debugmethod()">Debug</button>
-</div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/domain_craft_area']">
+                <span>Domain Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/reward_craft_area']">
+                <span>Reward Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagram_desing']">
+                <span>Desing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagrams']">
+                <span>Diagrams</span>    
+            </button>
+        </div>
+        <div *ngIf="userIsAdmin">
+            <button mat-button  class="menuButton" [routerLink]="['/users']">
+                <span>User's Administration</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']" (click)="unlogUser()">
+                <span>Log Out</span>    
+            </button>
+        </div>
+        <div class="contact-info">
+            <p>
+                <i>Javier Martín Lloret ©</i>
+            </p>
+        </div>
+    </mat-sidenav>
+  
+    <mat-sidenav-content>
+        <div class="contentWrapper mat-elevation-z4">
+            <h2>Desing</h2>
+            <div class="DesingGrid">
+                <div id="diagramID">
+                    
+                </div>
+                <div class="nodePickingArea">
+                    <h1>Node Picking Area</h1>
+                    <div>
+                        <button>
+                        Activity
+                        </button>
+                    </div>
+                    <div>
+                        <button>
+                            Reward
+                        </button>
+                    </div>
+                    <div>
+                        <button>
+                            Property
+                        </button>
+                    </div>
+                    <div>
+                        <button>
+                            Linker
+                        </button>
+                    </div>
+                </div>
+                <div class="diagramInfoeArea">
+                    <h2>Info Area</h2>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>

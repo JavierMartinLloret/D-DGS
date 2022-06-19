@@ -6,6 +6,7 @@ import { Diagram } from 'src/app/models/diagram';
 import { edge } from 'src/app/models/edge';
 import { node } from 'src/app/models/node';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
+import { UsersService } from 'src/app/services/users.service';
 import { DataSet } from "vis-data";
 import { Network } from 'vis-network';
 
@@ -59,6 +60,7 @@ export class DiagramDesingComponent implements OnInit {
   };
 
   // Flags
+  public userIsAdmin: boolean = false;
   public isAddActivitiyClicked: boolean = false;
   public isAddRewardClicked: boolean = false;
   public isAddLinkerClicked: boolean = false;
@@ -111,16 +113,21 @@ export class DiagramDesingComponent implements OnInit {
 
   public LINKERS: Array<node> = [this.EQUALITY_LINKER, this.GREATER_THAN_LINKER, this.LESS_THAN_LINKER];
 
-  constructor(private _diagramDomainService: DiagramDomainService) {
+  constructor(private _diagramDomainService: DiagramDomainService, private _usersService: UsersService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if (aux) {
       this.DOMAIN_KEY = aux;
+      this._usersService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
+        if(res)
+          this.userIsAdmin = true;
+      })
       this._diagramDomainService.getContextsFromAUser(this.DOMAIN_KEY).subscribe(res => {
         this.userContexts = res;
       })
       this._diagramDomainService.getAllRewardSetsFromACertainUser(this.DOMAIN_KEY).subscribe(res => {
         this.userRewardSets = res;
       })
+
     }
   }
 
@@ -152,6 +159,11 @@ export class DiagramDesingComponent implements OnInit {
       this.network = new Network(this.diagram, this.data, this.options);
     }
     
+  }
+
+  unlogUser()
+  {
+    sessionStorage.removeItem(LOG_TOKEN)
   }
 
   addActivityClicked(): void{
