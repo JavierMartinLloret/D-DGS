@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Activity } from 'src/app/models/activity';
 import { Activity_Property } from 'src/app/models/activity_property';
 import { Context } from 'src/app/models/context';
@@ -19,7 +20,7 @@ const PROPERTY_NODE_COLOR: string = "#5D8AA8";
 
 // INTERFACES
 interface node_state {
-  id: string,
+  id: string, // NODE ID, nothing to do with an _id from DB
   type: string,
   value: boolean
 };
@@ -48,6 +49,8 @@ export class DiagramDesingComponent implements OnInit {
 
   // Local variables
   public contextSelected: Context = new Context("","");
+  public activitySelected: Activity = new Activity("","","");
+  public wrapperSelectedNode: node = new node("","","","","","");
   public linkerSelected: node = new node("","","","","","",undefined);
   private nodeIDCounter: number = 0;
   private newEdge: edge = {
@@ -59,6 +62,10 @@ export class DiagramDesingComponent implements OnInit {
     value: 1
   };
 
+  private newNodeType: string = "ERROR";
+
+  public nodeTypes: Array<string> = ["ACTIVITY", "PROPERTY", "REWARD", "LINKER"];
+
   // Flags
   public userIsAdmin: boolean = false;
   public isAddActivitiyClicked: boolean = false;
@@ -67,6 +74,10 @@ export class DiagramDesingComponent implements OnInit {
   public isContextSelected: boolean = false;
   public isSaveDiagramClicked: boolean = false;
 
+  public isANodeGrabbed: boolean = false;
+  public isThereANodeOverDiagram: boolean = false;
+
+  public isAnActivityWrapperClicked: boolean = false;
   public isLinkModeActivated: boolean = false; // Linker is selected
 
   // Diagram-Related Variables
@@ -113,9 +124,14 @@ export class DiagramDesingComponent implements OnInit {
 
   public LINKERS: Array<node> = [this.EQUALITY_LINKER, this.GREATER_THAN_LINKER, this.LESS_THAN_LINKER];
 
-  constructor(private _diagramDomainService: DiagramDomainService, private _usersService: UsersService) {
+  constructor(private _diagramDomainService: DiagramDomainService, private _usersService: UsersService, private _router: Router) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
-    if (aux) {
+    if(aux == null || aux == "FAILED")
+    {
+      sessionStorage.removeItem(LOG_TOKEN);  
+      this._router.navigateByUrl('/login');
+    } 
+    else {
       this.DOMAIN_KEY = aux;
       this._usersService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
         if(res)
@@ -127,7 +143,6 @@ export class DiagramDesingComponent implements OnInit {
       this._diagramDomainService.getAllRewardSetsFromACertainUser(this.DOMAIN_KEY).subscribe(res => {
         this.userRewardSets = res;
       })
-
     }
   }
 
@@ -170,17 +185,223 @@ export class DiagramDesingComponent implements OnInit {
     this.isAddActivitiyClicked = this.isAddActivitiyClicked ? false : true;
   }
 
-  addRewardClicked(): void{
+  nodeGrabbed(nodeType: number): void {
+    switch (nodeType) {
+      case 0: // Activity
+        {
+          this.isANodeGrabbed = true;
+          this.newNodeType = "ACTIVITY";
+        }
+        break;
+      
+      default:
+        break;
+    }
+  }
+
+  nodeOverDiagram(): void {
+    this.isThereANodeOverDiagram = true;
+  }
+
+  nodeExitsTheDiagram(): void {
     
   }
 
-  /* JUST FOR TEST */
-  addLinkerClicked(): void{
-    this.isAddLinkerClicked = this.isAddLinkerClicked ? false: true;
+  activityDropped(): void {
+    let auxNode = new node(
+      this.nodeIDCounter.toString(),
+      "defaultName",
+      "default",
+      "defaultColor",
+      "default",
+      "defaultId"
+    );
+
+    let newTrigger: node_state = {
+      id: "",
+      type: "",
+      value: false
+    };
+    
+    if(this.isThereANodeOverDiagram)
+    { 
+      switch (this.newNodeType) {
+        case "ACTIVITY":
+          // Fill auxNode
+          auxNode.label = "New Activity";
+          auxNode.color = "#ffffff";
+          auxNode.type  = "ACTIVITY_SELECTOR";
+
+          // Fill newTrigger
+          newTrigger = {
+            id: auxNode.id,
+            type: auxNode.type,
+            value: false
+          }
+          break;
+      
+        default:
+          break;
+      }
+      // Adding the node to the diagram
+      this.nodes.add(auxNode);  
+
+      // Adding the node to the "control" structures
+      this.diagramNodes.push(auxNode);
+
+      this.nodeTrigger.push(newTrigger);
+
+      this.isThereANodeOverDiagram = false;
+    }
+    this.nodeIDCounter++;
+    this.isANodeGrabbed = false;
   }
 
-  saveDiagramClicked(): void{
-    this.isSaveDiagramClicked = this.isSaveDiagramClicked ? false: true;
+  diagramIsClicked() {
+    if(this.nodeTrigger.length > 0)
+    {
+      let hasChanged: Array<node_state> = new Array<node_state>();
+      /* Update the node triggers */
+      this.nodeTrigger.forEach(node_state_struct => {
+        if(node_state_struct.value != this.network.body.nodes[node_state_struct.id.toString()].selected)
+        {
+          node_state_struct.value = this.network.body.nodes[node_state_struct.id.toString()].selected;
+          hasChanged.push(node_state_struct);
+        }
+      })
+      switch (hasChanged.length) {
+        case 0:
+        {
+            console.log("Sin cambios");
+          
+        }
+          break;
+        case 1:
+        {
+          console.log("Un cambio");
+          switch (hasChanged[0].type) {
+            case "ACTIVITY_SELECTOR":
+            {
+              this.isAnActivityWrapperClicked = true;
+              // Hay que asignar a WrapperSelected el nodo que será sustituido.
+              this.diagramNodes.forEach((n:node) => {
+                if(n.id == hasChanged[0].id)
+                  this.wrapperSelectedNode = n;
+              })
+
+            }              
+              break;
+          
+            default:
+              break;
+          }        
+        }
+          break;
+        case 2:   
+        {
+          console.log("Dos cambios");
+        }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  activityIsSelected(): void {
+    // Hay que sustituir el nodo ACTIVITY_SELECTOR por el nodo/nodos que vayan a conformar la actividad this.activitySelected   
+    /* Creamos el nuevo nodo que va a sustituir al anterior */
+    if(this.activitySelected._id)
+    {
+      let newActivityNode: node = new node (
+        this.wrapperSelectedNode.id,
+        this.activitySelected.name.toString(),
+        "default", //SHAPE
+        "#189fdd", //COLOR,
+        "ACTIVITY",
+        this.activitySelected._id.toString()
+      );
+      /* Actualizar el Trigger */
+      this.nodeTrigger.forEach((n_s:node_state) => {
+        if(n_s.id == this.wrapperSelectedNode.id)
+        {
+          n_s.type = newActivityNode.type;
+          n_s.value = false; // Will be false when added to the network
+        }
+      })
+      /* Actualizar lista de nodos */
+      this.diagramNodes.forEach((n:node) => {
+        if(n.id == this.wrapperSelectedNode.id)
+        {
+          n.label = newActivityNode.label;
+          n.shape = newActivityNode.shape;
+          n.color = newActivityNode.color;
+          n.type = newActivityNode. type;
+          n.base_element_id = newActivityNode.base_element_id;
+        }
+      })
+      /* Actualizar la red (Eliminar el nodo previo y luego añadir el nuevo) */
+      this.nodes.remove(newActivityNode.id);
+      this.nodes.add(newActivityNode);
+
+      /* Resetear el sistema (Flags y variables locales) para poder repetir el proceso */
+      this.isAnActivityWrapperClicked = false;
+      this.wrapperSelectedNode = new node("","","","","","");
+      this.contextSelected = new Context("","");
+      this.activitySelected = new Activity("","","");
+
+      /* Añadir las propiedades como nodos asociados a la actividad anterior */
+      if(newActivityNode.base_element_id)
+      this._diagramDomainService.getPropertiesFromAnActivity(newActivityNode.base_element_id.toString()).subscribe((res: any) => {
+        this.addPropertyNodesToAnActivity(newActivityNode, res);});
+    }
+    
+  }
+
+  addPropertyNodesToAnActivity(activtyNode: node, properties: Array<Activity_Property>)
+  {
+    console.log(properties);
+    
+    if(activtyNode.base_element_id)
+    {
+      let nodesToAdd: Array<node> = new Array<node>();
+      let auxNode: node = new node("","","","","", activtyNode.base_element_id,"");
+      let edgesToAdd: Array<edge> = new Array<edge>();
+      let auxEdge: edge = new edge("","","","",0,"");
+
+      properties.forEach((property: Activity_Property) => {
+        console.log("Añadiendo una propiedad con id: "+this.nodeIDCounter.toString());
+        auxNode.id = this.nodeIDCounter.toString();
+        auxNode.label = property.name.toString();
+        auxNode.shape = "default"; // Shape
+        auxNode.color = "#ad2677"; // Color
+        auxNode.type = "PROPERTY";
+        auxNode.base_element_id = activtyNode.base_element_id;
+        
+        
+        auxEdge.id = activtyNode.id + "<->" + auxNode.id;
+        auxEdge.from = activtyNode.id;
+        auxEdge.to = auxNode.id;
+        auxEdge.arrows = "default";
+        auxEdge.value = 1;
+        console.log("Añadiendo un enlace con id: "+auxEdge.id);
+
+        if(auxNode.base_element_id)
+        {
+          nodesToAdd.push(new node(auxNode.id, auxNode.label, auxNode.shape, auxNode.color, auxNode.type, auxNode.base_element_id.toString()));
+          edgesToAdd.push(new edge(auxEdge.id, auxEdge.from, auxEdge.to, auxEdge.arrows, auxEdge.value));
+        }
+        this.nodeIDCounter++;
+      });
+      
+      console.log(nodesToAdd);
+      
+      this.nodes.add(nodesToAdd);
+      this.edges.add(edgesToAdd);
+    }
+    /* Hay que crear un nodo por cada propiedad asociada a la actividad */
+    /* Hay que crear un edge por cada propiedad. Los nodos tendrán sentido ACT -> PROPERTY */
+
   }
 
   contextIsSelected(): void {
@@ -199,7 +420,7 @@ export class DiagramDesingComponent implements OnInit {
     }
   }
 
-  addActivityToTheDiagram(activity: Activity)
+  addActivityToTheDiagram_old(activity: Activity)
   {
     try {
       let nodesToAdd: Array<node> = new Array<node>();
@@ -285,7 +506,7 @@ export class DiagramDesingComponent implements OnInit {
     }
   }
 
-  addLinkerToTheDiagram()
+  addLinkerToTheDiagram_old()
   {
     let auxNode : node = new node(this.linkerSelected.id, this.linkerSelected.label, this.linkerSelected.shape, this.linkerSelected.color, this.linkerSelected.type, "THERE IS NO SUCH ELEMENT NOW", undefined);
     this.nodes.add(auxNode);
@@ -300,7 +521,7 @@ export class DiagramDesingComponent implements OnInit {
     this.nodeTrigger.push(newTrigger);
   }
 
-  saveDiagram(): void
+  saveDiagram_old(): void
   {
     this.newDiagram.domain_key = this.DOMAIN_KEY;
     this.newDiagram.nodes = this.diagramNodes;
@@ -311,120 +532,13 @@ export class DiagramDesingComponent implements OnInit {
     
   }
   
-  diagramIsClicked()
-  {
-    if(this.nodeTrigger.length != 0) // Siempre y cuando haya elementos en el diagrama
-    {
-      let hasChanged: Array<node_state> = new Array<node_state>();
-      /* Update the node triggers */
-      this.nodeTrigger.forEach(node_state_struct => {
-        if(node_state_struct.value != this.network.body.nodes[node_state_struct.id.toString()].selected)
-        {
-          node_state_struct.value = this.network.body.nodes[node_state_struct.id.toString()].selected;
-          hasChanged.push(node_state_struct);
-        }
-
-      });
-
-      switch (hasChanged.length) {
-        case 0:
-          {
-            console.log("Sin cambios en el diagrama");
-          }
-          break;
-        case 1:
-          {
-            if(hasChanged[0].type == "Linker")
-            {
-              if(hasChanged[0].value)
-              {
-                console.log("Link mode activated");
-                this.isLinkModeActivated = true;
-              }
-              else
-              {
-                console.log("Link mode disabled");
-                this.isLinkModeActivated = false;
-              }              
-            }
-            else
-            {
-              // Display node characteristics ???
-            }
-          }
-          break;
-        case 2:
-          {
-            console.log("2 cambios en el diagrama");
-            let auxNode1: node_state = {
-              id: "",
-              type: "",
-              value: false
-            }
-            let auxNode2: node_state = auxNode1;
-            auxNode1 = hasChanged[0];
-            auxNode2 = hasChanged[1];
-
-            if((this.isLinkModeActivated && auxNode1.type == "Linker") || (this.isLinkModeActivated && auxNode2.type == "Linker"))
-            {
-              if(this.isLinkModeActivated && auxNode1.type == "Linker")
-              {
-                this.newEdge.from = auxNode1.id;
-                this.newEdge.to = auxNode2.id;
-              }
-              if(this.isLinkModeActivated && auxNode2.type == "Linker")
-              {
-                this.newEdge.to = auxNode1.id;
-                this.newEdge.from = auxNode2.id;
-              }
-              /* IS IT POSSIBLE TO LINK THE NODE ? HERE SHOULD BE THE LINKEABILITY EVALUATED */
-              this.newEdge.id = auxNode1.id +"-"+ auxNode2.id;
-              if(this.edgesIdsRegister.has(this.newEdge.id))
-              {
-                this.edges.remove(this.newEdge.id);
-                this.edgesIdsRegister.delete(this.newEdge.id)
-                
-                let aux: Array<edge> = new Array<edge>();
-                this.diagramEdges.forEach((e: edge) => {
-                  if(e.id != this.newEdge.id)
-                    aux.push(e);
-                })
-                this.diagramEdges = aux;
-              }
-              else
-              {
-                let auxedge : edge = new edge(this.newEdge.id, this.newEdge.from, this.newEdge.to, "", 1, undefined);
-                /*
-                console.log(this.newEdge);
-                this.diagramEdges.push(this.newEdge);*/
-                this.diagramEdges.push(auxedge);
-                this.edgesIdsRegister.add(this.newEdge.id);
-                this.edges.add(this.newEdge);
-              }
-
-
-              this.newEdge.id = this.newEdge.from = this.newEdge.to = "";
-              this.isLinkModeActivated = false;
-            }
-          }
-        break;
-      
-        default:
-          console.log("Mal rollo");
-          
-          break;
-      }
-
-    }
-  }
 
   debugmethod()
   {
-    console.log(this.options);
+    console.log(this.nodeIDCounter);
+    console.log(this.userA_P);
     
-    //console.log(this.network.body.edges);
-    /*
-    console.log("Nodes:");
+    /*console.log("Nodes:");
     console.log(this.diagramNodes);
     console.log("Edges:");
     console.log(this.diagramEdges);*/

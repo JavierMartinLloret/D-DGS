@@ -11,6 +11,7 @@
             close
         </mat-icon>
     </button>
+    <button (click)="debugmethod()">debug</button>
     <!-- <button (click)="debugmethod()">debug</button> -->
   </mat-toolbar>
 
@@ -64,13 +65,13 @@
         <div class="contentWrapper mat-elevation-z4">
             <h2>Desing</h2>
             <div class="DesingGrid">
-                <div id="diagramID">
+                <div id="diagramID" (click)="diagramIsClicked()" (dragover)="nodeOverDiagram()" (dragleave)="nodeExitsTheDiagram()">
                     
                 </div>
                 <div class="nodePickingArea">
                     <h1>Node Picking Area</h1>
-                    <div>
-                        <button>
+                    <div><!-- The argument is 0 bc is used with an activity-->
+                        <button draggable="true" (dragstart)="nodeGrabbed(0)" (dragend)="activityDropped()" >
                         Activity
                         </button>
                     </div>
@@ -92,6 +93,18 @@
                 </div>
                 <div class="diagramInfoeArea">
                     <h2>Info Area</h2>
+                    <div *ngIf="isAnActivityWrapperClicked">
+                        <h3>Select one context:</h3>
+                        <mat-select name="contexts" id="contexts" [(ngModel)]="contextSelected" (ngModelChange)="contextIsSelected()" placeholder="Select a context">
+                            <mat-option *ngFor="let c of userContexts" [value]="c">{{c.name}}</mat-option>
+                        </mat-select>
+                        <div *ngIf="isContextSelected">
+                            <h3>Select the Activity: </h3>
+                            <mat-select name="activities" id="activities" [(ngModel)]="activitySelected" (ngModelChange)="activityIsSelected()" placeholder="Select an activity">
+                                <mat-option *ngFor="let a of userActivities" [value]="a">{{a.name}}</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
