@@ -71,12 +71,12 @@
                 <div class="nodePickingArea">
                     <h1>Node Picking Area</h1>
                     <div><!-- The argument is 0 bc is used with an activity-->
-                        <button draggable="true" (dragstart)="nodeGrabbed(0)" (dragend)="activityDropped()" >
+                        <button draggable="true" (dragstart)="nodeGrabbed(0)" (dragend)="wrapperDropped()" >
                         Activity
                         </button>
                     </div>
                     <div>
-                        <button>
+                        <button draggable="true" (dragstart)="nodeGrabbed(1)" (dragend)="wrapperDropped()">
                             Reward
                         </button>
                     </div>
@@ -102,6 +102,18 @@
                             <h3>Select the Activity: </h3>
                             <mat-select name="activities" id="activities" [(ngModel)]="activitySelected" (ngModelChange)="activityIsSelected()" placeholder="Select an activity">
                                 <mat-option *ngFor="let a of userActivities" [value]="a">{{a.name}}</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                    <div *ngIf="isAnRewardWrapperClicked">
+                        <h3>Select a Reward:</h3>
+                        <mat-select name="rewardSets" id="rewardSets" [(ngModel)]="rewardSetSelected" (ngModelChange)="rewardSetIsSelected()" placeholder="Select a Reward Set">
+                            <mat-option *ngFor="let s of userRewardSets" [value]="s">{{s.name}}</mat-option>
+                        </mat-select>
+                        <div *ngIf="isRewarSetSelected">
+                            <h3>Select one reward</h3>
+                            <mat-select name="rewards" id="rewards" [(ngModel)]="rewardSelected" (ngModelChange)="rewardIsSelected()" placeholder="Select a Reward">
+                                <mat-option *ngFor="let r of userRewards" [value]="r">{{r.name}}</mat-option>
                             </mat-select>
                         </div>
                     </div>

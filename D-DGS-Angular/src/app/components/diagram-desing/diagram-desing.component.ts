@@ -6,6 +6,8 @@ import { Context } from 'src/app/models/context';
 import { Diagram } from 'src/app/models/diagram';
 import { edge } from 'src/app/models/edge';
 import { node } from 'src/app/models/node';
+import { Reward } from 'src/app/models/reward';
+import { Reward_Set } from 'src/app/models/reward_set';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
 import { UsersService } from 'src/app/services/users.service';
 import { DataSet } from "vis-data";
@@ -40,8 +42,6 @@ export class DiagramDesingComponent implements OnInit {
   // Containers
   userContexts: any = [];
   userActivities: any = [];
-  userA_P: Array<Activity_Property> = new Array<Activity_Property>();
-
   userRewardSets: any = [];
   userRewards: any = [];
 
@@ -49,7 +49,9 @@ export class DiagramDesingComponent implements OnInit {
 
   // Local variables
   public contextSelected: Context = new Context("","");
+  public rewardSetSelected: Reward_Set = new Reward_Set("","");
   public activitySelected: Activity = new Activity("","","");
+  public rewardSelected: Reward = new Reward("","","",0);
   public wrapperSelectedNode: node = new node("","","","","","");
   public linkerSelected: node = new node("","","","","","",undefined);
   private nodeIDCounter: number = 0;
@@ -72,12 +74,14 @@ export class DiagramDesingComponent implements OnInit {
   public isAddRewardClicked: boolean = false;
   public isAddLinkerClicked: boolean = false;
   public isContextSelected: boolean = false;
+  public isRewarSetSelected: boolean = false;
   public isSaveDiagramClicked: boolean = false;
 
   public isANodeGrabbed: boolean = false;
   public isThereANodeOverDiagram: boolean = false;
 
   public isAnActivityWrapperClicked: boolean = false;
+  public isAnRewardWrapperClicked: boolean = false;
   public isLinkModeActivated: boolean = false; // Linker is selected
 
   // Diagram-Related Variables
@@ -188,11 +192,16 @@ export class DiagramDesingComponent implements OnInit {
   nodeGrabbed(nodeType: number): void {
     switch (nodeType) {
       case 0: // Activity
-        {
-          this.isANodeGrabbed = true;
-          this.newNodeType = "ACTIVITY";
-        }
-        break;
+      {
+        this.isANodeGrabbed = true;
+        this.newNodeType = "ACTIVITY";
+      }break;
+      
+      case 1: // Reward
+      {
+        this.isANodeGrabbed = true;
+        this.newNodeType = "REWARD"
+      }break;
       
       default:
         break;
@@ -207,7 +216,7 @@ export class DiagramDesingComponent implements OnInit {
     
   }
 
-  activityDropped(): void {
+  wrapperDropped(): void {
     let auxNode = new node(
       this.nodeIDCounter.toString(),
       "defaultName",
@@ -227,6 +236,7 @@ export class DiagramDesingComponent implements OnInit {
     { 
       switch (this.newNodeType) {
         case "ACTIVITY":
+        {
           // Fill auxNode
           auxNode.label = "New Activity";
           auxNode.color = "#ffffff";
@@ -238,7 +248,19 @@ export class DiagramDesingComponent implements OnInit {
             type: auxNode.type,
             value: false
           }
-          break;
+        }break;
+
+        case "REWARD":
+        {
+          auxNode.label = "New Reward";
+          auxNode.color = "#d8d502";
+          auxNode.type = "REWARD_SELECTOR";
+          auxNode.shape = "star";
+
+          newTrigger.id = auxNode.id;
+          newTrigger.type = auxNode.type;
+          newTrigger.value = false;
+        }break;
       
         default:
           break;
@@ -272,14 +294,16 @@ export class DiagramDesingComponent implements OnInit {
       switch (hasChanged.length) {
         case 0:
         {
-            console.log("Sin cambios");
-          
-        }
-          break;
+          console.log("Sin cambios");
+          this.wrapperSelectedNode = new node("","","","","","");
+        }break;
+         
         case 1:
         {
           console.log("Un cambio");
-          switch (hasChanged[0].type) {
+          if(hasChanged[0].value)
+          {
+            switch (hasChanged[0].type) {
             case "ACTIVITY_SELECTOR":
             {
               this.isAnActivityWrapperClicked = true;
@@ -289,21 +313,32 @@ export class DiagramDesingComponent implements OnInit {
                   this.wrapperSelectedNode = n;
               })
 
-            }              
-              break;
+            }break;              
+            
+            case "REWARD_SELECTOR":
+            {
+              this.isAnRewardWrapperClicked = true;
+              this.diagramNodes.forEach((n:node)=> {
+                if(n.id == hasChanged[0].id)
+                  this.wrapperSelectedNode = n;
+              })
+            }break;
           
-            default:
-              break;
-          }        
-        }
-          break;
-        case 2:   
-        {
-          console.log("Dos cambios");
-        }
-          break;
-        default:
-          break;
+            default:break;
+            }
+          }
+          else
+          {
+            this.wrapperSelectedNode = new node("","","","","","");
+          }         
+      }break;
+        
+      case 2:   // EL QUE TENGA EL value: true ES EL SEGUNDO EN SER PULSADO
+      {
+        console.log("Dos cambios");
+      }break;
+          
+      default:break;
       }
     }
   }
@@ -357,6 +392,48 @@ export class DiagramDesingComponent implements OnInit {
     }
     
   }
+  // @see activityIsSelected()
+  rewardIsSelected(): void {
+    if(this.rewardSelected._id)
+    {
+      let newRewardNode: node = new node(
+        this.wrapperSelectedNode.id,
+        this.rewardSelected.name.toString(),
+        "star",
+        "#d87102",
+        "REWARD",
+        this.rewardSelected._id.toString()
+      );
+
+      this.nodeTrigger.forEach((n_s:node_state) => {
+        if(n_s.id == this.wrapperSelectedNode.id)
+        {
+          n_s.type = newRewardNode.type;
+          n_s.value = false; // Will be false when added to the network
+        }
+      });
+
+      this.diagramNodes.forEach((n:node) => {
+        if(n.id == this.wrapperSelectedNode.id)
+        {
+          n.label = newRewardNode.label;
+          n.shape = newRewardNode.shape;
+          n.color = newRewardNode.color;
+          n.type = newRewardNode. type;
+          n.base_element_id = newRewardNode.base_element_id;
+        }
+      });
+      
+      this.nodes.remove(newRewardNode.id);
+      this.nodes.add(newRewardNode);
+
+      /* Resetear el sistema (Flags y variables locales) para poder repetir el proceso */
+      this.isAnRewardWrapperClicked = false;
+      this.wrapperSelectedNode = new node("","","","","","");
+      this.rewardSetSelected = new Reward_Set("","");
+      this.rewardSelected = new Reward("","","",0);
+    }
+  }
 
   addPropertyNodesToAnActivity(activtyNode: node, properties: Array<Activity_Property>)
   {
@@ -394,7 +471,11 @@ export class DiagramDesingComponent implements OnInit {
         this.nodeIDCounter++;
       });
       
-      console.log(nodesToAdd);
+      nodesToAdd.forEach((n:node) => {
+        this.diagramNodes.push(n);
+        let n_s : node_state = {id: n.id, type: n.type, value: false};
+        this.nodeTrigger.push(n_s);
+      })
       
       this.nodes.add(nodesToAdd);
       this.edges.add(edgesToAdd);
@@ -410,135 +491,27 @@ export class DiagramDesingComponent implements OnInit {
       this._diagramDomainService.getActivitiesFromAContext(this.contextSelected._id.toString()).subscribe((activities:any) => {
         this.userActivities = activities;
         this.isContextSelected = true;
-
-        this._diagramDomainService.getAllProperties().subscribe((properties: any) => {
-          properties.forEach((property: Activity_Property) => {
-            this.userA_P.push(property);
-          });
-        })
       })
     }
   }
 
-  addActivityToTheDiagram_old(activity: Activity)
-  {
-    try {
-      let nodesToAdd: Array<node> = new Array<node>();
-      let auxNode : node;
-      let activtyNodeID: number = 0;
-
-      let edgesToAdd: Array<edge> = new Array<edge>();
-      let auxEdge: edge;
-
-      /* Crear el nodo principal (Actividad) y nodos hijos (Propiedades) */
-      if(activity._id != undefined)
-      {
-        auxNode = new node(
-        this.nodeIDCounter.toString(),
-        activity.name.toString(),
-        "Default",
-        ACTIVITY_NODE_COLOR,
-        "Default",
-        activity._id?.toString(),
-        undefined
-        );
-        activtyNodeID = this.nodeIDCounter;
-        this.nodeIDCounter++;
-        nodesToAdd.push(auxNode);
-      }
-
-      this.userA_P.forEach((property: Activity_Property) => {      
-        
-        if(activity._id != undefined)
-        {
-          if(property.activity_ID == activity._id.toString())
-          {          
-            auxNode = new node (
-              this.nodeIDCounter.toString(),
-              property.name.toString(),
-              "Default",
-              PROPERTY_NODE_COLOR,
-              "Default",
-              activity._id?.toString(),
-              undefined
-            );
-            auxEdge = new edge(
-              this.nodeIDCounter.toString()+"-"+activtyNodeID.toString(),
-              activtyNodeID.toString(),
-              this.nodeIDCounter.toString(),
-              "from",
-              3,
-              undefined
-            );
-            
-            this.nodeIDCounter++;
-            nodesToAdd.push(auxNode);
-            edgesToAdd.push(auxEdge);
-          }
-        }
-      });
-
-      nodesToAdd.forEach(nodeToAdd => {this.diagramNodes.push(nodeToAdd);})
-      edgesToAdd.forEach(edgeToAdd => {this.diagramEdges.push(edgeToAdd);})
-      this.nodes.add(nodesToAdd);
-      this.edges.add(edgesToAdd);
-
-      edgesToAdd.forEach(edge => {
-        this.edgesIdsRegister.add(edge.id);
-      });
-
-      // Preparing the trigger sistem
-      let newTrigger: node_state;
-      nodesToAdd.forEach((node: node) => {
-        if(node.id != undefined)
-        {
-          newTrigger = {
-            id: node.id,
-            type: "Default",
-            value: false
-          }
-          this.nodeTrigger.push(newTrigger);
-        }
-      });
-        
-    } catch (error) {
-      console.log("Error! Nodo repetido!");
-    }
-  }
-
-  addLinkerToTheDiagram_old()
-  {
-    let auxNode : node = new node(this.linkerSelected.id, this.linkerSelected.label, this.linkerSelected.shape, this.linkerSelected.color, this.linkerSelected.type, "THERE IS NO SUCH ELEMENT NOW", undefined);
-    this.nodes.add(auxNode);
-    this.diagramNodes.push(auxNode);
-
-    let newTrigger: node_state =
+  rewardSetIsSelected(): void {
+    if(this.rewardSetSelected._id != undefined)
     {
-      id: this.linkerSelected.id,
-      type: "Linker",
-      value: false
+      this._diagramDomainService.getRewardsOfACertainSet(this.rewardSetSelected._id.toString()).subscribe((rewards: any) => {
+        this.userRewards = rewards;
+        this.isRewarSetSelected = true;
+      })
     }
-    this.nodeTrigger.push(newTrigger);
   }
-
-  saveDiagram_old(): void
-  {
-    this.newDiagram.domain_key = this.DOMAIN_KEY;
-    this.newDiagram.nodes = this.diagramNodes;
-    this.newDiagram.edges = this.diagramEdges;
-    this._diagramDomainService.postADiagram(this.newDiagram).subscribe((res: any) =>{
-      window.alert("Diagram created! Keep modifing this one to make another!")
-    })
-    
-  }
-  
 
   debugmethod()
   {
-    console.log(this.nodeIDCounter);
-    console.log(this.userA_P);
-    
-    /*console.log("Nodes:");
+    console.log(this.userRewardSets);
+    /*console.log(this.nodeIDCounter);
+    console.log(this.diagramNodes);
+    console.log(this.nodeTrigger);
+    console.log("Nodes:");
     console.log(this.diagramNodes);
     console.log("Edges:");
     console.log(this.diagramEdges);*/
