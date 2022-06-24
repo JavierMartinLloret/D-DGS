@@ -5,6 +5,7 @@ import { Activity_Property } from 'src/app/models/activity_property';
 import { Context } from 'src/app/models/context';
 import { Diagram } from 'src/app/models/diagram';
 import { edge } from 'src/app/models/edge';
+import { Linker } from 'src/app/models/linker';
 import { node } from 'src/app/models/node';
 import { Reward } from 'src/app/models/reward';
 import { Reward_Set } from 'src/app/models/reward_set';
@@ -19,15 +20,12 @@ const PASSING_DIAGRAM: string = "PASSING_DIAGRAM_KEY";
 const ACTIVITY_NODE_COLOR: string = "#C9FFE5";
 const PROPERTY_NODE_COLOR: string = "#5D8AA8";
 
-
 // INTERFACES
 interface node_state {
   id: string, // NODE ID, nothing to do with an _id from DB
   type: string,
   value: boolean
 };
-
-
 
 @Component({
   selector: 'app-diagram-desing',
@@ -40,29 +38,24 @@ export class DiagramDesingComponent implements OnInit {
   public DOMAIN_KEY: string="";
   
   // Containers
-  userContexts: any = [];
-  userActivities: any = [];
-  userRewardSets: any = [];
-  userRewards: any = [];
-
-
+  public userContexts: any = [];
+  public userActivities: any = [];
+  public userRewardSets: any = [];
+  public userRewards: any = [];
+  /* PROVISIONAL */
+  public linkers: any = [];
+  public linkerCategories: any = ["Arithmetic"];
+  public linkersFilteredByTheUser: Array<Linker> = new Array<Linker>();
 
   // Local variables
   public contextSelected: Context = new Context("","");
   public rewardSetSelected: Reward_Set = new Reward_Set("","");
   public activitySelected: Activity = new Activity("","","");
   public rewardSelected: Reward = new Reward("","","",0);
+  public linkerCategorySelected: string = "";
+  public linkerSelected: Linker = new Linker("","",);
   public wrapperSelectedNode: node = new node("","","","","","");
-  public linkerSelected: node = new node("","","","","","",undefined);
   private nodeIDCounter: number = 0;
-  private newEdge: edge = {
-    _id: undefined,
-    id: "",
-    from: "",
-    to: "",
-    arrows: "",
-    value: 1
-  };
 
   private newNodeType: string = "ERROR";
 
@@ -75,11 +68,13 @@ export class DiagramDesingComponent implements OnInit {
   public isAddLinkerClicked: boolean = false;
   public isContextSelected: boolean = false;
   public isRewarSetSelected: boolean = false;
+  public isLinkerCategorySelected: boolean = false;
   public isSaveDiagramClicked: boolean = false;
 
-  public isANodeGrabbed: boolean = false;
+  public isAWrapperGrabbed: boolean = false;
   public isThereANodeOverDiagram: boolean = false;
 
+  public isAnLinkerWrapperClicked: boolean = false;
   public isAnActivityWrapperClicked: boolean = false;
   public isAnRewardWrapperClicked: boolean = false;
   public isLinkModeActivated: boolean = false; // Linker is selected
@@ -98,35 +93,11 @@ export class DiagramDesingComponent implements OnInit {
   public diagramEdges: Array<edge> = new Array<edge>();
   public newDiagram: Diagram = new Diagram("", "", this.diagramNodes, this.diagramEdges, undefined);
 
-  public EQUALITY_LINKER: node = {
-    _id: undefined,
-    id: "-1",
-    label: "=",
-    type: "Linker",
-    shape: "square",
-    color: "#C5000B",
-    base_element_id: "Ole ole los caracole"
-  };
-  public LESS_THAN_LINKER: node = {
-    _id: undefined,
-    id: "-2",
-    label: "<",
-    type: "Linker",
-    shape: "square",
-    color: "#C5000B",
-    base_element_id: "Ole ole los caracole"
-  };
-  public GREATER_THAN_LINKER: node = {
-    _id: undefined,
-    id: "-3",
-    label: ">",
-    type: "Linker",
-    shape: "square",
-    color: "#C5000B",
-    base_element_id: "Ole ole los caracole"
-  };
+  public EQUALITY_LINKER: Linker = new Linker("Equality", "ARITHMETIC","A");
+  public LESS_THAN_LINKER: Linker = new Linker("Less than", "ARITHMETIC", "B");
+  public GREATER_THAN_LINKER: Linker = new Linker("Greater than", "ARITHMETIC", "C");
 
-  public LINKERS: Array<node> = [this.EQUALITY_LINKER, this.GREATER_THAN_LINKER, this.LESS_THAN_LINKER];
+  public LINKERS: Array<Linker> = [this.EQUALITY_LINKER, this.GREATER_THAN_LINKER, this.LESS_THAN_LINKER];
 
   constructor(private _diagramDomainService: DiagramDomainService, private _usersService: UsersService, private _router: Router) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
@@ -193,16 +164,22 @@ export class DiagramDesingComponent implements OnInit {
     switch (nodeType) {
       case 0: // Activity
       {
-        this.isANodeGrabbed = true;
+        this.isAWrapperGrabbed = true;
         this.newNodeType = "ACTIVITY";
       }break;
       
       case 1: // Reward
       {
-        this.isANodeGrabbed = true;
-        this.newNodeType = "REWARD"
+        this.isAWrapperGrabbed = true;
+        this.newNodeType = "REWARD";
       }break;
       
+      case 2:
+      {
+        this.isAWrapperGrabbed = true;
+        this.newNodeType = "LINKER";
+      }break;
+
       default:
         break;
     }
@@ -261,6 +238,18 @@ export class DiagramDesingComponent implements OnInit {
           newTrigger.type = auxNode.type;
           newTrigger.value = false;
         }break;
+
+        case "LINKER":
+        {
+          auxNode.label = "New Linker";
+          auxNode.color = "#46fc0f";
+          auxNode.type = "LINKER_SELECTOR";
+          auxNode.shape = "diamond";
+
+          newTrigger.id = auxNode.id;
+          newTrigger.type = auxNode.type;
+          newTrigger.value = false;
+        }break;
       
         default:
           break;
@@ -276,7 +265,7 @@ export class DiagramDesingComponent implements OnInit {
       this.isThereANodeOverDiagram = false;
     }
     this.nodeIDCounter++;
-    this.isANodeGrabbed = false;
+    this.isAWrapperGrabbed = false;
   }
 
   diagramIsClicked() {
@@ -323,6 +312,15 @@ export class DiagramDesingComponent implements OnInit {
                   this.wrapperSelectedNode = n;
               })
             }break;
+
+            case "LINKER_SELECTOR":
+            {
+              this.isAnLinkerWrapperClicked = true;
+              this.diagramNodes.forEach((n:node)=> {
+                if(n.id == hasChanged[0].id)
+                  this.wrapperSelectedNode = n;
+              })
+            }break;
           
             default:break;
             }
@@ -330,6 +328,8 @@ export class DiagramDesingComponent implements OnInit {
           else
           {
             this.wrapperSelectedNode = new node("","","","","","");
+            this.isAnActivityWrapperClicked = this.isAnRewardWrapperClicked
+             = this.isAnLinkerWrapperClicked = false;
           }         
       }break;
         
@@ -434,6 +434,48 @@ export class DiagramDesingComponent implements OnInit {
       this.rewardSelected = new Reward("","","",0);
     }
   }
+  
+  linkerIsSelected(): void {
+    this.isAnLinkerWrapperClicked = false;
+    if(this.linkerSelected._id)
+    {
+      let newLinkerNode: node = new node (
+        this.wrapperSelectedNode.id,
+        this.linkerSelected.name.toString(),
+        "diamond", //SHAPE
+        "#46fc0f", //COLOR,
+        "LINKER",
+        this.linkerSelected._id.toString()
+      );
+
+      this.nodeTrigger.forEach((n_s:node_state) => {
+        if(n_s.id == this.wrapperSelectedNode.id)
+        {
+          n_s.type = newLinkerNode.type;
+          n_s.value = false; // Will be false when added to the network
+        }
+      });
+
+      this.diagramNodes.forEach((n:node) => {
+        if(n.id == this.wrapperSelectedNode.id)
+        {
+          n.label = newLinkerNode.label;
+          n.shape = newLinkerNode.shape;
+          n.color = newLinkerNode.color;
+          n.type = newLinkerNode. type;
+          n.base_element_id = newLinkerNode.base_element_id;
+        }
+      })
+
+      this.nodes.remove(newLinkerNode.id);
+      this.nodes.add(newLinkerNode);
+
+      this.isAnActivityWrapperClicked = false;
+      this.wrapperSelectedNode = new node("","","","","","");
+      this.linkerCategorySelected = "";
+      this.linkerSelected = new Linker("","");
+    }
+  }
 
   addPropertyNodesToAnActivity(activtyNode: node, properties: Array<Activity_Property>)
   {
@@ -503,6 +545,13 @@ export class DiagramDesingComponent implements OnInit {
         this.isRewarSetSelected = true;
       })
     }
+  }
+
+  linkerCategoryIsSelected()
+  {
+    // this.linkerCategorySelected contains the cat whish should be use to filter between all linkers, just to include inside this.linkersFilteredByTheUser the ones included in that category. for now:
+    this.linkersFilteredByTheUser = this.LINKERS;
+    this.isLinkerCategorySelected = true;
   }
 
   debugmethod()

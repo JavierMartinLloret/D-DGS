@@ -80,13 +80,15 @@
                             Reward
                         </button>
                     </div>
+                    <!--
                     <div>
                         <button>
                             Property
                         </button>
                     </div>
+                    -->
                     <div>
-                        <button>
+                        <button draggable="true" (dragstart)="nodeGrabbed(2)" (dragend)="wrapperDropped()">
                             Linker
                         </button>
                     </div>
@@ -111,9 +113,21 @@
                             <mat-option *ngFor="let s of userRewardSets" [value]="s">{{s.name}}</mat-option>
                         </mat-select>
                         <div *ngIf="isRewarSetSelected">
-                            <h3>Select one reward</h3>
+                            <h3>Select one reward of the set</h3>
                             <mat-select name="rewards" id="rewards" [(ngModel)]="rewardSelected" (ngModelChange)="rewardIsSelected()" placeholder="Select a Reward">
                                 <mat-option *ngFor="let r of userRewards" [value]="r">{{r.name}}</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                    <div *ngIf="isAnLinkerWrapperClicked">
+                        <h3>Select a Linker:</h3>
+                        <mat-select name="linkerCategories" id="linkerCategories" [(ngModel)]="linkerCategorySelected" (ngModelChange)="linkerCategoryIsSelected()" placeholder="Select a Linker Selected">
+                            <mat-option *ngFor="let c of linkerCategories" [value]="c">{{c}}</mat-option>
+                        </mat-select>
+                        <div *ngIf="isLinkerCategorySelected">
+                            <h3>Select one Linker</h3>
+                            <mat-select name="linkersFiltered" id="linkersFiltered" [(ngModel)]="linkerSelected" (ngModelChange)="linkerIsSelected()" placeholder="Select a linker">
+                                <mat-option *ngFor="let l of linkersFilteredByTheUser" [value]="l">{{l.name}}</mat-option>
                             </mat-select>
                         </div>
                     </div>

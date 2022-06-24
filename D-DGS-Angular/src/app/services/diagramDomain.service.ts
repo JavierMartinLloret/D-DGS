@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { Context } from "../models/context";
 import { Activity } from "../models/activity";
 import { Task } from "../models/task";
-import { Activity_Tasks } from "../models/activity_tasks";
 import { Reward } from "../models/reward";
 import { Line } from "../models/line";
 import { Diagram } from "../models/diagram";
