@@ -11,6 +11,18 @@ linkerRouter.get('/linkers', async (req, res) => {
     }
 });
 
+linkerRouter.get('/linkers/:category', async (req, res) => {
+    try {
+        const category = req.params.category;
+        const query = {"category": category};
+        const linkers = await LinkerModel.find(query);
+
+        res.status(200).send(linkers);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 linkerRouter.post('/linkers', async (req, res) => {
     const newLinker = new LinkerModel(req.body);
     try {

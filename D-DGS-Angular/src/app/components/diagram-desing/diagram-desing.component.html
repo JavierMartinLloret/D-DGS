@@ -120,14 +120,14 @@
                         </div>
                     </div>
                     <div *ngIf="isAnLinkerWrapperClicked">
-                        <h3>Select a Linker:</h3>
-                        <mat-select name="linkerCategories" id="linkerCategories" [(ngModel)]="linkerCategorySelected" (ngModelChange)="linkerCategoryIsSelected()" placeholder="Select a Linker Selected">
+                        <h3>Select a Category:</h3>
+                        <mat-select name="linkerCategories" id="linkerCategories" [(ngModel)]="linkerCategorySelected" (ngModelChange)="linkerCategoryIsSelected()" placeholder="Select a Linker Category">
                             <mat-option *ngFor="let c of linkerCategories" [value]="c">{{c}}</mat-option>
                         </mat-select>
                         <div *ngIf="isLinkerCategorySelected">
                             <h3>Select one Linker</h3>
-                            <mat-select name="linkersFiltered" id="linkersFiltered" [(ngModel)]="linkerSelected" (ngModelChange)="linkerIsSelected()" placeholder="Select a linker">
-                                <mat-option *ngFor="let l of linkersFilteredByTheUser" [value]="l">{{l.name}}</mat-option>
+                            <mat-select name="linkersFiltered" id="linkersFiltered" [(ngModel)]="linkerSelected" (ngModelChange)="linkerIsSelected()" placeholder="Select a Linker">
+                                <mat-option *ngFor="let l of linkersInTheCategorySelected" [value]="l">{{l.name}}</mat-option>
                             </mat-select>
                         </div>
                     </div>

@@ -42,10 +42,9 @@ export class DiagramDesingComponent implements OnInit {
   public userActivities: any = [];
   public userRewardSets: any = [];
   public userRewards: any = [];
-  /* PROVISIONAL */
   public linkers: any = [];
-  public linkerCategories: any = ["Arithmetic"];
-  public linkersFilteredByTheUser: Array<Linker> = new Array<Linker>();
+  public linkerCategories: Set<string> = new Set<string>();
+  public linkersInTheCategorySelected: Array<Linker> = new Array<Linker>();  
 
   // Local variables
   public contextSelected: Context = new Context("","");
@@ -93,12 +92,6 @@ export class DiagramDesingComponent implements OnInit {
   public diagramEdges: Array<edge> = new Array<edge>();
   public newDiagram: Diagram = new Diagram("", "", this.diagramNodes, this.diagramEdges, undefined);
 
-  public EQUALITY_LINKER: Linker = new Linker("Equality", "ARITHMETIC","A");
-  public LESS_THAN_LINKER: Linker = new Linker("Less than", "ARITHMETIC", "B");
-  public GREATER_THAN_LINKER: Linker = new Linker("Greater than", "ARITHMETIC", "C");
-
-  public LINKERS: Array<Linker> = [this.EQUALITY_LINKER, this.GREATER_THAN_LINKER, this.LESS_THAN_LINKER];
-
   constructor(private _diagramDomainService: DiagramDomainService, private _usersService: UsersService, private _router: Router) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux == null || aux == "FAILED")
@@ -117,6 +110,12 @@ export class DiagramDesingComponent implements OnInit {
       })
       this._diagramDomainService.getAllRewardSetsFromACertainUser(this.DOMAIN_KEY).subscribe(res => {
         this.userRewardSets = res;
+      })
+      this._diagramDomainService.getAllLinkers().subscribe((res:any) => {
+        this.linkers = res;
+        res.forEach((l:Linker) => {
+          this.linkerCategories.add(l.category);
+        });
       })
     }
   }
@@ -549,14 +548,15 @@ export class DiagramDesingComponent implements OnInit {
 
   linkerCategoryIsSelected()
   {
-    // this.linkerCategorySelected contains the cat whish should be use to filter between all linkers, just to include inside this.linkersFilteredByTheUser the ones included in that category. for now:
-    this.linkersFilteredByTheUser = this.LINKERS;
+    this._diagramDomainService.getLinkersFromAnSpecificCategory(this.linkerCategorySelected).subscribe((res:any) => {this.linkersInTheCategorySelected = res});
     this.isLinkerCategorySelected = true;
   }
 
   debugmethod()
   {
-    console.log(this.userRewardSets);
+    console.log(this.linkers);
+    console.log(this.linkerCategories);
+    
     /*console.log(this.nodeIDCounter);
     console.log(this.diagramNodes);
     console.log(this.nodeTrigger);

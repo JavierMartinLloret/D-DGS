@@ -2,14 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Context } from "../models/context";
 import { Activity } from "../models/activity";
-import { Task } from "../models/task";
 import { Reward } from "../models/reward";
-import { Line } from "../models/line";
 import { Diagram } from "../models/diagram";
 import { Activity_Property } from "../models/activity_property";
 import { Reward_Set } from "../models/reward_set";
 import { node } from "../models/node";
 import { edge } from "../models/edge";
+import { Linker } from "../models/linker";
 
 @Injectable({
     providedIn: 'root'
@@ -197,6 +196,19 @@ export class DiagramDomainService {
         return this._httpClient.delete(this.rewardsURL+"/fromset/"+parentSetID);
     }
 
+    /* LINKER */
+
+    private linkerURL: string ="http://localhost:3000/linkers";
+
+    getAllLinkers() 
+    {
+        return this._httpClient.get(this.linkerURL);
+    }
+
+    getLinkersFromAnSpecificCategory(category: string)
+    {
+        return this._httpClient.get(this.linkerURL+"/"+category);
+    }
 
     /* DIAGRAM */
 
