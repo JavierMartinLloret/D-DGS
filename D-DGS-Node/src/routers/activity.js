@@ -1,7 +1,6 @@
 const express = require("express");
 const Activity = require("../models/activity");
 const ActivityModel = require("../models/activity");
-const Activity_TasksModel = require("../models/activity_tasks");
 const activityRouter = new express.Router();
 
 // Get all activities in DB

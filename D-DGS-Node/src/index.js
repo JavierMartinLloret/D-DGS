@@ -7,8 +7,8 @@ const activityRouter = require('./routers/activity');
 const activityPropertyRouter = require('./routers/activity_property');
 const rewardSetRouter = require('./routers/reward_set');
 const rewardRouter = require('./routers/reward');
-const activity_tasksRouter = require('./routers/activity_tasks');
 const diagramRouter = require('./routers/diagram');
+const linkerRouter = require('./routers/linker');
 const mongoose = require('./db/mongoose');
 
 
@@ -33,9 +33,8 @@ app.use(activityRouter);
 app.use(activityPropertyRouter);
 app.use(rewardSetRouter);
 app.use(rewardRouter);
-app.use(activity_tasksRouter);
 app.use(diagramRouter);
-
+app.use(linkerRouter);
 
 app.listen(3000, () =>{
     console.log('Express server running on the port 3000');
