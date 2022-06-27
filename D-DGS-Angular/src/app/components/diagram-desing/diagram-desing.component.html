@@ -131,6 +131,17 @@
                             </mat-select>
                         </div>
                     </div>
+                    <div *ngIf="isAnActivityNodeClicked">
+                        <h3>Name: <h3 style="font-style: italic">{{activityClicked.name}}</h3></h3>
+                        <h4>Description: </h4><p style="font-style: italic">{{activityClicked.description}}</p>
+                    </div>
+                    <div *ngIf="isAPropertyNodeClicked">
+                        <h3>Name: <h3 style="font-style: italic">{{propertyClicked.name}}</h3></h3>
+                        <div style="text-align: left;">
+                            <h4>Property type: {{propertyClickedType}}</h4>
+                            <h4>Default value: {{propertyClickedValue}}</h4>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

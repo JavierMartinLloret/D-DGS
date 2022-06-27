@@ -30,7 +30,7 @@ activityPropertyRouter.get('/activity_property/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const query = {"_id": id};
-        const property = await ActivityProperty.find(query);
+        const property = await ActivityProperty.findOne(query);
 
         res.status(200).send(property)
     } catch (error) {

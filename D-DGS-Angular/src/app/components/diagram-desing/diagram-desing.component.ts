@@ -50,6 +50,10 @@ export class DiagramDesingComponent implements OnInit {
   public contextSelected: Context = new Context("","");
   public rewardSetSelected: Reward_Set = new Reward_Set("","");
   public activitySelected: Activity = new Activity("","","");
+  public activityClicked: Activity = new Activity("","","");
+  public propertyClicked: Activity_Property = new Activity_Property("","");
+  public propertyClickedType: string = "";
+  public propertyClickedValue: any = "";
   public rewardSelected: Reward = new Reward("","","",0);
   public linkerCategorySelected: string = "";
   public linkerSelected: Linker = new Linker("","",);
@@ -76,6 +80,9 @@ export class DiagramDesingComponent implements OnInit {
   public isAnLinkerWrapperClicked: boolean = false;
   public isAnActivityWrapperClicked: boolean = false;
   public isAnRewardWrapperClicked: boolean = false;
+  public isAnActivityNodeClicked: boolean = false;
+  public isAPropertyNodeClicked: boolean = false;
+
   public isLinkModeActivated: boolean = false; // Linker is selected
 
   // Diagram-Related Variables
@@ -189,7 +196,7 @@ export class DiagramDesingComponent implements OnInit {
   }
 
   nodeExitsTheDiagram(): void {
-    
+    /* EN TEORÍA ES PARA EVITAR EL BUG DE SOLTAR FUERA DEL DIAGRAMA, pero lo empeora :( */
   }
 
   wrapperDropped(): void {
@@ -282,19 +289,20 @@ export class DiagramDesingComponent implements OnInit {
       switch (hasChanged.length) {
         case 0:
         {
-          console.log("Sin cambios");
           this.wrapperSelectedNode = new node("","","","","","");
         }break;
          
         case 1:
         {
-          console.log("Un cambio");
           if(hasChanged[0].value)
           {
             switch (hasChanged[0].type) {
             case "ACTIVITY_SELECTOR":
             {
               this.isAnActivityWrapperClicked = true;
+              this.isAnActivityNodeClicked = false;
+              this.isAPropertyNodeClicked = false;
+
               // Hay que asignar a WrapperSelected el nodo que será sustituido.
               this.diagramNodes.forEach((n:node) => {
                 if(n.id == hasChanged[0].id)
@@ -306,6 +314,9 @@ export class DiagramDesingComponent implements OnInit {
             case "REWARD_SELECTOR":
             {
               this.isAnRewardWrapperClicked = true;
+              this.isAnActivityNodeClicked = false;
+              this.isAPropertyNodeClicked = false;
+
               this.diagramNodes.forEach((n:node)=> {
                 if(n.id == hasChanged[0].id)
                   this.wrapperSelectedNode = n;
@@ -315,12 +326,64 @@ export class DiagramDesingComponent implements OnInit {
             case "LINKER_SELECTOR":
             {
               this.isAnLinkerWrapperClicked = true;
+              this.isAnActivityNodeClicked = false;
+              this.isAPropertyNodeClicked = false;
+
               this.diagramNodes.forEach((n:node)=> {
                 if(n.id == hasChanged[0].id)
                   this.wrapperSelectedNode = n;
               })
             }break;
           
+            case "ACTIVITY":
+            {
+              this.isAnActivityNodeClicked = true;
+              this.isAPropertyNodeClicked = false;
+
+              let activityClickedID: string | undefined;
+              this.diagramNodes.forEach((n:node)=> {
+                if(n.id == hasChanged[0].id)
+                  activityClickedID = n.base_element_id;
+              });
+              if(activityClickedID)
+                this._diagramDomainService.getActivityFromId(activityClickedID).subscribe((res:any) => {this.activityClicked = res;})
+              
+            }break;
+
+            case "PROPERTY":
+            {
+              this.isAPropertyNodeClicked = true;
+              this.isAnActivityNodeClicked = false;
+
+              let propertyClickedID: string | undefined;
+              this.diagramNodes.forEach((n:node)=> {
+                if(n.id == hasChanged[0].id)
+                  propertyClickedID = n.base_element_id;
+              });              
+              if(propertyClickedID)
+                this._diagramDomainService.getPropertyFromID(propertyClickedID).subscribe((res:any) => {
+                  this.propertyClicked = res;
+                  if(res.value_Number != undefined)
+                  {
+                    this.propertyClickedValue = res.value_Number;
+                    this.propertyClickedType = "Numerical"
+                  }
+                  if(res.value_String != undefined)
+                  {
+                    this.propertyClickedValue = res.value_String;
+                    this.propertyClickedType = "String"
+                  }
+                  if(res.value_Date != undefined)
+                  {
+                    this.propertyClickedValue = res.value_Date;
+                    this.propertyClickedType = "Date"
+                  }
+                    
+                })
+            }break;
+            // case Recompensa
+            // case Linker            
+
             default:break;
             }
           }
@@ -328,13 +391,19 @@ export class DiagramDesingComponent implements OnInit {
           {
             this.wrapperSelectedNode = new node("","","","","","");
             this.isAnActivityWrapperClicked = this.isAnRewardWrapperClicked
-             = this.isAnLinkerWrapperClicked = false;
+            = this.isAnLinkerWrapperClicked = this.isAnActivityNodeClicked 
+            = this.isAPropertyNodeClicked = false;
           }         
       }break;
         
       case 2:   // EL QUE TENGA EL value: true ES EL SEGUNDO EN SER PULSADO
       {
-        console.log("Dos cambios");
+        this.wrapperSelectedNode = new node("","","","","","");
+        this.activityClicked = new Activity("","","");
+        this.propertyClicked = new Activity_Property("","");
+        this.isAnActivityWrapperClicked = this.isAnRewardWrapperClicked
+        = this.isAnLinkerWrapperClicked = this.isAnActivityNodeClicked 
+        = this.isAPropertyNodeClicked = false;
       }break;
           
       default:break;
@@ -477,9 +546,7 @@ export class DiagramDesingComponent implements OnInit {
   }
 
   addPropertyNodesToAnActivity(activtyNode: node, properties: Array<Activity_Property>)
-  {
-    console.log(properties);
-    
+  {    
     if(activtyNode.base_element_id)
     {
       let nodesToAdd: Array<node> = new Array<node>();
@@ -488,28 +555,29 @@ export class DiagramDesingComponent implements OnInit {
       let auxEdge: edge = new edge("","","","",0,"");
 
       properties.forEach((property: Activity_Property) => {
-        console.log("Añadiendo una propiedad con id: "+this.nodeIDCounter.toString());
-        auxNode.id = this.nodeIDCounter.toString();
-        auxNode.label = property.name.toString();
-        auxNode.shape = "default"; // Shape
-        auxNode.color = "#ad2677"; // Color
-        auxNode.type = "PROPERTY";
-        auxNode.base_element_id = activtyNode.base_element_id;
-        
-        
-        auxEdge.id = activtyNode.id + "<->" + auxNode.id;
-        auxEdge.from = activtyNode.id;
-        auxEdge.to = auxNode.id;
-        auxEdge.arrows = "default";
-        auxEdge.value = 1;
-        console.log("Añadiendo un enlace con id: "+auxEdge.id);
-
-        if(auxNode.base_element_id)
+        if(property._id)
         {
-          nodesToAdd.push(new node(auxNode.id, auxNode.label, auxNode.shape, auxNode.color, auxNode.type, auxNode.base_element_id.toString()));
-          edgesToAdd.push(new edge(auxEdge.id, auxEdge.from, auxEdge.to, auxEdge.arrows, auxEdge.value));
+          auxNode.id = this.nodeIDCounter.toString();
+          auxNode.label = property.name.toString();
+          auxNode.shape = "default"; // Shape
+          auxNode.color = "#ad2677"; // Color
+          auxNode.type = "PROPERTY";
+          auxNode.base_element_id = property._id.toString();
+          
+          
+          auxEdge.id = activtyNode.id + "<->" + auxNode.id;
+          auxEdge.from = activtyNode.id;
+          auxEdge.to = auxNode.id;
+          auxEdge.arrows = "default";
+          auxEdge.value = 1;
+
+          if(auxNode.base_element_id)
+          {
+            nodesToAdd.push(new node(auxNode.id, auxNode.label, auxNode.shape, auxNode.color, auxNode.type, auxNode.base_element_id.toString()));
+            edgesToAdd.push(new edge(auxEdge.id, auxEdge.from, auxEdge.to, auxEdge.arrows, auxEdge.value));
+          }
+          this.nodeIDCounter++;
         }
-        this.nodeIDCounter++;
       });
       
       nodesToAdd.forEach((n:node) => {
@@ -553,10 +621,7 @@ export class DiagramDesingComponent implements OnInit {
   }
 
   debugmethod()
-  {
-    console.log(this.linkers);
-    console.log(this.linkerCategories);
-    
+  {    
     /*console.log(this.nodeIDCounter);
     console.log(this.diagramNodes);
     console.log(this.nodeTrigger);
