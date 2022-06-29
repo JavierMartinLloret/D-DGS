@@ -10,6 +10,7 @@ import { node } from 'src/app/models/node';
 import { Reward } from 'src/app/models/reward';
 import { Reward_Set } from 'src/app/models/reward_set';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
+import { LinkEvaluationService } from 'src/app/services/link-evaluation.service';
 import { UsersService } from 'src/app/services/users.service';
 import { DataSet } from "vis-data";
 import { Network } from 'vis-network';
@@ -54,15 +55,17 @@ export class DiagramDesingComponent implements OnInit {
   public propertyClicked: Activity_Property = new Activity_Property("","");
   public propertyClickedType: string = "";
   public propertyClickedValue: any = "";
+  public rewardClicked: Reward = new Reward("","","",0);
   public rewardSelected: Reward = new Reward("","","",0);
+  public linkerClicked: Linker = new Linker("","");
   public linkerCategorySelected: string = "";
-  public linkerSelected: Linker = new Linker("","",);
+  public linkerSelected: Linker = new Linker("","");
   public wrapperSelectedNode: node = new node("","","","","","");
   private nodeIDCounter: number = 0;
 
   private newNodeType: string = "ERROR";
 
-  public nodeTypes: Array<string> = ["ACTIVITY", "PROPERTY", "REWARD", "LINKER"];
+  //public nodeTypes: Array<string> = ["ACTIVITY", "PROPERTY", "REWARD", "LINKER"];
 
   // Flags
   public userIsAdmin: boolean = false;
@@ -82,6 +85,8 @@ export class DiagramDesingComponent implements OnInit {
   public isAnRewardWrapperClicked: boolean = false;
   public isAnActivityNodeClicked: boolean = false;
   public isAPropertyNodeClicked: boolean = false;
+  public isALinkerNodeClicked: boolean = false;
+  public isARewardNodeClicked: boolean = false;
 
   public isLinkModeActivated: boolean = false; // Linker is selected
 
@@ -94,12 +99,11 @@ export class DiagramDesingComponent implements OnInit {
   public network: any;
 
   public nodeTrigger: Array<node_state> = new Array<node_state>();
-  public edgesIdsRegister: Set<string> = new Set<string>();
   public diagramNodes: Array<node> = new Array<node>();
   public diagramEdges: Array<edge> = new Array<edge>();
   public newDiagram: Diagram = new Diagram("", "", this.diagramNodes, this.diagramEdges, undefined);
 
-  constructor(private _diagramDomainService: DiagramDomainService, private _usersService: UsersService, private _router: Router) {
+  constructor(private _diagramDomainService: DiagramDomainService, private _usersService: UsersService, private _linkEvaluationService: LinkEvaluationService, private _router: Router) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux == null || aux == "FAILED")
     {
@@ -157,10 +161,7 @@ export class DiagramDesingComponent implements OnInit {
     
   }
 
-  unlogUser()
-  {
-    sessionStorage.removeItem(LOG_TOKEN)
-  }
+  unlogUser(){sessionStorage.removeItem(LOG_TOKEN)}
 
   addActivityClicked(): void{
     this.isAddActivitiyClicked = this.isAddActivitiyClicked ? false : true;
@@ -297,6 +298,7 @@ export class DiagramDesingComponent implements OnInit {
           if(hasChanged[0].value)
           {
             switch (hasChanged[0].type) {
+              // SELECTORS_START
             case "ACTIVITY_SELECTOR":
             {
               this.isAnActivityWrapperClicked = true;
@@ -334,12 +336,15 @@ export class DiagramDesingComponent implements OnInit {
                   this.wrapperSelectedNode = n;
               })
             }break;
-          
+            // SELECTOR_END
+
             case "ACTIVITY":
             {
               this.isAnActivityNodeClicked = true;
               this.isAPropertyNodeClicked = false;
-
+              this.isARewardNodeClicked = false;
+              this.isALinkerNodeClicked = false;
+              
               let activityClickedID: string | undefined;
               this.diagramNodes.forEach((n:node)=> {
                 if(n.id == hasChanged[0].id)
@@ -354,7 +359,9 @@ export class DiagramDesingComponent implements OnInit {
             {
               this.isAPropertyNodeClicked = true;
               this.isAnActivityNodeClicked = false;
-
+              this.isARewardNodeClicked = false;
+              this.isALinkerNodeClicked = false;
+              
               let propertyClickedID: string | undefined;
               this.diagramNodes.forEach((n:node)=> {
                 if(n.id == hasChanged[0].id)
@@ -381,8 +388,42 @@ export class DiagramDesingComponent implements OnInit {
                     
                 })
             }break;
-            // case Recompensa
-            // case Linker            
+
+            case "REWARD":
+            {
+              this.isARewardNodeClicked = true;
+              this.isAnActivityNodeClicked = false;
+              this.isAPropertyNodeClicked = false;
+              this.isALinkerNodeClicked = false;
+
+              let rewardClickedID: string | undefined;
+              this.diagramNodes.forEach((n:node)=> {
+                if(n.id == hasChanged[0].id)
+                  rewardClickedID = n.base_element_id;
+              });
+              if(rewardClickedID)
+              {
+                this._diagramDomainService.getAReward(rewardClickedID).subscribe((res:any) => {this.rewardClicked = res;})
+              }
+            }break;
+
+            case "LINKER":
+            {
+              this.isALinkerNodeClicked = true;
+              this.isARewardNodeClicked = false;
+              this.isAnActivityNodeClicked = false;
+              this.isAPropertyNodeClicked = false;
+
+              let linkerClickedID: string | undefined;
+              this.diagramNodes.forEach((n:node)=> {
+                if(n.id == hasChanged[0].id)
+                  linkerClickedID = n.base_element_id;
+              });
+              if(linkerClickedID)
+              {
+                this._diagramDomainService.getALinker(linkerClickedID).subscribe((res:any) => {this.linkerClicked = res;})
+              }
+            }break;       
 
             default:break;
             }
@@ -392,7 +433,7 @@ export class DiagramDesingComponent implements OnInit {
             this.wrapperSelectedNode = new node("","","","","","");
             this.isAnActivityWrapperClicked = this.isAnRewardWrapperClicked
             = this.isAnLinkerWrapperClicked = this.isAnActivityNodeClicked 
-            = this.isAPropertyNodeClicked = false;
+            = this.isAPropertyNodeClicked = this.isARewardNodeClicked = false;
           }         
       }break;
         
@@ -403,7 +444,53 @@ export class DiagramDesingComponent implements OnInit {
         this.propertyClicked = new Activity_Property("","");
         this.isAnActivityWrapperClicked = this.isAnRewardWrapperClicked
         = this.isAnLinkerWrapperClicked = this.isAnActivityNodeClicked 
-        = this.isAPropertyNodeClicked = false;
+        = this.isAPropertyNodeClicked = this.isARewardNodeClicked = false;
+
+        if(this.isLinkModeActivated)
+        {
+          let linkerNode : node = new node("","","","","","");
+          let nodeToLink: node = new node("","","","","","");
+  
+          hasChanged.forEach((n_s:node_state) => {
+            if(n_s.value)
+              nodeToLink.id = n_s.id;
+            else
+              linkerNode.id = n_s.id;
+          });
+  
+          this.diagramNodes.forEach((n:node) => {
+            if(n.id == nodeToLink.id)
+              nodeToLink = n;
+            if(n.id == linkerNode.id)
+              linkerNode = n;
+          });
+
+          if(linkerNode.base_element_id)
+          {
+            this._diagramDomainService.getALinker(linkerNode.base_element_id).subscribe((res: any) => {
+              if(this._linkEvaluationService.evaluateALink(res, nodeToLink))
+              {
+                let newEdge : edge = {
+                  _id: undefined,
+                  id: linkerNode.id + "<->" + nodeToLink.id,
+                  from: linkerNode.id,
+                  to: nodeToLink.id,
+                  arrows: "none",
+                  value: 1
+                };
+                this.diagramEdges.push(newEdge);
+                this.edges.add(newEdge);
+              }
+              else
+              {
+                window.alert("This link cannot be made, are you shure it has any sense?")
+              }
+            })
+          }
+          this.isALinkerNodeClicked = false;
+          this.isLinkModeActivated = false;
+        }
+
       }break;
           
       default:break;
@@ -620,6 +707,8 @@ export class DiagramDesingComponent implements OnInit {
     this.isLinkerCategorySelected = true;
   }
 
+  activateLinkMode(): void {this.isLinkModeActivated = true;}
+
   debugmethod()
   {    
     /*console.log(this.nodeIDCounter);
@@ -629,7 +718,5 @@ export class DiagramDesingComponent implements OnInit {
     console.log(this.diagramNodes);
     console.log("Edges:");
     console.log(this.diagramEdges);*/
-
-    
   }
 }

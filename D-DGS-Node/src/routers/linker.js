@@ -11,6 +11,16 @@ linkerRouter.get('/linkers', async (req, res) => {
     }
 });
 
+linkerRouter.post('/linkers', async (req, res) => {
+    const newLinker = new LinkerModel(req.body);
+    try {
+        await newLinker.save();
+        res.status(201).send(newLinker._id);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 linkerRouter.get('/linkers/:category', async (req, res) => {
     try {
         const category = req.params.category;
@@ -23,11 +33,13 @@ linkerRouter.get('/linkers/:category', async (req, res) => {
     }
 })
 
-linkerRouter.post('/linkers', async (req, res) => {
-    const newLinker = new LinkerModel(req.body);
+linkerRouter.get('/linkers/id/:id', async (req, res) => {
     try {
-        await newLinker.save();
-        res.status(201).send(newLinker._id);
+        const id = req.params.id;
+        const query = {"_id": id};
+        const linker = await LinkerModel.findOne(query);
+
+        res.status(200).send(linker);
     } catch (error) {
         res.status(500).send(error);
     }

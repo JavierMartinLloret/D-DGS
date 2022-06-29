@@ -137,10 +137,22 @@
                     </div>
                     <div *ngIf="isAPropertyNodeClicked">
                         <h3>Name: <h3 style="font-style: italic">{{propertyClicked.name}}</h3></h3>
-                        <div style="text-align: left;">
-                            <h4>Property type: {{propertyClickedType}}</h4>
-                            <h4>Default value: {{propertyClickedValue}}</h4>
-                        </div>
+                        <h4 style="text-align: left;">Property type: {{propertyClickedType}}</h4>
+                        <h4 style="text-align: justify;">Default value: "{{propertyClickedValue}}"</h4>
+                    </div>
+                    <div *ngIf="isARewardNodeClicked">
+                        <h3>Name: <h3 style="font-style: italic">{{rewardClicked.name}}</h3></h3>
+                        <h4 style="text-align: left;">Current priority: {{rewardClicked.priority}}</h4>
+                        <p style="text-align: justify;">{{rewardClicked.description}}</p>
+                    </div>
+                    <div *ngIf="isALinkerNodeClicked">
+                        <h3>Linker name: <h3 style="font-style: italic">{{linkerClicked.name}}</h3></h3>
+                        <button style="text-align: center;" *ngIf="!isLinkModeActivated" (click)="activateLinkMode()">
+                            <span>Add a conexion</span>
+                        </button>
+                        <p style="text-align: center;" *ngIf="isLinkModeActivated">
+                            Click on a valid node to add a link!
+                        </p>
                     </div>
                 </div>
             </div>

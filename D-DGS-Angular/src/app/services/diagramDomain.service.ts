@@ -205,6 +205,11 @@ export class DiagramDomainService {
         return this._httpClient.get(this.linkerURL);
     }
 
+    getALinker(id: string)
+    {
+        return this._httpClient.get(this.linkerURL+"/id/"+id);
+    }
+
     getLinkersFromAnSpecificCategory(category: string)
     {
         return this._httpClient.get(this.linkerURL+"/"+category);
