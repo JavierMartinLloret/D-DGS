@@ -61,6 +61,7 @@ export class DiagramDesingComponent implements OnInit {
   public linkerCategorySelected: string = "";
   public linkerSelected: Linker = new Linker("","");
   public wrapperSelectedNode: node = new node("","","","","","");
+  public newDiagramName: string = "";
   private nodeIDCounter: number = 0;
 
   private newNodeType: string = "ERROR";
@@ -87,8 +88,7 @@ export class DiagramDesingComponent implements OnInit {
   public isAPropertyNodeClicked: boolean = false;
   public isALinkerNodeClicked: boolean = false;
   public isARewardNodeClicked: boolean = false;
-
-  public isLinkModeActivated: boolean = false; // Linker is selected
+  public isLinkModeActivated: boolean = false;
 
   // Diagram-Related Variables
   public diagram: any;
@@ -467,25 +467,81 @@ export class DiagramDesingComponent implements OnInit {
 
           if(linkerNode.base_element_id)
           {
-            this._diagramDomainService.getALinker(linkerNode.base_element_id).subscribe((res: any) => {
-              if(this._linkEvaluationService.evaluateALink(res, nodeToLink))
+            this._diagramDomainService.getALinker(linkerNode.base_element_id).subscribe((linker: any) => {
+              if(nodeToLink.base_element_id)
               {
-                let newEdge : edge = {
-                  _id: undefined,
-                  id: linkerNode.id + "<->" + nodeToLink.id,
-                  from: linkerNode.id,
-                  to: nodeToLink.id,
-                  arrows: "none",
-                  value: 1
-                };
-                this.diagramEdges.push(newEdge);
-                this.edges.add(newEdge);
+                switch (nodeToLink.type) {
+                  case "ACTIVITY":
+                  {
+                    this._diagramDomainService.getActivityFromId(nodeToLink.base_element_id).subscribe((res:any) => {
+                      if(this._linkEvaluationService.evaluateALink(linker, nodeToLink, res))
+                      {
+                        let newEdge : edge = {
+                          _id: undefined,
+                          id: linkerNode.id + "<->" + nodeToLink.id,
+                          from: linkerNode.id,
+                          to: nodeToLink.id,
+                          arrows: "none",
+                          value: 1
+                        };
+                        this.diagramEdges.push(newEdge);
+                        this.edges.add(newEdge);
+                      }
+                      else
+                      {
+                        window.alert("This link cannot be made, are you shure it has any sense?")
+                      }
+                    })
+                  }break;
+                  case "PROPERTY":
+                  {
+                    this._diagramDomainService.getPropertyFromID(nodeToLink.base_element_id).subscribe((res:any) => {
+                      if(this._linkEvaluationService.evaluateALink(linker, nodeToLink, res))
+                      {
+                        let newEdge : edge = {
+                          _id: undefined,
+                          id: linkerNode.id + "<->" + nodeToLink.id,
+                          from: linkerNode.id,
+                          to: nodeToLink.id,
+                          arrows: "none",
+                          value: 1
+                        };
+                        this.diagramEdges.push(newEdge);
+                        this.edges.add(newEdge);
+                      }
+                      else
+                      {
+                        window.alert("This link cannot be made, are you shure it has any sense?")
+                      }
+                    })
+                  }break;
+                  case "REWARD":
+                  {
+                    this._diagramDomainService.getAReward(nodeToLink.base_element_id).subscribe((res:any) => {
+                      if(this._linkEvaluationService.evaluateALink(linker, nodeToLink, res))
+                      {
+                        let newEdge : edge = {
+                          _id: undefined,
+                          id: linkerNode.id + "<->" + nodeToLink.id,
+                          from: linkerNode.id,
+                          to: nodeToLink.id,
+                          arrows: "none",
+                          value: 1
+                        };
+                        this.diagramEdges.push(newEdge);
+                        this.edges.add(newEdge);
+                      }
+                      else
+                      {
+                        window.alert("This link cannot be made, are you shure it has any sense?")
+                      }
+                    })
+                  }break;
+                  default:
+                    break;
+                }
               }
-              else
-              {
-                window.alert("This link cannot be made, are you shure it has any sense?")
-              }
-            })
+            });
           }
           this.isALinkerNodeClicked = false;
           this.isLinkModeActivated = false;
@@ -672,6 +728,10 @@ export class DiagramDesingComponent implements OnInit {
         let n_s : node_state = {id: n.id, type: n.type, value: false};
         this.nodeTrigger.push(n_s);
       })
+
+      edgesToAdd.forEach((e:edge) => {
+        this.diagramEdges.push(e);  
+      })
       
       this.nodes.add(nodesToAdd);
       this.edges.add(edgesToAdd);
@@ -708,6 +768,31 @@ export class DiagramDesingComponent implements OnInit {
   }
 
   activateLinkMode(): void {this.isLinkModeActivated = true;}
+
+  saveDiagramIsClicked(): void {
+    this.isSaveDiagramClicked = this.isSaveDiagramClicked ? false : true;
+  }
+
+  saveDiagram(): void {
+    let filteredNodesArray: Array<node> = new Array<node>();
+    this.diagramNodes.forEach((n:node) => {
+      if(n.type == "ACTIVITY" || n.type == "PROPERTY" || n.type == "REWARD")
+        filteredNodesArray.push(n);
+    });
+
+    let diagram : Diagram = 
+    {
+      _id: undefined,
+      domain_key: this.DOMAIN_KEY,
+      name: this.newDiagramName,
+      nodes: filteredNodesArray,
+      edges: this.diagramEdges
+    }
+
+    this._diagramDomainService.postADiagram(diagram).subscribe((res:any) => {})
+    console.log(diagram);
+    window.alert("Diagram Created!");
+  }
 
   debugmethod()
   {    

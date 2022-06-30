@@ -79,7 +79,7 @@ mat-divider {
         'diagram diagram nodePickingArea'
         'diagram diagram diagramInfoArea'
         'diagram diagram diagramInfoArea';
-    height: 97%;
+    height: 100%;
     gap: 5px;
     background-color: black;
 }

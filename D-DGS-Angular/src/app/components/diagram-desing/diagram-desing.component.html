@@ -11,7 +11,6 @@
             close
         </mat-icon>
     </button>
-    <button (click)="debugmethod()">debug</button>
     <!-- <button (click)="debugmethod()">debug</button> -->
   </mat-toolbar>
 
@@ -63,7 +62,6 @@
   
     <mat-sidenav-content>
         <div class="contentWrapper mat-elevation-z4">
-            <h2>Desing</h2>
             <div class="DesingGrid">
                 <div id="diagramID" (click)="diagramIsClicked()" (dragover)="nodeOverDiagram()" (dragleave)="nodeExitsTheDiagram()">
                     
@@ -95,6 +93,15 @@
                 </div>
                 <div class="diagramInfoeArea">
                     <h2>Info Area</h2>
+                    <div *ngIf="diagramNodes.length > 1">
+                        <button (click)="saveDiagramIsClicked()">Save The diagram!</button>
+                        <div *ngIf="isSaveDiagramClicked">
+                            <form ngNativeValidate (ngSubmit)="saveDiagram()" name="NewDiagramForm">
+                                <p>Diagram Name: <input type="text" name="newDiagramName" id="newDiagramName" [(ngModel)]="newDiagramName" required></p>
+                                <button type="submit">Save it!</button>
+                            </form>
+                        </div>
+                    </div>
                     <div *ngIf="isAnActivityWrapperClicked">
                         <h3>Select one context:</h3>
                         <mat-select name="contexts" id="contexts" [(ngModel)]="contextSelected" (ngModelChange)="contextIsSelected()" placeholder="Select a context">

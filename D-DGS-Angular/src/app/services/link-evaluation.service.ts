@@ -9,7 +9,7 @@ export class LinkEvaluationService {
 
   constructor() { }
 
-  evaluateALink(linker: Linker, nodeToLink: node) : boolean
+  evaluateALink(linker: Linker, nodeToLink: node, baseElement: any) : boolean
   {
     let response: boolean = true;
     switch (linker.category) {
@@ -17,34 +17,18 @@ export class LinkEvaluationService {
       {
         switch (linker.name) {
           case "Equality":
+          case "Distinct":
           {
             // SOLO ASIGNABLE A PROPIEDADES.
             response = (nodeToLink.type=="PROPERTY") ? true : false;
           }break;
           case "Less than":
-          {
-            // SOLO ASIGNABLE A PROPIEDADES.
-            response = (nodeToLink.type=="PROPERTY") ? true : false;
-          }break;
           case "Less or Equal":
-          {
-            // SOLO ASIGNABLE A PROPIEDADES.
-            response = (nodeToLink.type=="PROPERTY") ? true : false;
-          }break;
-          case "Greater than":
-          {
-            // SOLO ASIGNABLE A PROPIEDADES.
-            response = (nodeToLink.type=="PROPERTY") ? true : false;
-          }break;
+          case "Greater than" :
           case "Greater or equal":
           {
-            // SOLO ASIGNABLE A PROPIEDADES.
-            response = (nodeToLink.type=="PROPERTY") ? true : false;
-          }break;
-          case "Distinct":
-          {
-            // SOLO ASIGNABLE A PROPIEDADES.
-            response = (nodeToLink.type=="PROPERTY") ? true : false;
+            // SOLO ASIGNABLE A PROPIEDADES. El tipo de la propiedad debe ser != de string.
+            response = (nodeToLink.type=="PROPERTY" && (baseElement.value_String == undefined)) ? true : false;
           }break;
           default:break;
         }
