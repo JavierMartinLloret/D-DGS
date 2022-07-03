@@ -71,7 +71,7 @@
                 <ul *ngFor="let d of userDiagrams" class="ContentBox DiagramList" >
                     <li>
                         <a class="nav-link" [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">{{d.name}}  </a>
-                        <button class="diagramButton"><mat-icon> insert_drive_file</mat-icon></button>
+                        <button class="diagramButton"><mat-icon>arrow_downward</mat-icon></button>
                         <button (click)="deleteDiagram(d)"><mat-icon>delete_forever</mat-icon></button>
                         <button [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)"><mat-icon>remove_red_eye</mat-icon></button>
                     </li>        

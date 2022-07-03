@@ -146,8 +146,11 @@ export class DiagramDesingComponent implements OnInit {
     if(sessionStorage.getItem(PASSING_DIAGRAM)=="true")
     {
       this.newDiagram = this._diagramDomainService.loadDiagramToBeEdited();
+
       this.nodes.add(this.newDiagram.nodes);
+      this.newDiagram.nodes.forEach((n:node) => {this.diagramNodes.push(n);});
       this.edges.add(this.newDiagram.edges);
+      this.newDiagram.edges.forEach((e:edge) => {this.diagramEdges.push(e);});
       this.options = {
         manipulation: {
           enabled: false
@@ -589,6 +592,7 @@ export class DiagramDesingComponent implements OnInit {
       /* Actualizar la red (Eliminar el nodo previo y luego añadir el nuevo) */
       this.nodes.remove(newActivityNode.id);
       this.nodes.add(newActivityNode);
+      
 
       /* Resetear el sistema (Flags y variables locales) para poder repetir el proceso */
       this.isAnActivityWrapperClicked = false;
@@ -678,9 +682,10 @@ export class DiagramDesingComponent implements OnInit {
         }
       })
 
+      
       this.nodes.remove(newLinkerNode.id);
       this.nodes.add(newLinkerNode);
-
+      
       this.isAnActivityWrapperClicked = false;
       this.wrapperSelectedNode = new node("","","","","","");
       this.linkerCategorySelected = "";
@@ -776,7 +781,7 @@ export class DiagramDesingComponent implements OnInit {
   saveDiagram(): void {
     let filteredNodesArray: Array<node> = new Array<node>();
     this.diagramNodes.forEach((n:node) => {
-      if(n.type == "ACTIVITY" || n.type == "PROPERTY" || n.type == "REWARD")
+      if(n.type == "ACTIVITY" || n.type == "PROPERTY" || n.type == "REWARD" || n.type == "LINKER")
         filteredNodesArray.push(n);
     });
 
@@ -796,6 +801,8 @@ export class DiagramDesingComponent implements OnInit {
 
   debugmethod()
   {    
+    console.log(this.nodes);
+    console.log(this.diagramNodes);
     /*console.log(this.nodeIDCounter);
     console.log(this.diagramNodes);
     console.log(this.nodeTrigger);
