@@ -70,10 +70,16 @@
             <div *ngIf="userHasDiagrams">
                 <ul *ngFor="let d of userDiagrams" class="ContentBox DiagramList" >
                     <li>
-                        <a class="nav-link" [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">{{d.name}}  </a>
-                        <button class="diagramButton"><mat-icon>arrow_downward</mat-icon></button>
+                        <div style="vertical-align: middle;">
+                        <a [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">{{d.name}}</a>
+                        <a class="nav-link-download" href="http://localhost:3000/downloads/diagrams/{{d._id}}" target="_blank" download>
+                            <button class="diagramButton">
+                                <mat-icon>arrow_downward</mat-icon>
+                            </button>
+                        </a>
                         <button (click)="deleteDiagram(d)"><mat-icon>delete_forever</mat-icon></button>
                         <button [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)"><mat-icon>remove_red_eye</mat-icon></button>
+                        </div>
                     </li>        
                 </ul>
             </div>

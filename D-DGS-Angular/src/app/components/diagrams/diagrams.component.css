@@ -73,3 +73,7 @@ mat-divider {
     display: inline-flex;
     align-items: flex-end; 
 }
+
+.nav-link-download {
+    text-decoration: none;
+}

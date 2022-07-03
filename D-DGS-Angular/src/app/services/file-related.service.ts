@@ -8,17 +8,9 @@ export class FileRelatedService {
 
   constructor(private _httpClient: HttpClient) { }
 
-  private diagramURL: string = "http://localhost:3000/diagrams/download"
-
-  downloadFileExample(fileName: string, format: string) {
-    this._httpClient.get(this.diagramURL+"/"+fileName).subscribe((response: any) => {
-      console.log(response);
-      
-    })
-  }
+  private diagramURL: string = "http://localhost:3000/downloads"
 
   getAJSONDiagram(diagramID: string) {
-    let response;
-    this._httpClient.get(this.diagramURL+"/"+diagramID);
+     return this._httpClient.get(this.diagramURL+"/diagrams/"+diagramID);
   }
 }

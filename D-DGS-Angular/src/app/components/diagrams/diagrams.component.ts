@@ -24,13 +24,12 @@ export class DiagramsComponent implements OnInit {
 
   public userIsAdmin: boolean = false;
 
-  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _usersService: UsersService) {
+  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _usersService: UsersService, private _downloadService: FileRelatedService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux)
     {
       this.DOMAIN_KEY = aux;
       this._diagramDomainService.getAllDiagramsOfAnUser(this.DOMAIN_KEY).subscribe(res => {
-        console.log(res);
         this.userDiagrams = res;
         if(this.userDiagrams.length > 0)
           this.userHasDiagrams = true;
@@ -57,10 +56,9 @@ export class DiagramsComponent implements OnInit {
     sessionStorage.setItem(PASSING_DIAGRAM, "true");
   }
 
-  downloadDiagram(): void
+  downloadDiagram(diagramID: string): void
   {
-    console.log("TRABAJO EN CURSO");
-    
+    this._downloadService.getAJSONDiagram(diagramID).subscribe((res)=> {})    
   }
 
   deleteDiagram(diagram: Diagram): void

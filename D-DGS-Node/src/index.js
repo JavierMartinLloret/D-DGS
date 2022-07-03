@@ -9,6 +9,7 @@ const rewardSetRouter = require('./routers/reward_set');
 const rewardRouter = require('./routers/reward');
 const diagramRouter = require('./routers/diagram');
 const linkerRouter = require('./routers/linker');
+const downloadsRouter = require('./routers/downloads');
 const mongoose = require('./db/mongoose');
 
 
@@ -35,6 +36,7 @@ app.use(rewardSetRouter);
 app.use(rewardRouter);
 app.use(diagramRouter);
 app.use(linkerRouter);
+app.use(downloadsRouter);
 
 app.listen(3000, () =>{
     console.log('Express server running on the port 3000');
