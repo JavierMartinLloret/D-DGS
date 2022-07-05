@@ -23,6 +23,11 @@ export class DiagramsComponent implements OnInit {
   public userDiagrams: any = [];
 
   public userIsAdmin: boolean = false;
+  public isFormatSelected:boolean = false;
+
+  public fileFormats: Array<String> = [".json", ".xml"];
+
+  public formatSelected: string = "";
 
   constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _usersService: UsersService, private _downloadService: FileRelatedService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
@@ -50,6 +55,10 @@ export class DiagramsComponent implements OnInit {
     }      
   }
 
+  formatIsSelected(){
+    this.isFormatSelected = true;
+  }
+
   visualizeDiagram(diagram: Diagram): void
   {
     this._diagramDomainService.saveDiagramToBeEdited(diagram);
@@ -74,12 +83,7 @@ export class DiagramsComponent implements OnInit {
 
   debugmethod()
   {
-    console.log(this.userDiagrams);
-    console.log(this.userHasDiagrams);
-    console.log(this.userDiagrams.length);
-    
-    
-    
+    this._router.navigateByUrl('http://localhost:3000/downloads/diagrams/sidhi/1');
     //this.userHasDiagrams = this.userHasDiagrams ? false : true;
   }
 }

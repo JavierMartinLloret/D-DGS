@@ -67,19 +67,34 @@
             <div class="ContentBox DiagramList" *ngIf="!userHasDiagrams">
                 <p>You haven't made any diagram so far, <a class="nav-link" [routerLink]="['/diagram_desing']">create one now!</a></p>
             </div>
-            <div *ngIf="userHasDiagrams">
+            <div *ngIf="userHasDiagrams" style="text-align: center; padding-right: 100px;">
+                <mat-select *ngIf="userHasDiagrams" name="downloadFormatSelector" id="downloadFormatSelector" [(ngModel)]="formatSelected" (ngModelChange)="formatIsSelected()" placeholder="Select a download Format" style="max-width: max-content;">
+                    <mat-option *ngFor="let f of fileFormats" [value]="f">{{f}}</mat-option>
+                </mat-select>
                 <ul *ngFor="let d of userDiagrams" class="ContentBox DiagramList" >
                     <li>
-                        <div style="vertical-align: middle;">
                         <a [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)">{{d.name}}</a>
-                        <a class="nav-link-download" href="http://localhost:3000/downloads/diagrams/{{d._id}}" target="_blank" download>
-                            <button class="diagramButton">
-                                <mat-icon>arrow_downward</mat-icon>
-                            </button>
-                        </a>
-                        <button (click)="deleteDiagram(d)"><mat-icon>delete_forever</mat-icon></button>
-                        <button [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)"><mat-icon>remove_red_eye</mat-icon></button>
-                        </div>
+                        <ul>
+                            <li style="list-style: none; display: flex;">
+                                <button class="DiagramOptionButton" [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)"><mat-icon>remove_red_eye</mat-icon></button>
+                                <button class="DiagramOptionButton" (click)="deleteDiagram(d)"><mat-icon>delete_forever</mat-icon></button>
+                                <div *ngIf="isFormatSelected && formatSelected=='.json'" style="padding-top: 5px;">
+                                    <a  href="http://localhost:3000/downloads/diagrams/json/{{d._id}}" target="_blank" download>
+                                        <button class="DiagramOptionButton">
+                                            <mat-icon>arrow_downward</mat-icon>
+                                        </button>
+                                    </a>
+                                </div>
+                                <div *ngIf="isFormatSelected && formatSelected=='.xml'" style="padding-top: 5px;">
+                                    <a href="http://localhost:3000/downloads/diagrams/xml/{{d._id}}" target="_blank" download>
+                                        <button class="diagramButton">
+                                            <mat-icon>arrow_downward</mat-icon>
+                                        </button>
+                                    </a>
+                                </div>
+                            </li>
+                            
+                        </ul>
                     </li>        
                 </ul>
             </div>
