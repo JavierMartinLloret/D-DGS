@@ -11,7 +11,7 @@
             close
         </mat-icon>
     </button>
-    
+    <button (click)="debugmethod()">debug</button>
     <!-- <button (click)="debugmethod()">debug</button> -->
 </mat-toolbar>
 
@@ -78,16 +78,16 @@
                             <li style="list-style: none; display: flex;">
                                 <button class="DiagramOptionButton" [routerLink]="['/diagram_desing']" (click)="visualizeDiagram(d)"><mat-icon>remove_red_eye</mat-icon></button>
                                 <button class="DiagramOptionButton" (click)="deleteDiagram(d)"><mat-icon>delete_forever</mat-icon></button>
-                                <div *ngIf="isFormatSelected && formatSelected=='.json'" style="padding-top: 5px;">
-                                    <a  href="http://localhost:3000/downloads/diagrams/json/{{d._id}}" target="_blank" download>
+                                <div *ngIf="isFormatSelected && formatSelected=='.json'">
+                                    <a href="http://localhost:3000/downloads/diagrams/json/{{d._id}}" target="_blank" download>
                                         <button class="DiagramOptionButton">
                                             <mat-icon>arrow_downward</mat-icon>
                                         </button>
                                     </a>
                                 </div>
-                                <div *ngIf="isFormatSelected && formatSelected=='.xml'" style="padding-top: 5px;">
+                                <div *ngIf="isFormatSelected && formatSelected=='.xml'">
                                     <a href="http://localhost:3000/downloads/diagrams/xml/{{d._id}}" target="_blank" download>
-                                        <button class="diagramButton">
+                                        <button class="DiagramOptionButton">
                                             <mat-icon>arrow_downward</mat-icon>
                                         </button>
                                     </a>

@@ -65,7 +65,7 @@ export class DiagramsComponent implements OnInit {
     sessionStorage.setItem(PASSING_DIAGRAM, "true");
   }
 
-  downloadDiagram(diagramID: string): void
+  downloadJSONDiagram(diagramID: string): void
   {
     this._downloadService.getAJSONDiagram(diagramID).subscribe((res)=> {})    
   }
@@ -81,9 +81,10 @@ export class DiagramsComponent implements OnInit {
     sessionStorage.removeItem(LOG_TOKEN)
   }
 
+  
+
   debugmethod()
   {
-    this._router.navigateByUrl('http://localhost:3000/downloads/diagrams/sidhi/1');
-    //this.userHasDiagrams = this.userHasDiagrams ? false : true;
+    window.location.href = "http://localhost:3000/downloads/diagrams/sidhi/";
   }
 }
