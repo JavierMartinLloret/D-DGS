@@ -7,7 +7,6 @@ const diagramFilesPath = './src/downloadble_files/';
 
 const DownloadsRouter = new express.Router();
 
-
 // TODO: Borrar el fichero local una vez se ha completado la descarga.
 DownloadsRouter.get('/downloads/diagrams/json/:id', async (req, res) => {
     var diagramID, diagram;

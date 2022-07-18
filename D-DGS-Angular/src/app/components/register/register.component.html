@@ -1,10 +1,43 @@
-<h1>PROVISIONAL REGISTRATION PROCESS</h1>
-<div>
-    <form ngNavigateValidate (ngSubmit)="registerUser()">
-        <p>Nickname: <input type="text" name="nickname" id="nickname" [(ngModel)]="userToCreate.nickname" required> </p>
-        <p>Password: <input type="password" name="password" id="password" [(ngModel)]="userToCreate.password" required> </p>
-        <p>Email: <input type="text" name="email" id="email" [(ngModel)]="userToCreate.email" required></p>
-        <p>Will this user be an administrator? <input type="checkbox" name="is_admin" id="is_admin" [(ngModel)]="userToCreate.is_admin"></p>
-        <p><input type="submit" value="Sign up!"></p>
-    </form>
-</div>
+<mat-toolbar>
+    <a class="nav-link-toolbar" [routerLink]="['/']">
+        <span>D&DGS</span>
+        <img src="./../../../assets/images/LOGO.png" alt="D&DGS Logo" style="vertical-align: middle; width:32px; height: 32px; margin-left: 10px;">
+    </a>
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened">
+            menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+            close
+        </mat-icon>
+    </button>
+    
+    <!-- <button (click)="debugmethod()">debug</button> -->
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav">
+        <h1>Registration</h1>
+        <mat-divider></mat-divider>
+        <p>This area will be usefull later!</p>
+        <div class="contact-info">
+            <p>
+                <i>Javier Martín Lloret ©</i>
+            </p>
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content mat-elevation-z4">
+        <h2>Registration</h2>
+        <p>Fill the following form to register in D&DGS to start your gamification desing!</p>
+        <div class="Registration_Form">
+        <form ngNativeValidate (ngSubmit)="registerUser()">
+            <p>User Nickname: <input type="text" name="nickname" id="nickname" [(ngModel)]="userToCreate.nickname" required></p>
+            <p>Password: <input type="password" name="password" id="password" [(ngModel)]="userToCreate.password" required></p>
+            <p>Email: <input type="text" name="email" id="email" [(ngModel)]="userToCreate.email"></p>
+            <p>Will this user be an admin ? <input type="checkbox" name="isAnAdmin" id="isAnAdmin" [(ngModel)]="userToCreate.is_admin"></p>
+            <input type="submit" value="Register!">
+        </form>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

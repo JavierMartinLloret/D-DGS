@@ -19,9 +19,21 @@ const LOG_TOKEN: string = "LOG_TOKEN";
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private _router: Router, private _userService: UsersService, private _diagramDomainService: DiagramDomainService) { }
-
+  public DOMAIN_KEY: string="";
+  public userIsAdmin: boolean = false;
   public userToCreate: User = new User("","","","",false);
+
+  constructor(private _router: Router, private _userService: UsersService, private _diagramDomainService: DiagramDomainService) {
+    let aux = sessionStorage.getItem(LOG_TOKEN);
+    if(aux)
+    {
+      this.DOMAIN_KEY = aux;
+      this._userService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
+        if(res)
+          this.userIsAdmin = true;
+      })
+    }
+  }
 
   ngOnInit(): void {
     if(sessionStorage.getItem(LOG_TOKEN) != null && sessionStorage.getItem(LOG_TOKEN) != "FAILED")
@@ -43,6 +55,11 @@ export class RegisterComponent implements OnInit {
         })
       })
     })
+  }
+
+  unlogUser()
+  {
+    sessionStorage.removeItem(LOG_TOKEN);
   }
 
 }

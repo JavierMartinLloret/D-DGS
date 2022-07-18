@@ -39,19 +39,11 @@ activityRouter.get('/activities/:id', async (req, res) => {
     }
 })
 
-// Register an activity in DB (Also creates an Act-Tasks)
+// Register an activity in DB
 activityRouter.post('/activities', async (req, res) => {
     const activity = new Activity(req.body);
-    const aux = {
-        domain_key : activity.domain_key,
-        activity: activity._id,
-        tasks: []
-    };
-    const newRelationship = new Activity_TasksModel(aux);
-
     try {
         await activity.save();
-        await newRelationship.save();
         res.status(201).send(activity._id);
     } catch (error) {
         res.status(500).send(error);

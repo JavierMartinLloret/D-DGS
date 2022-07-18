@@ -78,7 +78,7 @@ export class DiagramsComponent implements OnInit {
 
   unlogUser()
   {
-    sessionStorage.removeItem(LOG_TOKEN)
+    sessionStorage.removeItem(LOG_TOKEN);
   }
 
   
