@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DDGSStrategyFile version="1.1">
+<Strategy>
+    <Id></Id>
+    <Name></Name>
+    <Description></Description>
+
+    <Domain>
+        <Activity><!-- One per Activity in the Domain -->
+            <Id></Id>
+            <Name></Name>
+            <Description></Description>
+            <Properties>
+                <Property> <!-- One per Property associated with the Activity -->
+                    <Id></Id>
+                    <Name></Name>
+                    <Type></Type>
+                </Property>
+            </Properties>
+        </Activity>
+    </Domain>
+
+    <RewardSet>
+        <Id></Id>
+        <Name></Name>
+        <Reward> <!-- One per Rewars in the Set-->
+            <Id></Id>
+            <Name></Name>
+            <Description></Description>
+            <Priority></Priority> <!-- INT [0...RewardSet.size()]-->
+        </Reward>
+    </RewardSet>
+
+    <Operators>
+        <Operator>
+            <Id></Id>
+            <Name></Name>
+            <Cathegory></Cathegory>
+        </Operator>
+    </Operators>
+
+    <Substrategies>
+        <Substrategy>
+            <Id></Id>
+            <Name></Name>
+            <Criteria>
+                <Criterion>
+                        <C_Operator></C_Operator><!-- Operator ID (?) -->
+                        <Operand1>
+                            <Type></Type> <!-- Any base type like INT, STRING, BOOLEAN -->
+                            <Value></Value> 
+                        </Operand1>
+                        <Operand2>
+                            <Activity><!-- OR <Property> OR <Operator> -->
+                                <Id></Id>
+                            </Activity><!-- OR </Property> OR <Operator> -->
+                        </Operand2>
+                        <!--<OperandN> ???-->
+                </Criterion>
+            </Criteria>
+
+            <SS_Rewards>
+                <SS_Reward><!-- One per Reward associated with the Substrategy -->
+                    <Id></Id>
+                    <Value></Value> <!-- Times this Reward si given when SE is completed -->
+                </SS_Reward>
+            </SS_Rewards>
+        </Substrategy>
+    </Subtrategies>
+
+</Strategy>
+</DDGSStrategyFile>
