@@ -25,7 +25,7 @@ export class DiagramsComponent implements OnInit {
   public userIsAdmin: boolean = false;
   public isFormatSelected:boolean = false;
 
-  public fileFormats: Array<String> = [".json", ".xml"];
+  public fileFormats: Array<String> = [".json", ".xml", ".siddhi"];
 
   public formatSelected: string = "";
 
