@@ -18,6 +18,7 @@ import { DiagramDomainService } from './services/diagramDomain.service';
 import { UsersService } from './services/users.service';
 import { RewardDomainComponent } from './components/reward-domain/reward-domain.component';
 import { DiagramDesingComponent } from './components/diagram-desing/diagram-desing.component';
+import { DomainViewComponent } from "./components/domain-view/domain-view.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /* ANGULAR MATERIAL */
@@ -29,11 +30,13 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTableModule } from "@angular/material/table";
 
+
 const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
   {path: 'main', component: MainMenuComponent},
   {path: 'domain_craft_area', component: DiagramCreationComponent},
+  {path: 'domain_craft_area/:contextID', component: DomainViewComponent},
   {path: 'reward_craft_area', component: RewardDomainComponent},
   {path: 'diagram_desing', component: DiagramDesingComponent},
   {path: 'diagrams', component: DiagramsComponent},  
@@ -55,7 +58,8 @@ const routes: Routes = [
     RegisterComponent,
     DiagramsComponent,
     RewardDomainComponent,
-    DiagramDesingComponent
+    DiagramDesingComponent,
+    DomainViewComponent
   ],
   imports: [
     BrowserModule,
