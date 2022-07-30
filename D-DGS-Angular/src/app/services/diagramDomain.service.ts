@@ -36,6 +36,10 @@ export class DiagramDomainService {
         return this._httpClient.post(this.contextURL, newContext);
     }
 
+    updateAContext(newContext: Context) {
+        return this._httpClient.put(this.contextURL+"/byid/"+newContext._id, newContext);
+    }
+
     deleteAllContextsFromAUser(domain_key: string)
     {
         return this._httpClient.delete(this.contextURL+"/bydomain/"+domain_key);

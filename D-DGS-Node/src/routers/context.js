@@ -38,6 +38,24 @@ contexRouter.get('/context/byid/:id', async (req, res) => {
     }
 })
 
+// Put (Update) one context
+contexRouter.put('/context/byid/:id', async (req, res) => {
+    try {
+        const updatedContext = new Context(req.body);
+
+        const query = {"_id": req.body._id};
+        const update = {$set:{
+            "name": updatedContext.name
+        }};
+
+        await Context.updateOne(query, update);
+
+        res.status(200).send(true);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 // Post a new context
 contexRouter.post('/context', async (req, res) => {
     const context = new Context(req.body);
