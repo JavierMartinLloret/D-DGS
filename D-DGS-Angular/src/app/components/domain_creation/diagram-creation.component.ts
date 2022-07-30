@@ -24,11 +24,12 @@ export class DiagramCreationComponent implements OnInit {
 
   // Local variables
   public newContextName: String = "";
-
+  public contextToEdit: Context = new Context("","", undefined);
 
   // Flags
   public userIsAdmin: boolean = false;
   public isAddNewContextClicked = false;
+  public isEditContextClicked = false;
 
   // Table needs
   public tableHeader: string[] = ['DatabaseID', 'Name', 'Actions'];
@@ -67,9 +68,22 @@ export class DiagramCreationComponent implements OnInit {
     this._diagramDomainService.postANewContext(newContext).subscribe(res => {window.location.reload();});
   }
 
+  navigateToContext(context: Context)
+  {
+    if(context._id)
+      this._router.navigateByUrl('/domain_craft_area/'+context._id.toString());
+  }
+
+  editContextClicked(c : Context)
+  {
+    this.contextToEdit = c;
+    this.isEditContextClicked = this.isEditContextClicked ? false : true;
+  }
+
   editContext()
   {
-
+    /* REQUIERE DE TESTEO CON POSTMAN EN LA TORRE */
+    this._diagramDomainService.updateAContext(this.contextToEdit).subscribe(res => {window.location.reload();})
   }
 
   deleteContext(contextClicked: Context)
