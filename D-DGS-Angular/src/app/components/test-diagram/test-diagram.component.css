@@ -22,10 +22,6 @@ mat-sidenav {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    font-size: 2rem;
-    color: darkgray;
-    border-radius: 10px;
 }
 
 mat-sidenav-container {
@@ -51,4 +47,8 @@ mat-divider {
     bottom: 3px;
     align-self: center;
     color: white;
+}
+
+.actionButton{
+    margin-right: 10px;
 }

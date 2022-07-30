@@ -27,6 +27,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatSelectModule } from "@angular/material/select";
+import { MatTableModule } from "@angular/material/table";
 
 const routes: Routes = [
   {path: 'register', component: RegisterComponent},
@@ -67,7 +68,8 @@ const routes: Routes = [
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTableModule
   ],
   providers: [
     DiagramDomainService,

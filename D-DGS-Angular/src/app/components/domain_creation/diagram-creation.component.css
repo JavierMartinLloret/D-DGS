@@ -52,18 +52,6 @@ mat-divider {
     border-radius: 10px;
 }
 
-.Title {
-    text-align: center;
-    color: black;
-}
-
-.ContextSelector {
-    max-width: max-content;
-    border-style: ridge;
-    border-color: darkgray;
-    border-radius: 1px;
-}
-
-ul {
-    list-style: circle;
+.actionButton{
+    margin-right: 10px;
 }

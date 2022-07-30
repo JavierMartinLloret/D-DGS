@@ -27,9 +27,9 @@
             <h1>Welcome to D&DGS!</h1>
         </div>
         <div>
-            <div class="Panel Left" (mouseleave)="signInIsOpen = false" (mouseover)="signInIsOpen = true">
+            <div class="Panel Left">
                 <h2>Sign in!</h2>
-                <div *ngIf="signInIsOpen">
+                <div>
                     <form ngNativeValidate (ngSubmit)="loggin()">
                         <p>Nickname: <input type="text" name="nickname" id="nickname" [(ngModel)]="inputNick" required></p>
                         <p>Password: <input type="password" name="password" id="password" [(ngModel)]="inputPass" required></p>
@@ -38,9 +38,9 @@
                 </div>
             </div>
             
-            <div class="Panel Right" (mouseleave)="signUpIsOpen = false" (mouseover)="signUpIsOpen = true">
+            <div class="Panel Right">
                 <h2 >Sign up!</h2>
-                <div *ngIf="signUpIsOpen">
+                <div>
                     <button [routerLink]="['/register']">Go to register</button>
                 </div>
             </div>

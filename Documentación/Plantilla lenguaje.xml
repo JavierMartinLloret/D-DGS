@@ -28,7 +28,7 @@
             <Id></Id>
             <Name></Name>
             <Description></Description>
-            <Priority></Priority> <!-- INT [0...RewardSet.size()]-->
+            <Priority></Priority> <!-- INT [0...RewardSet.size()] 0 is MAX-->
         </Reward>
     </RewardSet>
 
