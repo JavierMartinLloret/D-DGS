@@ -72,6 +72,7 @@ export class ListOfUsersComponent implements OnInit {
 
   deleteUser(user: User)
   {
+    /* CUIDADO, PUEDE BORRAR LOS DATOS DE 2 USUARIOS, REVISAR */
     this._diagramDomainService.deleteAllContextsFromAUser(this.DOMAIN_KEY).subscribe(res => {
       this._diagramDomainService.deleteAllRewardSetsFromASpecificUser(this.DOMAIN_KEY).subscribe(res => {
         if(user._id != undefined)

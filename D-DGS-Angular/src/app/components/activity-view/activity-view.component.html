@@ -1,0 +1,86 @@
+<mat-toolbar>
+    <a class="nav-link-main" [routerLink]="['/']">
+        <span>D&DGS</span>
+        <img src="./../../../assets/images/LOGO.png" alt="D&DGS Logo" style="vertical-align: middle; width:32px; height: 32px; margin-left: 10px;">
+    </a>
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened">
+            menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+            close
+        </mat-icon>
+    </button>
+    
+    <!-- <button (click)="debugmethod()">debug</button> -->
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav">
+        <h1>Domain Editing</h1>
+        <mat-divider></mat-divider>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']">
+                <span>Home</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/domain_craft_area']">
+                <span>Domain Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/reward_craft_area']">
+                <span>Reward Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagram_desing']">
+                <span>Desing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagrams']">
+                <span>Diagrams</span>    
+            </button>
+        </div>
+        <div *ngIf="userIsAdmin">
+            <button mat-button  class="menuButton" [routerLink]="['/users']">
+                <span>User's Administration</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']" (click)="unlogUser()">
+                <span>Log Out</span>    
+            </button>
+        </div>
+        <div class="contact-info">
+            <p>
+                <i>Javier Martín Lloret ©</i>
+            </p>
+        </div>
+    </mat-sidenav>
+    
+    <h1 style="text-align: center; margin-top: 10px">Activity: <i>{{currentActivity.name}}</i></h1>
+    <div *ngIf="properties.length == 0" style="text-align: left; margin-left: 10px;">
+        <h2>This Activity has no properties. Create The first one!</h2>
+        <form ngNativeValidate (ngSubmit)="createNewProperty()">
+            New Property's name: <input type="text" name="NewPropertyName" id="NewPropertyName" [(ngModel)]="newProperty.name" required> <br>
+            New Property's type: <br>
+            <input type="radio" id="String" name="propertyType" [(ngModel)]="newPropertyType" value=0>
+            <label for="String">String</label><br>
+            <input type="radio" id="Number" name="propertyType" [(ngModel)]="newPropertyType" value=1>
+            <label for="Number">Number</label><br>
+            <input type="radio" id="Date" name="propertyType" [(ngModel)]="newPropertyType" value=2>
+            <label for="Date">Date</label><br>
+
+            <!--
+            <p *ngIf="newPropertyType == 0">Value: <input type="text" name="propertyValueString" id="propertyValueString" [ngModel]="newPropertyValue" style="margin-top: 5px;"><br></p>
+            <p *ngIf="newPropertyType == 1">Value: <input type="number" name="propertyValueNumber" id="propertyValueNumber" [ngModel]="newPropertyValue" style="margin-top: 5px;"><br></p>
+            <p *ngIf="newPropertyType == 2">Value: <input type="date" name="propertyValueDate" id="propertyValueDate" [ngModel]="newPropertyValue" style="margin-top: 5px;"><br></p>
+            -->
+            <input type="submit" value="Create the property!" style="margin-top: 10px;">
+        </form>
+    </div>
+
+</mat-sidenav-container>

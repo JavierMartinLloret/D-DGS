@@ -101,7 +101,7 @@ export class DomainViewComponent implements OnInit {
 
   naivgateToActivity(a: Activity): void {
     if(a._id)
-      this._router.navigateByUrl('/domain_craft_area/domains/activity/'+a._id.toString());
+      this._router.navigateByUrl('domain_craft_area/activities/'+a._id.toString());
   }
 
   editActivityIsClicked(a: Activity): void {
