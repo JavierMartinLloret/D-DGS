@@ -36,7 +36,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'main', component: MainMenuComponent},
   {path: 'domain_craft_area', component: DiagramCreationComponent},
-  {path: 'domain_craft_area/:contextID', component: DomainViewComponent},
+  {path: 'domain_craft_area/domains/:id', component: DomainViewComponent},
   {path: 'reward_craft_area', component: RewardDomainComponent},
   {path: 'diagram_desing', component: DiagramDesingComponent},
   {path: 'diagrams', component: DiagramsComponent},  

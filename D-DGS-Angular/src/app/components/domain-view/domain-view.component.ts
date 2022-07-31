@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Activity } from 'src/app/models/activity';
 import { Context } from 'src/app/models/context';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
 import { UsersService } from 'src/app/services/users.service';
@@ -23,13 +24,17 @@ export class DomainViewComponent implements OnInit {
 
   // Local variables
   public currentContext: Context = new Context("","",undefined);
+  public newActivity: Activity = new Activity("", "", "");
+  public activityToEdit: Activity = new Activity("","","");
 
   // Table needs
-  public tableHeader: string[] = ['DatabaseID', 'Name', 'Actions'];
+  public tableHeader: string[] = ['DatabaseID', 'Name', 'Description', 'Actions'];
 
   // Flags
   public userIsAdmin: boolean = false;
   public thisUserOwnsTheContext: boolean = false;
+  public isAddNewActivityClicked: boolean = false;
+  public isEditActivityClicked: boolean = false;
 
   constructor(private _diagramDomainService: DiagramDomainService, private _usersService:UsersService, private _router: Router) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
@@ -78,6 +83,41 @@ export class DomainViewComponent implements OnInit {
   unlogUser()
   {
     sessionStorage.removeItem(LOG_TOKEN)
+  }
+
+  calculateStringSize(s: string): number {return new String(s).length;}
+
+  createANewActivityIsClicked(): void {
+    this.isAddNewActivityClicked = this.isAddNewActivityClicked ? false : true;
+  }
+
+  createNewActivity(): void {
+    if(this.currentContext._id)
+    {
+      this.newActivity.context_ID = this.currentContext._id.toString();
+      this._diagramDomainService.postANewActivity(this.newActivity).subscribe(res => {window.location.reload();})
+    }
+  }
+
+  naivgateToActivity(a: Activity): void {
+    if(a._id)
+      this._router.navigateByUrl('/domain_craft_area/domains/activity/'+a._id.toString());
+  }
+
+  editActivityIsClicked(a: Activity): void {
+    this.activityToEdit = a;
+    this.isEditActivityClicked = this.isEditActivityClicked ? false: true;
+  }
+
+  editActivity(): void {
+    /* IMPLEMENTAR MÉTODO  */
+    this._diagramDomainService.updateAnActivity(this.activityToEdit).subscribe(res => {window.location.reload();})
+  }
+
+  deleteActivity(a: Activity): void {
+    if(confirm("Are you sure you want to delete this activity? This is irreversible."))
+      if(a._id)
+        this._diagramDomainService.deleteAnActivity(a._id.toString()).subscribe(res => {window.location.reload()});
   }
 
 }

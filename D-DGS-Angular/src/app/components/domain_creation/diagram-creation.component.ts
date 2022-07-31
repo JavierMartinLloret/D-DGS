@@ -71,7 +71,7 @@ export class DiagramCreationComponent implements OnInit {
   navigateToContext(context: Context)
   {
     if(context._id)
-      this._router.navigateByUrl('/domain_craft_area/'+context._id.toString());
+      this._router.navigateByUrl('/domain_craft_area/domains/'+context._id.toString());
   }
 
   editContextClicked(c : Context)
@@ -89,8 +89,9 @@ export class DiagramCreationComponent implements OnInit {
   deleteContext(contextClicked: Context)
   {
     if(confirm("Are you sure you want to delete this domain? This is irreversible"))
-    if(contextClicked._id)  
-      this._diagramDomainService.deleteAContext(contextClicked._id.toString()).subscribe(res => {window.location.reload();})
+      if(contextClicked._id)  
+        this._diagramDomainService.deleteAContext(contextClicked._id.toString()).subscribe(res => {window.location.reload();})
+    /* HAY QUE ELIMINAR EN CASCADA LAS ACTIVIDADES ASOCIADAS */
   } 
 
   unlogUser()
