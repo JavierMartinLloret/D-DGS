@@ -42,7 +42,6 @@ contexRouter.get('/context/byid/:id', async (req, res) => {
 contexRouter.put('/context/byid/:id', async (req, res) => {
     try {
         const updatedContext = new Context(req.body);
-
         const query = {"_id": req.body._id};
         const update = {$set:{
             "name": updatedContext.name
