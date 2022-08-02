@@ -101,7 +101,7 @@ export class DiagramDomainService {
         return this._httpClient.get(this.activityPropertyURL+"/"+propertyID);
     }
 
-    postANewProperty_Numerical(property: Activity_Property, value: Number) {
+    postANewProperty_Numerical(property: Activity_Property, value: number) {
         let completeProperty = {
             "activity_ID": property.activity_ID,
             "name": property.name,
@@ -110,7 +110,7 @@ export class DiagramDomainService {
         return this._httpClient.post(this.activityPropertyURL, completeProperty);
     }
 
-    postANewProperty_Stringy(property: Activity_Property, value: String) {
+    postANewProperty_Stringy(property: Activity_Property, value: string) {
         let completeProperty = {
             "activity_ID": property.activity_ID,
             "name": property.name,

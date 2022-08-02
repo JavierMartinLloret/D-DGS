@@ -8,7 +8,7 @@ import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
 const LOG_TOKEN: string = "LOG_TOKEN";
 // LOG_TOKEN: null | FAILED | identificador del dominio del usuario
 
-enum propertyTypeEnum {
+export enum propertyTypeEnum {
   STRING,
   NUMBER,
   DATE,
@@ -32,10 +32,15 @@ export class ActivityViewComponent implements OnInit {
   public currentActivity: Activity = new Activity("","","");
   public newProperty: Activity_Property = new Activity_Property("","","");
   public newPropertyType: propertyTypeEnum = propertyTypeEnum.UNDEFINED;
-  public newPropertyValue: string | number | Date = "";
+  public newPropertyValue: any = ""; // string | number | Date
+
+  // Table needs
+  public tableHeader: string[] = ['DatabaseID', 'Name', 'Default Value', 'Actions'];
 
   // Flags
   public userIsAdmin: boolean = false;
+  public isAddANewPropertyClicked: boolean = false;
+  public isEditPropertyClicked: boolean = false;
 
   constructor(private _router: Router, private _diagramDomainService: DiagramDomainService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
@@ -78,14 +83,38 @@ export class ActivityViewComponent implements OnInit {
     sessionStorage.removeItem(LOG_TOKEN)
   }
 
-  // CLICKED
+  createANewPropertyClicked(): void {
+    this.isAddANewPropertyClicked = this.isAddANewPropertyClicked ? false : true;
+  }
 
-  createNewProperty(): void {
+  createNewProperty(): void {    
     if(this.currentActivity._id)
     {
       this.newProperty.activity_ID = this.currentActivity._id;
-      /* SWITCH PARA LA CONSULTA */
+      switch (this.newPropertyType) {
+        case 0:
+        {
+          this._diagramDomainService.postANewProperty_Stringy(this.newProperty, this.newPropertyValue).subscribe(res => {window.location.reload();})
+        }break;
+        case 1:
+        {
+          this._diagramDomainService.postANewProperty_Numerical(this.newProperty, this.newPropertyValue).subscribe(res => {window.location.reload();})
+        }break;
+        case 2:
+        {
+          this._diagramDomainService.postANewProperty_Date(this.newProperty, this.newPropertyValue).subscribe(res => {window.location.reload();})
+        }break;
+        default:
+          console.log("Error when creating the property");
+        break;
+      }
     }   
+  }
+
+  deleteProperty(p: Activity_Property): void {
+    if(confirm("Are you sure you want to delete this property? This is irreversible."))
+      if(p._id)
+        this._diagramDomainService.deleteAProperty(p._id.toString()).subscribe(res => {window.location.reload();})
   }
 
 }
