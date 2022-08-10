@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Reward } from 'src/app/models/reward';
 import { Reward_Set } from 'src/app/models/reward_set';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
 import { UsersService } from 'src/app/services/users.service';
@@ -24,21 +23,19 @@ export class RewardDomainComponent implements OnInit {
   setRewards: any = [];
   
   // Local variables
-  public newSetName: String = "";
-  public currentMaxPriority: number = 0;
-  public newRewardName: String = "";
-  public newRewardDescription: String = "";
-  public newRewardPriority: Number = 0;
+  public newSet: Reward_Set = new Reward_Set("", "", undefined);
+  public setToEdit: Reward_Set = new Reward_Set("","", undefined);
 
   // Objects
   public setSelected: Reward_Set = new Reward_Set("","");
 
   // Flags
-  public isSetIsSelected: Boolean = false;
-  public isSetSelectedDefault: Boolean = false;
-  public isCreateANewSetSelected: Boolean = false;
-  public isNewRewardSelected: Boolean = false;
   public userIsAdmin: boolean = false;
+  public isAddNewSetClicked: boolean = false;
+  public isEditSetClicked: boolean = false;
+
+  // Table needs
+  public tableHeader: string[] = ['DatabaseID', 'Name', 'Actions'];
 
   constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _usersService: UsersService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
@@ -67,79 +64,44 @@ export class RewardDomainComponent implements OnInit {
     sessionStorage.removeItem(LOG_TOKEN)
   }
 
-  setIsSelected()
+  createNewSetClicked()
   {
-    if(this.setSelected._id != undefined)
-    {
-      this._diagramDomainService.getRewardsOfACertainSet(this.setSelected._id.toString()).subscribe(r => {
-        this.setRewards = r;
-        this.isSetIsSelected = true;
-
-        if(this.setSelected.name == DEFAULT_SET_NAME)
-          this.isSetSelectedDefault = true;
-        else
-          this.isSetSelectedDefault = false;
-
-        /* */
-        let aux: number = 0;
-        this.setRewards.forEach((reward: Reward) => {
-          if(reward.priority > aux)
-            aux = reward.priority.valueOf();
-        });
-        this.currentMaxPriority = ++aux;
-        /* */
-      })
-    }
+    this.isAddNewSetClicked = this.isAddNewSetClicked ? false : true;
   }
 
-  createANewSetIsSelected()
+  createNewSet()
   {
-    this.isCreateANewSetSelected = this.isCreateANewSetSelected ? false : true;
+    this.newSet.domain_key = this.DOMAIN_KEY;
+    this._diagramDomainService.postANewRewardSet(this.newSet).subscribe(res => {window.location.reload();})
   }
 
-  addNewRewardIsClicked()
+  navigateToRewardSet(s: Reward_Set)
   {
-    this.isNewRewardSelected = (this.isNewRewardSelected) ? false : true;
+    if(s._id)
+      this._router.navigateByUrl('reward_craft_area/reward_set/'+s._id.toString());
   }
 
-  createANewSet()
+  editSetClicked(s: Reward_Set)
   {
-    let newSet = new Reward_Set(this.newSetName, this.DOMAIN_KEY);
-    this._diagramDomainService.postANewRewardSet(newSet).subscribe(res => {window.location.reload();})
+    this.setToEdit = s;
+    this.isEditSetClicked = this.isEditSetClicked ? false: true;
   }
 
-  deleteSelectedSet()
+  editSet()
   {
-    if(this.setSelected._id != undefined)
-    {
-      this._diagramDomainService.deleteAllRewardsFromACertainSet(this.setSelected._id.toString()).subscribe(res => {
-        if(this.setSelected._id != undefined)
-        this._diagramDomainService.deleteARewardSet(this.setSelected._id.toString()).subscribe(res => {window.location.reload();})
-      })
-    }
+    this._diagramDomainService.updateRewardSet(this.setToEdit).subscribe(res => {window.location.reload();})
   }
 
-  addNewReward()
+  deleteSet(s: Reward_Set)
   {
-    if(this.setSelected._id != undefined)
-    {
-      let newReward = new Reward(this.setSelected._id, this.newRewardName, this.newRewardDescription, this.newRewardPriority);
-      this._diagramDomainService.postANewReward(newReward).subscribe(res => {window.location.reload();})
-    }
-
+    if(confirm("Are you sure you want to delete this Set? This is irreversible"))
+      if(s._id)
+        this._diagramDomainService.deleteARewardSet(s._id.toString()).subscribe(res => {window.location.reload();})
   }
 
-  deleteAReward(reward: Reward)
+  debug()
   {
-    if(reward._id != undefined)
-    {
-      this._diagramDomainService.deleteAReward(reward._id.toString()).subscribe(res => {window.location.reload();});
-    }    
-  }
-
-  debugmethod()
-  {
-    console.log(this.userIsAdmin);
+    console.log(this.userSets);
   }
 
 }

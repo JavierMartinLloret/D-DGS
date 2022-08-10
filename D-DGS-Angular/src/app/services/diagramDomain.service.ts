@@ -160,6 +160,11 @@ export class DiagramDomainService {
         return this._httpClient.post(this.rewardSetsURL, newRewardSet);
     }
 
+    updateRewardSet(rewardSetToUpdate: Reward_Set)
+    {
+        return this._httpClient.put(this.rewardSetsURL, rewardSetToUpdate);
+    }
+
     deleteARewardSet(rewardSetID: string)
     {
         return this._httpClient.delete(this.rewardSetsURL+"/"+rewardSetID);

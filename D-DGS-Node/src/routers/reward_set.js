@@ -50,6 +50,24 @@ rewardSetRouter.post('/reward_set', async (req, res) => {
     }
 })
 
+// Update a Set
+rewardSetRouter.put('/reward_set', async (req, res) => {
+    try {
+        const updatedSet = new RewardSet(req.body);
+
+        const query = {"_id": req.body._id};
+        const update = {$set:{
+            "name": updatedSet.name
+        }};
+
+        await RewardSet.updateOne(query, update);
+
+        res.status(200).send(true);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 // Delete a set
 rewardSetRouter.delete('/reward_set/:id', async (req, res) => {
     try {

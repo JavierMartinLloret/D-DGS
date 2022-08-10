@@ -30,6 +30,7 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTableModule } from "@angular/material/table";
 import { ActivityViewComponent } from './components/activity-view/activity-view.component';
+import { RewardViewComponent } from './components/reward-view/reward-view.component';
 
 
 const routes: Routes = [
@@ -40,6 +41,7 @@ const routes: Routes = [
   {path: 'domain_craft_area/domains/:id', component: DomainViewComponent},
   {path: 'domain_craft_area/activities/:id', component: ActivityViewComponent},
   {path: 'reward_craft_area', component: RewardDomainComponent},
+  {path: 'reward_craft_area/reward_set/:id', component: RewardViewComponent},
   {path: 'diagram_desing', component: DiagramDesingComponent},
   {path: 'diagrams', component: DiagramsComponent},  
   {path: 'users', component: ListOfUsersComponent},
@@ -62,7 +64,8 @@ const routes: Routes = [
     RewardDomainComponent,
     DiagramDesingComponent,
     DomainViewComponent,
-    ActivityViewComponent
+    ActivityViewComponent,
+    RewardViewComponent
   ],
   imports: [
     BrowserModule,
