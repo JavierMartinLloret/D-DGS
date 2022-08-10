@@ -117,4 +117,10 @@ export class ActivityViewComponent implements OnInit {
         this._diagramDomainService.deleteAProperty(p._id.toString()).subscribe(res => {window.location.reload();})
   }
 
+  debug(p: any) : void
+  {
+    console.log(p.value_Date);
+    
+  }
+
 }
