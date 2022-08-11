@@ -30,7 +30,7 @@ rewardSetRouter.get('/reward_set/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const query = {"_id": id};
-        const set = await RewardSet.find(query);
+        const set = await RewardSet.findOne(query);
 
         res.status(200).send(set);
     } catch (error) {
