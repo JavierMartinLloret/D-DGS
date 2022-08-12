@@ -50,11 +50,11 @@ rewardRouter.post('/rewards', async (req, res) => {
 })
 
 // Update a reward
-rewardRouter.put('/rewards/:id', async (req, res) => {
+rewardRouter.put('/rewards', async (req, res) => {
     try {
-        const rewardID = req.params.id;
-        const query = {"_id": rewardID};
         const updatedReward = new Reward(req.body);
+        const rewardID = updatedReward._id;
+        const query = {"_id": rewardID};
 
         const update = {$set:{
             "parentSet": updatedReward.parentSet,

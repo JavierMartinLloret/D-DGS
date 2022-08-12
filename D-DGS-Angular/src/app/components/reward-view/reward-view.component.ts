@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Reward } from 'src/app/models/reward';
 import { Reward_Set } from 'src/app/models/reward_set';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
 import { UsersService } from 'src/app/services/users.service';
+
 
 
 const LOG_TOKEN: string = "LOG_TOKEN";
@@ -31,7 +34,17 @@ export class RewardViewComponent implements OnInit {
   public isAddRewardClicked: boolean = false;
 
   // Table needs
-  public tableHeader: string[] = ['DatabaseID', 'Name', 'Description', 'Priority', 'Actions']
+  @ViewChild('table') table: MatTable<Reward> = {} as MatTable<Reward>;
+  public tableHeader: string[] = ['DatabaseID', 'Name', 'Description', 'Priority', 'Actions'];
+  dropTable(event: CdkDragDrop<Reward[]>) {
+    const prevIndex = this.rewards.findIndex((d) => d === event.item.data);
+    moveItemInArray(this.rewards, prevIndex, event.currentIndex);
+    this.rewards.forEach((element: Reward) => {
+      element.priority = this.rewards.indexOf(element);
+      this._diagramDomainService.updateAReward(element).subscribe(res => {})
+    })
+    this.table.renderRows();
+  }
 
   constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _usersService: UsersService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
@@ -49,8 +62,11 @@ export class RewardViewComponent implements OnInit {
             this._router.navigateByUrl('/main');
         })
 
-        this._diagramDomainService.getRewardsOfACertainSet(currentSetID).subscribe((rewards:any) => {
-          this.rewards = rewards;
+        this._diagramDomainService.getRewardsOfACertainSet(currentSetID).subscribe((UnorderedRewards:any) => {
+          let auxArray:Array<Reward> = UnorderedRewards;
+          this.rewards = auxArray.sort((a, b) => {
+            return a.priority > b.priority ? 1 : -1;
+          })
         })
 
         this._usersService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
@@ -61,10 +77,7 @@ export class RewardViewComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    console.log(this.rewards);
-    
-  }
+  ngOnInit(): void {}
 
   unlogUser()
   {
