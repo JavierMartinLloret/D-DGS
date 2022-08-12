@@ -110,14 +110,17 @@ export class DomainViewComponent implements OnInit {
   }
 
   editActivity(): void {
-    /* IMPLEMENTAR MÉTODO  */
     this._diagramDomainService.updateAnActivity(this.activityToEdit).subscribe(res => {window.location.reload();})
   }
 
   deleteActivity(a: Activity): void {
     if(confirm("Are you sure you want to delete this activity? This is irreversible."))
       if(a._id)
+      {
+        this._diagramDomainService.deleteAllPropertiesFromAnActivity(a._id.toString()).subscribe(res => {window.location.reload()});
         this._diagramDomainService.deleteAnActivity(a._id.toString()).subscribe(res => {window.location.reload()});
+      }
+        
   }
 
 }

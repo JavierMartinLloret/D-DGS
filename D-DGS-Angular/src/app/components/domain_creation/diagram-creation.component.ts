@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { Activity } from 'src/app/models/activity';
-import { Activity_Property } from "src/app/models/activity_property";
 import { Context } from 'src/app/models/context';
 import { DiagramDomainService } from "src/app/services/diagramDomain.service";
 import { UsersService } from 'src/app/services/users.service';
@@ -89,9 +87,11 @@ export class DiagramCreationComponent implements OnInit {
   deleteContext(contextClicked: Context)
   {
     if(confirm("Are you sure you want to delete this domain? This is irreversible"))
-      if(contextClicked._id)  
+      if(contextClicked._id)
+      {
+        this._diagramDomainService.deleteAllActivitiesFromAContext(contextClicked._id.toString()).subscribe(res => {window.location.reload();});
         this._diagramDomainService.deleteAContext(contextClicked._id.toString()).subscribe(res => {window.location.reload();})
-    /* HAY QUE ELIMINAR EN CASCADA LAS ACTIVIDADES ASOCIADAS */
+      }
   } 
 
   unlogUser()

@@ -96,7 +96,11 @@ export class RewardDomainComponent implements OnInit {
   {
     if(confirm("Are you sure you want to delete this Set? This is irreversible"))
       if(s._id)
-        this._diagramDomainService.deleteARewardSet(s._id.toString()).subscribe(res => {window.location.reload();})
+      {
+        this._diagramDomainService.deleteAllRewardsFromACertainSet(s._id.toString()).subscribe(res => {window.location.reload();});
+        this._diagramDomainService.deleteARewardSet(s._id.toString()).subscribe(res => {window.location.reload();});
+      }
+        
   }
 
   debug()
