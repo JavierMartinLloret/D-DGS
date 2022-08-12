@@ -32,6 +32,8 @@ import { MatTableModule } from "@angular/material/table";
 import { ActivityViewComponent } from './components/activity-view/activity-view.component';
 import { RewardViewComponent } from './components/reward-view/reward-view.component';
 
+import { DragDropModule} from "@angular/cdk/drag-drop";
+
 
 const routes: Routes = [
   {path: 'register', component: RegisterComponent},
@@ -79,7 +81,8 @@ const routes: Routes = [
     MatIconModule,
     MatDividerModule,
     MatSelectModule,
-    MatTableModule
+    MatTableModule,
+    DragDropModule
   ],
   providers: [
     DiagramDomainService,
