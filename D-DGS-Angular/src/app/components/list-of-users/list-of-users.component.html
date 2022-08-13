@@ -61,37 +61,65 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-      <div class="content mat-elevation-z4">
-        <h2 class="content Title">Current user's on DB</h2>
-        <div class="content">
-          <ul>
-            <li *ngFor="let user of users">
-                <p>Nickname: {{user.nickname}}</p>
-                <p>Email: {{user.email}}</p>
-                <button [routerLink]="['/users']" (click)="editUserIsSelected(user)">
-                  <mat-icon style="vertical-align: middle;">edit</mat-icon>
-                  <span>Edit the user</span>
-                </button>
-                <button (click)="deleteUser(user)">
-                  <mat-icon style="vertical-align: middle;">remove_circle</mat-icon>
-                  <span>Delete this user</span>
-                </button>
-            </li>
-        </ul>
+    <h1 style="text-align: center; margin-top: 10px">Users on DB</h1>
+    <div>
+        <table mat-table #table [dataSource]="users" style="width: 100%;">
 
-        <div *ngIf="isEditUserSelected">
-          <form ngNativeValidate name="editingUserForm" (ngSubmit)="editUser()">
-            <p>Nickname: <input type="text"  name="editingUserNickname" placeholder="{{userToEdit.nickname}}" [(ngModel)]="newEditedUser.nickname" required></p>
-            <p>Email: <input type="text" name="editingUserEmail" placeholder="{{userToEdit.email}}" [(ngModel)]="newEditedUser.email" required></p>
-            <p>Password: <input type="password" name="editingUserPassword" placeholder="{{userToEdit.password}}" [(ngModel)]="newEditedUser.password" required></p>
-            <p>Is an administrator? :<input type="checkbox" name="editingUserIs_admin" placeholder="{{userToEdit.is_admin}}" [(ngModel)]="newEditedUser.is_admin"></p>
-            <button type="submit">
-              <mat-icon style="vertical-align: middle;">check_circle</mat-icon>
-              <span>Edit it!</span>
-            </button>
-          </form>
-        </div>
-        </div>
-      </div>
+            <!-- ID Column -->
+            <ng-container matColumnDef="DatabaseID">
+                <th mat-header-cell *matHeaderCellDef> ID</th>
+                <td mat-cell *matCellDef="let element">
+                {{element._id}}
+                </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.nickname}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="Email">
+                <th mat-header-cell *matHeaderCellDef> Email </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="IsAdmin">
+                <th mat-header-cell *matHeaderCellDef> Is an administrator </th>
+                <td mat-cell *matCellDef="let element"> 
+                    <mat-icon *ngIf="element.is_admin">done_icon</mat-icon>
+                    <mat-icon *ngIf="!element.is_admin">not_interested</mat-icon>
+                </td>
+            </ng-container>
+
+            <!-- Actions Colum-->
+            <ng-container matColumnDef="Actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element">
+                    <button class="actionButton" title="Edit this User" (click)="editUserIsClicked(element)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button class="actionButton" title="Delete this User" (click)="deleteUser(element)">
+                        <mat-icon>delete_forever</mat-icon>
+                    </button>
+
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="tableHeader"></tr>
+            <tr mat-row *matRowDef="let row; columns: tableHeader;"></tr>
+        </table>
+    </div>
+    <div style="margin-left: 10px; margin-top: 10px;" *ngIf="isEditUserClicked">
+        <form ngNativeValidate (ngSubmit)="editUser()">
+            User's nickname: <input type="text" name="UserNewName" id="UserNewName" [(ngModel)]="userToEdit.nickname" required> <br>
+            User's email: <input type="text" name="UserNewEmail" id="UserNewEmail" [(ngModel)]="userToEdit.email" style="margin-left: 26px;" required><br>
+            User's pasword: <input type="password" name="UserNewPassword" id="UserNewPassword" [(ngModel)]="userToEdit.password" style="margin-left: 7px;" required> <br>
+            User is admin : <input type="checkbox" name="UserIsAdmin" id="UserIsAdmin" [(ngModel)]="userToEdit.is_admin" style="margin-left: 13px;"><br>
+            <input type="submit" value="Update it!">
+        </form>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

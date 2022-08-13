@@ -56,3 +56,7 @@ mat-divider {
     text-align: center;
     color: black;
 }
+
+.actionButton{
+    margin-right: 10px;
+}

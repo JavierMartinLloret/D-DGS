@@ -43,10 +43,9 @@ export class RegisterComponent implements OnInit {
     } 
   }
 
-  registerUser() {
-    /*HAY QUE CREAR UN IDENTIFICADOR DE DOMINIO PARA EL NUEVO USUARIO REGISTRADO 
-      A SER POSIBLE CON ALGO QUE NO SEA ESTA BASURILLA */    
+  registerUser() { 
     this.userToCreate.domain_key = this.userToCreate.nickname+"IDENTIFICATOR";
+    this.userToCreate.is_admin = false;
         
     this._userService.postUser(this.userToCreate).subscribe((state: any) => {
       this._diagramDomainService.postANewContext(new Context(DEFAULT_CONTEXT_NAME, this.userToCreate.domain_key)).subscribe(res => {

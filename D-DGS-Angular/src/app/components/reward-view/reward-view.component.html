@@ -69,7 +69,7 @@
             (cdkDropListDropped)="dropTable($event)"
             style="width: 100%;">
 
-            <!-- Position Column -->
+            <!-- ID Column -->
             <ng-container matColumnDef="DatabaseID">
                 <th mat-header-cell *matHeaderCellDef> ID</th>
                 <td mat-cell *matCellDef="let element">
@@ -95,7 +95,7 @@
                 <td mat-cell *matCellDef="let element"> {{element.priority}} </td>
             </ng-container>
 
-            <!-- Priority Colum-->
+            <!-- Actions Colum-->
             <ng-container matColumnDef="Actions">
                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                 <td mat-cell *matCellDef="let element">
