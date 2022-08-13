@@ -17,28 +17,29 @@ const PASSING_DIAGRAM: string = "PASSING_DIAGRAM_KEY";
 })
 export class DiagramsComponent implements OnInit {
 
-  public userHasDiagrams: boolean = false;
+  
+  // Domain_Key
   public DOMAIN_KEY: string="";
 
-  public userDiagrams: any = [];
+  // Containers
+  //public strategies: Strategy[] = [];
 
+  // Local variables
+  //public newStrategy: Strategy = new Strategy();
+
+  // Table needs
+  public tableHeader: string[] = ['DatabaseID', 'Name', 'Description', 'Domain', 'Reward Set', 'Actions'];
+
+  // Flags
+  public userHasDiagrams: boolean = false;
   public userIsAdmin: boolean = false;
-  public isFormatSelected:boolean = false;
-
-  public fileFormats: Array<String> = [".json", ".xml", ".siddhi"];
-
-  public formatSelected: string = "";
+  
 
   constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _usersService: UsersService, private _downloadService: FileRelatedService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux)
     {
       this.DOMAIN_KEY = aux;
-      this._diagramDomainService.getAllDiagramsOfAnUser(this.DOMAIN_KEY).subscribe(res => {
-        this.userDiagrams = res;
-        if(this.userDiagrams.length > 0)
-          this.userHasDiagrams = true;
-      })
       this._usersService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {
         if(res)
           this.userIsAdmin = true;
@@ -47,44 +48,17 @@ export class DiagramsComponent implements OnInit {
     
   }
 
-  ngOnInit(): void {
-    if(sessionStorage.getItem(LOG_TOKEN) == null || sessionStorage.getItem(LOG_TOKEN) == "FAILED")
-    {
-      sessionStorage.removeItem(LOG_TOKEN);  
-      this._router.navigateByUrl('/login');
-    }      
-  }
+  ngOnInit(): void {}
 
-  formatIsSelected(){
-    this.isFormatSelected = true;
-  }
+  unlogUser(): void {sessionStorage.removeItem(LOG_TOKEN);}
 
-  visualizeDiagram(diagram: Diagram): void
+  debug():void {this.userHasDiagrams = this.userHasDiagrams ? false : true;}
+
+  // CLICKED
+
+  createANewStrategy()
   {
-    this._diagramDomainService.saveDiagramToBeEdited(diagram);
-    sessionStorage.setItem(PASSING_DIAGRAM, "true");
+
   }
 
-  downloadJSONDiagram(diagramID: string): void
-  {
-    this._downloadService.getAJSONDiagram(diagramID).subscribe((res)=> {})    
-  }
-
-  deleteDiagram(diagram: Diagram): void
-  {
-    if(diagram._id != undefined)
-      this._diagramDomainService.deleteADiagram(diagram._id.toString()).subscribe(res => {window.location.reload();})
-  }
-
-  unlogUser()
-  {
-    sessionStorage.removeItem(LOG_TOKEN);
-  }
-
-  
-
-  debugmethod()
-  {
-    window.location.href = "http://localhost:3000/downloads/diagrams/sidhi/";
-  }
 }

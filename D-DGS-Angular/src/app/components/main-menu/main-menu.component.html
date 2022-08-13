@@ -83,17 +83,25 @@
                 </button>
             </div>
             <div class="Pad BotomLeft">
-                <button [routerLink]="['/diagram_desing']">
-                    <mat-icon style="vertical-align: middle;">edit</mat-icon>
-                    <span>Desing</span>
-                </button>
-            </div>
-            <div class="Pad BotomCenter">
                 <div *ngIf="userIsAdmin">
                     <button [routerLink]="['/users']">
                         <mat-icon style="vertical-align: middle;">supervised_user_circle</mat-icon>
                         <span>User's Administration</span>
                     </button>
+                </div>
+                <div *ngIf="!userIsAdmin">
+                    <button [routerLink]="['/users']" disabled title="You must be an administrator to access here!">
+                        <mat-icon style="vertical-align: middle;">supervised_user_circle</mat-icon>
+                        <span>User's Administration</span>
+                    </button>
+                </div>
+            </div>
+            <div class="Pad BotomCenter">
+                <div *ngIf="userIsAdmin">
+                    <!--<button [routerLink]="['/users']">
+                        <mat-icon style="vertical-align: middle;">supervised_user_circle</mat-icon>
+                        <span>User's Administration</span>
+                    </button>-->
                 </div>
             </div>
             <div class="Pad BotomRight">
