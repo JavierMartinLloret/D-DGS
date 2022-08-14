@@ -1,5 +1,6 @@
 //  npm run dev To start
 
+const mongoose = require('./db/mongoose'); // NO SE LEE NUNCA AQUÍ, PERO ES NECESARIO
 const express = require("express");
 const userRouter = require('./routers/user');
 const contextRouter = require('./routers/context');
@@ -10,7 +11,7 @@ const rewardRouter = require('./routers/reward');
 const diagramRouter = require('./routers/diagram');
 const linkerRouter = require('./routers/linker');
 const downloadsRouter = require('./routers/downloads');
-const mongoose = require('./db/mongoose');
+const strategiesRouter = require('./routers/strategy');
 
 
 const app = express();
@@ -37,6 +38,7 @@ app.use(rewardRouter);
 app.use(diagramRouter);
 app.use(linkerRouter);
 app.use(downloadsRouter);
+app.use(strategiesRouter);
 
 app.listen(3000, () =>{
     console.log('Express server running on the port 3000');

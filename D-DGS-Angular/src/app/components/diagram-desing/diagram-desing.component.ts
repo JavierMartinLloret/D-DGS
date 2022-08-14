@@ -231,7 +231,7 @@ export class DiagramDesingComponent implements OnInit {
 
           // Fill newTrigger
           newTrigger = {
-            id: auxNode.id,
+            id: auxNode.idInDiagram,
             type: auxNode.type,
             value: false
           }
@@ -244,7 +244,7 @@ export class DiagramDesingComponent implements OnInit {
           auxNode.type = "REWARD_SELECTOR";
           auxNode.shape = "star";
 
-          newTrigger.id = auxNode.id;
+          newTrigger.id = auxNode.idInDiagram;
           newTrigger.type = auxNode.type;
           newTrigger.value = false;
         }break;
@@ -256,7 +256,7 @@ export class DiagramDesingComponent implements OnInit {
           auxNode.type = "LINKER_SELECTOR";
           auxNode.shape = "diamond";
 
-          newTrigger.id = auxNode.id;
+          newTrigger.id = auxNode.idInDiagram;
           newTrigger.type = auxNode.type;
           newTrigger.value = false;
         }break;
@@ -310,7 +310,7 @@ export class DiagramDesingComponent implements OnInit {
 
               // Hay que asignar a WrapperSelected el nodo que será sustituido.
               this.diagramNodes.forEach((n:node) => {
-                if(n.id == hasChanged[0].id)
+                if(n.idInDiagram == hasChanged[0].id)
                   this.wrapperSelectedNode = n;
               })
 
@@ -323,7 +323,7 @@ export class DiagramDesingComponent implements OnInit {
               this.isAPropertyNodeClicked = false;
 
               this.diagramNodes.forEach((n:node)=> {
-                if(n.id == hasChanged[0].id)
+                if(n.idInDiagram == hasChanged[0].id)
                   this.wrapperSelectedNode = n;
               })
             }break;
@@ -335,7 +335,7 @@ export class DiagramDesingComponent implements OnInit {
               this.isAPropertyNodeClicked = false;
 
               this.diagramNodes.forEach((n:node)=> {
-                if(n.id == hasChanged[0].id)
+                if(n.idInDiagram == hasChanged[0].id)
                   this.wrapperSelectedNode = n;
               })
             }break;
@@ -350,7 +350,7 @@ export class DiagramDesingComponent implements OnInit {
               
               let activityClickedID: string | undefined;
               this.diagramNodes.forEach((n:node)=> {
-                if(n.id == hasChanged[0].id)
+                if(n.idInDiagram == hasChanged[0].id)
                   activityClickedID = n.base_element_id;
               });
               if(activityClickedID)
@@ -367,7 +367,7 @@ export class DiagramDesingComponent implements OnInit {
               
               let propertyClickedID: string | undefined;
               this.diagramNodes.forEach((n:node)=> {
-                if(n.id == hasChanged[0].id)
+                if(n.idInDiagram == hasChanged[0].id)
                   propertyClickedID = n.base_element_id;
               });              
               if(propertyClickedID)
@@ -401,7 +401,7 @@ export class DiagramDesingComponent implements OnInit {
 
               let rewardClickedID: string | undefined;
               this.diagramNodes.forEach((n:node)=> {
-                if(n.id == hasChanged[0].id)
+                if(n.idInDiagram == hasChanged[0].id)
                   rewardClickedID = n.base_element_id;
               });
               if(rewardClickedID)
@@ -419,7 +419,7 @@ export class DiagramDesingComponent implements OnInit {
 
               let linkerClickedID: string | undefined;
               this.diagramNodes.forEach((n:node)=> {
-                if(n.id == hasChanged[0].id)
+                if(n.idInDiagram == hasChanged[0].id)
                   linkerClickedID = n.base_element_id;
               });
               if(linkerClickedID)
@@ -456,15 +456,15 @@ export class DiagramDesingComponent implements OnInit {
   
           hasChanged.forEach((n_s:node_state) => {
             if(n_s.value)
-              nodeToLink.id = n_s.id;
+              nodeToLink.idInDiagram = n_s.id;
             else
-              linkerNode.id = n_s.id;
+              linkerNode.idInDiagram = n_s.id;
           });
   
           this.diagramNodes.forEach((n:node) => {
-            if(n.id == nodeToLink.id)
+            if(n.idInDiagram == nodeToLink.idInDiagram)
               nodeToLink = n;
-            if(n.id == linkerNode.id)
+            if(n.idInDiagram == linkerNode.idInDiagram)
               linkerNode = n;
           });
 
@@ -481,9 +481,9 @@ export class DiagramDesingComponent implements OnInit {
                       {
                         let newEdge : edge = {
                           _id: undefined,
-                          id: linkerNode.id + "<->" + nodeToLink.id,
-                          from: linkerNode.id,
-                          to: nodeToLink.id,
+                          idInDiagram: linkerNode.idInDiagram + "<->" + nodeToLink.idInDiagram,
+                          from: linkerNode.idInDiagram,
+                          to: nodeToLink.idInDiagram,
                           arrows: "none",
                           value: 1
                         };
@@ -503,9 +503,9 @@ export class DiagramDesingComponent implements OnInit {
                       {
                         let newEdge : edge = {
                           _id: undefined,
-                          id: linkerNode.id + "<->" + nodeToLink.id,
-                          from: linkerNode.id,
-                          to: nodeToLink.id,
+                          idInDiagram: linkerNode.idInDiagram + "<->" + nodeToLink.idInDiagram,
+                          from: linkerNode.idInDiagram,
+                          to: nodeToLink.idInDiagram,
                           arrows: "none",
                           value: 1
                         };
@@ -525,9 +525,9 @@ export class DiagramDesingComponent implements OnInit {
                       {
                         let newEdge : edge = {
                           _id: undefined,
-                          id: linkerNode.id + "<->" + nodeToLink.id,
-                          from: linkerNode.id,
-                          to: nodeToLink.id,
+                          idInDiagram: linkerNode.idInDiagram + "<->" + nodeToLink.idInDiagram,
+                          from: linkerNode.idInDiagram,
+                          to: nodeToLink.idInDiagram,
                           arrows: "none",
                           value: 1
                         };
@@ -563,7 +563,7 @@ export class DiagramDesingComponent implements OnInit {
     if(this.activitySelected._id)
     {
       let newActivityNode: node = new node (
-        this.wrapperSelectedNode.id,
+        this.wrapperSelectedNode.idInDiagram,
         this.activitySelected.name.toString(),
         "default", //SHAPE
         "#189fdd", //COLOR,
@@ -572,7 +572,7 @@ export class DiagramDesingComponent implements OnInit {
       );
       /* Actualizar el Trigger */
       this.nodeTrigger.forEach((n_s:node_state) => {
-        if(n_s.id == this.wrapperSelectedNode.id)
+        if(n_s.id == this.wrapperSelectedNode.idInDiagram)
         {
           n_s.type = newActivityNode.type;
           n_s.value = false; // Will be false when added to the network
@@ -580,7 +580,7 @@ export class DiagramDesingComponent implements OnInit {
       })
       /* Actualizar lista de nodos */
       this.diagramNodes.forEach((n:node) => {
-        if(n.id == this.wrapperSelectedNode.id)
+        if(n.idInDiagram == this.wrapperSelectedNode.idInDiagram)
         {
           n.label = newActivityNode.label;
           n.shape = newActivityNode.shape;
@@ -590,7 +590,7 @@ export class DiagramDesingComponent implements OnInit {
         }
       })
       /* Actualizar la red (Eliminar el nodo previo y luego añadir el nuevo) */
-      this.nodes.remove(newActivityNode.id);
+      this.nodes.remove(newActivityNode.idInDiagram);
       this.nodes.add(newActivityNode);
       
 
@@ -612,7 +612,7 @@ export class DiagramDesingComponent implements OnInit {
     if(this.rewardSelected._id)
     {
       let newRewardNode: node = new node(
-        this.wrapperSelectedNode.id,
+        this.wrapperSelectedNode.idInDiagram,
         this.rewardSelected.name.toString(),
         "star",
         "#d87102",
@@ -621,7 +621,7 @@ export class DiagramDesingComponent implements OnInit {
       );
 
       this.nodeTrigger.forEach((n_s:node_state) => {
-        if(n_s.id == this.wrapperSelectedNode.id)
+        if(n_s.id == this.wrapperSelectedNode.idInDiagram)
         {
           n_s.type = newRewardNode.type;
           n_s.value = false; // Will be false when added to the network
@@ -629,7 +629,7 @@ export class DiagramDesingComponent implements OnInit {
       });
 
       this.diagramNodes.forEach((n:node) => {
-        if(n.id == this.wrapperSelectedNode.id)
+        if(n.idInDiagram == this.wrapperSelectedNode.idInDiagram)
         {
           n.label = newRewardNode.label;
           n.shape = newRewardNode.shape;
@@ -639,7 +639,7 @@ export class DiagramDesingComponent implements OnInit {
         }
       });
       
-      this.nodes.remove(newRewardNode.id);
+      this.nodes.remove(newRewardNode.idInDiagram);
       this.nodes.add(newRewardNode);
 
       /* Resetear el sistema (Flags y variables locales) para poder repetir el proceso */
@@ -655,7 +655,7 @@ export class DiagramDesingComponent implements OnInit {
     if(this.linkerSelected._id)
     {
       let newLinkerNode: node = new node (
-        this.wrapperSelectedNode.id,
+        this.wrapperSelectedNode.idInDiagram,
         this.linkerSelected.name.toString(),
         "diamond", //SHAPE
         "#46fc0f", //COLOR,
@@ -664,7 +664,7 @@ export class DiagramDesingComponent implements OnInit {
       );
 
       this.nodeTrigger.forEach((n_s:node_state) => {
-        if(n_s.id == this.wrapperSelectedNode.id)
+        if(n_s.id == this.wrapperSelectedNode.idInDiagram)
         {
           n_s.type = newLinkerNode.type;
           n_s.value = false; // Will be false when added to the network
@@ -672,7 +672,7 @@ export class DiagramDesingComponent implements OnInit {
       });
 
       this.diagramNodes.forEach((n:node) => {
-        if(n.id == this.wrapperSelectedNode.id)
+        if(n.idInDiagram == this.wrapperSelectedNode.idInDiagram)
         {
           n.label = newLinkerNode.label;
           n.shape = newLinkerNode.shape;
@@ -683,7 +683,7 @@ export class DiagramDesingComponent implements OnInit {
       })
 
       
-      this.nodes.remove(newLinkerNode.id);
+      this.nodes.remove(newLinkerNode.idInDiagram);
       this.nodes.add(newLinkerNode);
       
       this.isAnActivityWrapperClicked = false;
@@ -705,7 +705,7 @@ export class DiagramDesingComponent implements OnInit {
       properties.forEach((property: Activity_Property) => {
         if(property._id)
         {
-          auxNode.id = this.nodeIDCounter.toString();
+          auxNode.idInDiagram = this.nodeIDCounter.toString();
           auxNode.label = property.name.toString();
           auxNode.shape = "default"; // Shape
           auxNode.color = "#ad2677"; // Color
@@ -713,16 +713,16 @@ export class DiagramDesingComponent implements OnInit {
           auxNode.base_element_id = property._id.toString();
           
           
-          auxEdge.id = activtyNode.id + "<->" + auxNode.id;
-          auxEdge.from = activtyNode.id;
-          auxEdge.to = auxNode.id;
+          auxEdge.idInDiagram = activtyNode.idInDiagram + "<->" + auxNode.idInDiagram;
+          auxEdge.from = activtyNode.idInDiagram;
+          auxEdge.to = auxNode.idInDiagram;
           auxEdge.arrows = "default";
           auxEdge.value = 1;
 
           if(auxNode.base_element_id)
           {
-            nodesToAdd.push(new node(auxNode.id, auxNode.label, auxNode.shape, auxNode.color, auxNode.type, auxNode.base_element_id.toString()));
-            edgesToAdd.push(new edge(auxEdge.id, auxEdge.from, auxEdge.to, auxEdge.arrows, auxEdge.value));
+            nodesToAdd.push(new node(auxNode.idInDiagram, auxNode.label, auxNode.shape, auxNode.color, auxNode.type, auxNode.base_element_id.toString()));
+            edgesToAdd.push(new edge(auxEdge.idInDiagram, auxEdge.from, auxEdge.to, auxEdge.arrows, auxEdge.value));
           }
           this.nodeIDCounter++;
         }
@@ -730,7 +730,7 @@ export class DiagramDesingComponent implements OnInit {
       
       nodesToAdd.forEach((n:node) => {
         this.diagramNodes.push(n);
-        let n_s : node_state = {id: n.id, type: n.type, value: false};
+        let n_s : node_state = {id: n.idInDiagram, type: n.type, value: false};
         this.nodeTrigger.push(n_s);
       })
 
