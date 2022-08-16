@@ -17,7 +17,6 @@ import { DiagramsComponent } from './components/diagrams/diagrams.component';
 import { DiagramDomainService } from './services/diagramDomain.service';
 import { UsersService } from './services/users.service';
 import { RewardDomainComponent } from './components/reward-domain/reward-domain.component';
-import { DiagramDesingComponent } from './components/diagram-desing/diagram-desing.component';
 import { DomainViewComponent } from "./components/domain-view/domain-view.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -33,6 +32,7 @@ import { ActivityViewComponent } from './components/activity-view/activity-view.
 import { RewardViewComponent } from './components/reward-view/reward-view.component';
 
 import { DragDropModule} from "@angular/cdk/drag-drop";
+import { DesingStrategyComponent } from './components/desing-strategy/desing-strategy.component';
 
 
 const routes: Routes = [
@@ -44,7 +44,8 @@ const routes: Routes = [
   {path: 'domain_craft_area/activities/:id', component: ActivityViewComponent},
   {path: 'reward_craft_area', component: RewardDomainComponent},
   {path: 'reward_craft_area/reward_set/:id', component: RewardViewComponent},
-  {path: 'diagram_desing', component: DiagramDesingComponent},
+  {path: 'diagrams', component: DiagramsComponent},  
+  {path: 'diagrams/:id', component: DesingStrategyComponent},
   {path: 'diagrams', component: DiagramsComponent},  
   {path: 'users', component: ListOfUsersComponent},
   {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -64,10 +65,10 @@ const routes: Routes = [
     RegisterComponent,
     DiagramsComponent,
     RewardDomainComponent,
-    DiagramDesingComponent,
     DomainViewComponent,
     ActivityViewComponent,
-    RewardViewComponent
+    RewardViewComponent,
+    DesingStrategyComponent
   ],
   imports: [
     BrowserModule,

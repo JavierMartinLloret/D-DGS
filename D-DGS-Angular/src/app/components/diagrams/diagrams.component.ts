@@ -11,7 +11,7 @@ import { StrategiesService } from 'src/app/services/strategies.service';
 import { UsersService } from 'src/app/services/users.service';
 
 const LOG_TOKEN: string = "LOG_TOKEN";
-const PASSING_DIAGRAM: string = "PASSING_DIAGRAM_KEY";
+const DIAGRAM_TOKEN: string = "DIAGRAM_EDITION_ENABLE"; // 'y' | 'n'
 // LOG_TOKEN: null | FAILED | identificador del dominio del usuario
 // * DEBE SUSTITUIRSE EN ALGÚN MOMENTO POR ALGO CIFRADO
 
@@ -78,5 +78,31 @@ export class DiagramsComponent implements OnInit {
     this.newStrategy.domain_key = this.DOMAIN_KEY;
     this._strategiesService.postANewStrategy(this.newStrategy).subscribe(res => window.location.reload());
   }
+
+  navigateToDiagramToSee(s: Strategy)
+  {
+    if(s._id)
+    {
+      sessionStorage.setItem(DIAGRAM_TOKEN, "n");
+      this._router.navigateByUrl('/diagrams/'+s._id.toString())
+    }
+  }
+
+  navigateToDiagramToEdit(s: Strategy)
+  {
+    if(s._id)
+    {
+      sessionStorage.setItem(DIAGRAM_TOKEN, "y");
+      this._router.navigateByUrl('/diagrams/'+s._id.toString())
+    }
+  }
+
+  deleteStrategy(s: Strategy)
+  {
+    if(confirm("Are you sure you want to delete this Strategy? This is irreversible."))
+      if(s._id)
+        this._strategiesService.deleteAnStrategy(s._id.toString()).subscribe(res => window.location.reload());
+  }
+
 
 }

@@ -69,3 +69,6 @@ mat-divider {
     list-style-type: none;
 }
 
+.actionButton{
+    margin-right: 10px;
+}

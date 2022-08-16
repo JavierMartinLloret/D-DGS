@@ -24,4 +24,8 @@ export class StrategiesService {
   postANewStrategy(s: Strategy) {
     return this._httpClient.post(this.strategiesURL, s);
   }
+
+  deleteAnStrategy(ID: string) {
+    return this._httpClient.delete(this.strategiesURL+"/"+ID);
+  }
 }

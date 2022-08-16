@@ -27,12 +27,24 @@ strategyRouter.get('/strategies/:domain_key', async (req, res) => {
 
 // Post a Strategy in DB
 strategyRouter.post('/strategies', async (req, res) => {
-    
     try {
-        
         const strategy = new StrategyModel(req.body);
         await strategy.save();
         res.status(201).send(true);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+// Delete an Strategy in DB
+strategyRouter.delete('/strategies/:ID', async (req, res) => {
+    try {
+        const ID = req.params.ID;
+        const query = {"_id": ID};
+
+        await StrategyModel.deleteOne(query);
+
+        res.status(200).send(true);
     } catch (error) {
         res.status(500).send(error);
     }
