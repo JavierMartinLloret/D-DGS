@@ -142,7 +142,7 @@
             </div>
         </div>
         <div *ngIf="!userHasDiagrams">
-            <h2>This Activity has no properties. Create The first one!</h2>
+            <h2>You didn't create any diagrams. It's time for that to change!</h2>
             <div>
                 <form ngNativeValidate (ngSubmit)="createANewStrategy()">
                     New Strategy name: <input type="text" name="newStrategyName" id="newStrategyname" [(ngModel)]="newStrategy.name" required style="margin-left: 95px; margin-bottom: 5px;"> <br>
