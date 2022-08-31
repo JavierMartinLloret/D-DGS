@@ -104,5 +104,8 @@
       }
     }
   },
-  "defaultProject": "D-DGS-Angular"
+  "defaultProject": "D-DGS-Angular",
+  "cli": {
+    "analytics": false
+  }
 }

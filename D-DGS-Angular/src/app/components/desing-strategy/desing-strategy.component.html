@@ -1,1 +1,146 @@
-<p>desing-strategy works!</p>
+<mat-toolbar>
+    <a class="nav-link-main" [routerLink]="['/']">
+        <span>D&DGS</span>
+        <img src="./../../../assets/images/LOGO.png" alt="D&DGS Logo" style="vertical-align: middle; width:32px; height: 32px; margin-left: 10px;">
+    </a>
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened">
+            menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+            close
+        </mat-icon>
+    </button>
+    <!-- <button (click)="debugmethod()">debug</button> -->
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav">
+        <h1>Desing</h1>
+        <mat-divider></mat-divider>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']">
+                <span>Home</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/domain_craft_area']">
+                <span>Domain Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/reward_craft_area']">
+                <span>Reward Editing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagram_desing']">
+                <span>Desing</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/diagrams']">
+                <span>Diagrams</span>    
+            </button>
+        </div>
+        <div *ngIf="userIsAdmin">
+            <button mat-button  class="menuButton" [routerLink]="['/users']">
+                <span>User's Administration</span>    
+            </button>
+        </div>
+        <div>
+            <button mat-button class="menuButton" [routerLink]="['/']" (click)="unlogUser()">
+                <span>Log Out</span>    
+            </button>
+        </div>
+        <div class="contact-info">
+            <p>
+                <i>Javier Martín Lloret ©</i>
+            </p>
+        </div>
+    </mat-sidenav>
+    <div>
+        <button (click)="debug()">debug</button>
+        <h1 style="text-align: center;">Diagram Desing Area</h1>
+        <h2 style="text-align: center;">Diagram: <i>{{localStrategy.name}}</i></h2>
+        
+        <div class="desing-grid">
+            <div class="HeaderButtonArray">
+                <button class="ButtonFromTheHeader" (click)="addSubstrategyIsClicked()">
+                    Substrategy
+                </button>
+                <button class="ButtonFromTheHeader" (click)="addActivityIsClicked()">
+                    Activity
+                </button>
+                <button class="ButtonFromTheHeader" (click)="addLinkerIsClicked()">
+                    Linker
+                </button>
+                <button class="ButtonFromTheHeader" (click)="addRewardIsClicked()">
+                    Reward
+                </button>
+            </div>
+            <div class="Canvas">
+                <div id="diagramID">
+
+                </div>
+            </div>
+            <div class="Botom">
+                <h3 style="text-align: left; font-size: 1.2vw;"><b>Info Area</b></h3>
+                <div *ngIf="isAddSubstrategyClicked">
+                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently creating a Susbtrategy</b></h3>
+                    <form (ngSubmit)="addSubstrategyToDiagram()" style="text-align: left; font-size: 1vw;">
+                        Strategy Name:<input type="text" name="newSubstrategyName" id="newSubstrategyName" [(ngModel)]="newSubstrategyName" style="margin-left: 10px;">
+                        <input type="submit" value="Add it!" style="margin-left: 10px;">
+                    </form>
+                </div>
+                <div *ngIf="isAddActivityClicked">
+                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding an Activity</b></h3>
+                    <form (ngSubmit)="addActivityToDiagram()" style="text-align: left; font-size: 1vw;">
+                        <mat-form-field style="margin-left: 5px;">
+                            <mat-select [(value)]="activityToAddSelected" placeholder="Select Activity">
+                                <mat-option *ngFor="let a of activitiesFromTheDomain" [value]=a>
+                                    {{a.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <input type="submit" value="Add it!" style="margin-left: 10px;">
+                    </form>
+                </div>
+                <div *ngIf="isAddLinkerClicked">
+                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding a Linker</b></h3>
+                    <form (ngSubmit)="addLinkerToDiagram()" style="text-align: left; font-size: 1vw;">
+                        <mat-form-field style="margin-left: 5px;">
+                            <mat-select [(value)]="linkerCategorySelected" placeholder="Select Category">
+                                <mat-option *ngFor="let l of linkerCategories" [value]="l">
+                                    {{l}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field style="margin-left: 10px;" *ngIf="linkerCategorySelected != ''">
+                            <mat-select [(value)]="linkerToAddSelected" placeholder="Select a Linker">
+                                <mat-option *ngFor="let l of linkers" [value]="l" >
+                                    {{l.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="linkerCategorySelected != ''">
+                    </form>
+                </div>
+                <div *ngIf="isAddRewardClicked">
+                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding a Reward</b></h3>
+                    <form (ngSubmit)="addRewardToDiagram()" style="text-align: left; font-size: 1vw;">
+                        <mat-form-field style="margin-left: 5px;">
+                            <mat-select [(value)]="rewardToAddSelected" placeholder="Select Reward">
+                                <mat-option *ngFor="let r of localRewards" [value]=r>
+                                    {{r.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <input type="submit" value="Add it!" style="margin-left: 10px;">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-sidenav-container>
+  

@@ -1,0 +1,89 @@
+mat-toolbar {
+    background: #141eb6;
+    color: white;
+}
+mat-sidenav {
+    margin: 16px;
+    width: 240px;
+    border-right: none;
+    background: darkblue;
+    color: white;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    font-size: large;
+    line-height: 1em;
+}
+
+mat-sidenav-container {
+    height: calc(100vh - 65px);
+}
+
+mat-divider {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    background-color: lightgray;
+}
+
+.nav-link-main {
+    color: white;
+}
+
+.menuButton {
+    font-size: large;
+}
+
+.contact-info {
+    position: absolute;
+    bottom: 3px;
+    align-self: center;
+    color: white;
+}
+
+.HeaderButtonArray{
+    grid-area: header;
+}
+
+.ButtonFromTheHeader{
+    height: 50px;
+    width: 25%;
+    font-size: 1.5vw;
+}
+
+.desing-grid > div {
+    background-color: white;
+    padding: 0px;
+}
+
+.desing-grid {
+    display: grid;
+    grid-template-areas:
+    'header header header header header header header header'
+    'canvas canvas canvas canvas canvas canvas canvas canvas'
+    'canvas canvas canvas canvas canvas canvas canvas canvas'
+    'botom  botom  botom  botom  botom  botom  botom  botom '
+    'botom  botom  botom  botom  botom  botom  botom  botom ';
+    gap: 10px;
+    background-color: #141eb6;
+    padding: 10px;
+}
+
+.Canvas {
+    grid-area: canvas;
+    height: 55vh;
+}
+
+.Botom {
+    text-align: center;
+    grid-area: botom;
+    height: 15vh;
+}
+
+#diagramID {
+    grid-area: canvas;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    border: 5px;
+    border-color: black;
+}

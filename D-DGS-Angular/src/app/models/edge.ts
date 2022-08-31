@@ -1,12 +1,12 @@
 export class edge {
     _id: string | undefined; // MONGODB
-    idInDiagram: string; // Vis.js Network ID
-    from: string;
-    to: string;
+    idInDiagram: number; // Vis.js Network ID
+    from: number;
+    to: number;
     arrows: string;
     value: number;
 
-    constructor(id: string, from: string, to: string, arrows: string, value: number, _id?: string)
+    constructor(id: number, from: number, to: number, arrows: string, value: number, _id?: string)
     {
         this._id = _id;
         this.idInDiagram = id;

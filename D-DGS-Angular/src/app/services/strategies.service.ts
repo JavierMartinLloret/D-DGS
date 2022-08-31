@@ -17,12 +17,22 @@ export class StrategiesService {
     return this._httpClient.get(this.strategiesURL);
   }
 
+  getASpecificStrategy(id: string)
+  {
+    return this._httpClient.get(this.strategiesURL+"/"+id)
+  }
+
   getAllStrategiesFromAnSpecificUser(domain_key: string) {
-    return this._httpClient.get(this.strategiesURL +"/"+domain_key)
+    return this._httpClient.get(this.strategiesURL +"/fromAUser/"+domain_key)
   }
 
   postANewStrategy(s: Strategy) {
     return this._httpClient.post(this.strategiesURL, s);
+  }
+
+  updateAStrategy(s: Strategy)
+  {
+    return this._httpClient.put(this.strategiesURL, s);
   }
 
   deleteAnStrategy(ID: string) {

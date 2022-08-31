@@ -1,13 +1,13 @@
 export class node {
     _id: string | undefined; // MONGODB
-    idInDiagram: string; // Vis.js Network ID
+    idInDiagram: number; // Vis.js Network ID
     label: string;
     shape: string;
     color: string;
     type: string;
     base_element_id: string | undefined;
 
-    constructor(id: string, label: string, shape: string, color: string, type: string, base_element_id: string, _id?: string)
+    constructor(id: number, label: string, shape: string, color: string, type: string, base_element_id: string, _id?: string)
     {
         this._id = _id;
         this.idInDiagram = id;
