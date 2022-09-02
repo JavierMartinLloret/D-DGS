@@ -75,6 +75,9 @@
                 <button class="ButtonFromTheHeader" (click)="addLinkerIsClicked()">
                     Linker
                 </button>
+                <button class="ButtonFromTheHeader" (click)="addAbsoluteValueIsClicked()">
+                    Absolute value
+                </button>
                 <button class="ButtonFromTheHeader" (click)="addRewardIsClicked()">
                     Reward
                 </button>
@@ -137,6 +140,26 @@
                             </mat-select>
                         </mat-form-field>
                         <input type="submit" value="Add it!" style="margin-left: 10px;">
+                    </form>
+                </div>
+                <div *ngIf="isAddAbsoluteValueClicked">
+                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding an Absolute value</b></h3>
+                    <form (ngSubmit)="addAbsoluteValueToDiagram()" style="text-align: left; font-size: 1vw;">
+                        <input type="radio" id="Text" name="absoluteValueFormat" value="T" [(ngModel)]="newAbsoluteValueType"> Text
+                        <input type="radio" id="Number" name="absoluteValueFormat" value="N" [(ngModel)]="newAbsoluteValueType"> Number
+                        <input type="radio" id="Date" name="absoluteValueFormat" value="D" [(ngModel)]="newAbsoluteValueType"> Date
+                        <div *ngIf="newAbsoluteValueType == 'T'" style="margin-left: 5px;">
+                            Value:<input type="text" [(ngModel)]="newAbsoluteValue" id="TextValue" name="absoluteValueTextValue" style="margin-left: 10px;">
+                            <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != ''">
+                        </div>
+                        <div *ngIf="newAbsoluteValueType == 'N'" style="margin-left: 5px;">
+                            Value: <input type="number" [(ngModel)]="newAbsoluteValue" name="absoluteValueNumberValue" id="NumberValue" style="margin-left: 10px;">
+                            <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != '' && newAbsoluteValue != null">
+                        </div>
+                        <div *ngIf="newAbsoluteValueType == 'D'" style="margin-left: 5px;">
+                            Value: <input type="date" [(ngModel)]="newAbsoluteValue" name="absoluteValueDateValue" id="DateValue" style="margin-left: 10px;">
+                            <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != ''">
+                        </div>
                     </form>
                 </div>
             </div>

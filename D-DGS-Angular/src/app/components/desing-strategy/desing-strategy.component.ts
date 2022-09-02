@@ -19,29 +19,34 @@ const LOG_TOKEN: string = "LOG_TOKEN";
 const DIAGRAM_TOKEN: string = "DIAGRAM_EDITION_ENABLE"; // 'y' | 'n'
 
 /* SUBSTRATEGY NODE */
-const DEFAULT_SUBSTRATEGY_SHAPE: string = "square";
-const DEFAULT_SUBSTRATEGY_COLOR: string = "blue";
-const DEFAULT_SUBSTRATEGY_TYPE: string = "substrategy";
+const DEFAULT_SUBSTRATEGY_SHAPE : string = "square";
+const DEFAULT_SUBSTRATEGY_COLOR : string = "blue";
+const DEFAULT_SUBSTRATEGY_TYPE  : string = "substrategy";
 
 /* ACTIVITY NODE */
 const DEFAULT_ACTIVITY_SHAPE : string = "box";
 const DEFAULT_ACTIVITY_COLOR : string = "#CC4E00";
-const DEFAULT_ACTIVITY_TYPE : string = "activity";
+const DEFAULT_ACTIVITY_TYPE  : string = "activity";
 
 /* PROPERTY NODE */
 const DEFAULT_PROPERTY_SHAPE : string = "ellipse";
 const DEFAULT_PROPERTY_COLOR : string = "#FFDDA6";
-const DEFAULT_PROPERTY_TYPE : string = "property";
+const DEFAULT_PROPERTY_TYPE  : string = "property";
+
+/* ABSOLUT_VALUE */
+const DEFAULT_ABSOLUTE_SHAPE : string = "circle";
+const DEFAULT_ABSOLUTE_COLOR : string = "#FFD9D9"
+const DEFAULT_ABSOLUTE_TYPE  : string = "absolute";
 
 /* LINKER NODE */
 const DEFAULT_LINKER_SHAPE : string = "diamond";
 const DEFAULT_LINKER_COLOR : string = "#00C2A8"
-const DEFAULT_LINKER_TYPE : string = "linker";
+const DEFAULT_LINKER_TYPE  : string = "linker";
 
 /* REWARD NODE */
 const DEFAULT_REWARD_SHAPE : string = "star"; 
 const DEFAULT_REWARD_COLOR : string = "#FCCE14"
-const DEFAULT_REWARD_TYPE : string = "reward";
+const DEFAULT_REWARD_TYPE  : string = "reward";
 
 /* EDGE ACTIVITY-PROPERTY */
 
@@ -72,6 +77,8 @@ export class DesingStrategyComponent implements AfterViewInit {
   public linkerCategorySelected: string = "";
   public linkerToAddSelected: Linker = new Linker("","",undefined);
   public rewardToAddSelected: Reward = new Reward("","","",0);
+  public newAbsoluteValueType: string = "";
+  public newAbsoluteValue: any = "";
 
 
   // Flags
@@ -81,7 +88,7 @@ export class DesingStrategyComponent implements AfterViewInit {
 
   public isAddSubstrategyClicked: boolean = false;
   public isAddActivityClicked: boolean = false;
-  public isAddPropertyClicked: boolean = false;
+  public isAddAbsoluteValueClicked: boolean = false;
   public isAddLinkerClicked: boolean = false;
   public isAddRewardClicked: boolean = false;
 
@@ -171,7 +178,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     this.isAddSubstrategyClicked = this.isAddSubstrategyClicked ? false : true;
     
     this.isAddActivityClicked = false;
-    this.isAddPropertyClicked = false;
+    this.isAddAbsoluteValueClicked = false;
     this.isAddLinkerClicked = false;
     this.isAddRewardClicked = false;
   }
@@ -204,7 +211,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     this.isAddActivityClicked = this.isAddActivityClicked ? false : true;
   
     this.isAddSubstrategyClicked = false;
-    this.isAddPropertyClicked = false;
+    this.isAddAbsoluteValueClicked = false;
     this.isAddLinkerClicked = false;
     this.isAddRewardClicked = false;
   }
@@ -280,7 +287,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     this.isAddLinkerClicked = this.isAddLinkerClicked ? false : true;
   
     this.isAddSubstrategyClicked = false;
-    this.isAddPropertyClicked = false;
+    this.isAddAbsoluteValueClicked = false;
     this.isAddRewardClicked = false;
     this.isAddActivityClicked = false;
   }
@@ -307,11 +314,54 @@ export class DesingStrategyComponent implements AfterViewInit {
     }
   }
 
+  addAbsoluteValueIsClicked(): void {
+    this.isAddAbsoluteValueClicked = this.isAddAbsoluteValueClicked ? false : true;
+  
+    this.isAddSubstrategyClicked = false;
+    this.isAddLinkerClicked = false;
+    this.isAddRewardClicked = false;
+    this.isAddActivityClicked = false;
+  }
+
+  addAbsoluteValueToDiagram(): void {
+    let nodeLabel: string = "";
+    switch (this.newAbsoluteValueType) {
+      case 'T':
+        nodeLabel = this.newAbsoluteValue;
+        break;
+      case 'N':
+        nodeLabel = this.newAbsoluteValue.toString();
+        break;
+      case 'D':
+        nodeLabel = "Date: "+this.newAbsoluteValue;
+        break;
+      default:
+        console.log("Error selecting a tag for an absolute value node");
+        break;
+    }
+    
+    let newNode : node = new node(
+      this.nodeIDCounter,
+      nodeLabel,
+      DEFAULT_ABSOLUTE_SHAPE,
+      DEFAULT_ABSOLUTE_COLOR,
+      DEFAULT_ABSOLUTE_TYPE,
+      "",
+      undefined
+    );
+
+    this.nodes.add(newNode);
+    this.nodeIDCounter++;
+    this.updateStrategy();
+    this.isAddAbsoluteValueClicked = false;
+    this.newAbsoluteValue = this.newAbsoluteValueType = "";
+  }
+
   addRewardIsClicked(): void {
     this.isAddRewardClicked = this.isAddRewardClicked ? false : true;
   
     this.isAddSubstrategyClicked = false;
-    this.isAddPropertyClicked = false;
+    this.isAddAbsoluteValueClicked = false;
     this.isAddLinkerClicked = false;
     this.isAddActivityClicked = false;
   }
@@ -337,6 +387,8 @@ export class DesingStrategyComponent implements AfterViewInit {
     }
   }
 
+  
+
   updateStrategy(): void {
     /* NO UPDATEA */
     this._strategiesService.updateAStrategy(this.localStrategy);
@@ -344,7 +396,7 @@ export class DesingStrategyComponent implements AfterViewInit {
   }
 
   debug():void {
-    console.log(this.linkerCategorySelected)
+    console.log(this.newAbsoluteValue)
   }
 
 }
