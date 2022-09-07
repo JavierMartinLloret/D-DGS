@@ -5,8 +5,9 @@
     <Id></Id>
     <Name></Name>
     <Description></Description>
-
     <Domain>
+        <Id></Id>
+        <Name></Name>
         <Activity><!-- One per Activity in the Domain -->
             <Id></Id>
             <Name></Name>
@@ -20,7 +21,6 @@
             </Properties>
         </Activity>
     </Domain>
-
     <RewardSet>
         <Id></Id>
         <Name></Name>
@@ -31,15 +31,13 @@
             <Priority></Priority> <!-- INT [0...RewardSet.size()] 0 is MAX-->
         </Reward>
     </RewardSet>
-
     <Operators>
         <Operator>
             <Id></Id>
             <Name></Name>
-            <Cathegory></Cathegory>
+            <Category></Category>
         </Operator>
     </Operators>
-
     <Substrategies>
         <Substrategy>
             <Id></Id>
@@ -47,16 +45,16 @@
             <Criteria>
                 <Criterion>
                         <C_Operator></C_Operator><!-- Operator ID (?) -->
-                        <Operand1>
-                            <Type></Type> <!-- Any base type like INT, STRING, BOOLEAN -->
-                            <Value></Value> 
-                        </Operand1>
-                        <Operand2>
-                            <Activity><!-- OR <Property> OR <Operator> -->
-                                <Id></Id>
-                            </Activity><!-- OR </Property> OR <Operator> -->
-                        </Operand2>
-                        <!--<OperandN> ???-->
+                        <Operands>
+                            <Operand>
+                                <Type></Type> <!-- Absolute_String, Absolte_Number, Absolute_Date -->
+                                <Value></Value> 
+                            </Operand>
+                            <Operand>
+                                <Type></Type> <!-- Substrategy, Activity, Property -->
+                                <Id></Id> 
+                            </Operand>
+                        </Operands>
                 </Criterion>
             </Criteria>
 
