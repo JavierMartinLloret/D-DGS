@@ -50,12 +50,26 @@ const DEFAULT_REWARD_TYPE  : string = "reward";
 
 /* EDGE ACTIVITY-PROPERTY */
 
+/* NODEREFERENCE DEFAULT VALUES */
+const DEFAULT_NODE_TYPE_CODE_STRING: string = 's';
+const DEFAULT_NODE_TYPE_CODE_NUMBER: string = 'n';
+const DEFAULT_NODE_TYPE_CODE_DATE  : string = 'd';
+const DEFAULT_NODE_TYPE_CODE_OBJECT: string = 'o';
+
+interface nodeReference {
+  idInDiagram: number,
+  nodeType: string, /* 's'== string, 'n' == number, 'd' == Date, 'o' == Object */
+  value: any        /* s,n,o == value. Object == _id for service to call*/
+}
+
 @Component({
   selector: 'app-desing-strategy',
   templateUrl: './desing-strategy.component.html',
   styleUrls: ['./desing-strategy.component.css']
 })
 export class DesingStrategyComponent implements AfterViewInit {
+
+  
 
   // Domain_Key
   public DOMAIN_KEY: string="";
@@ -69,9 +83,12 @@ export class DesingStrategyComponent implements AfterViewInit {
   public linkerCategories: Set<string> = new Set<string>();
   public localRewards: Array<Reward> = [];
 
+  public avaliableNodesToLinkWithNodeClicked: Set<node> = new Set<node>();
+
   // Local variables
   public localStrategy: Strategy = new Strategy("","","", this.localDomain, this.localRewardSet, this.localSubstrategies);
   public nodeIDCounter: number = 0;
+  public edgeIDCounter: number = 0;
   public newSubstrategyName: string = "";
   public activityToAddSelected: Activity = new Activity("","","");
   public linkerCategorySelected: string = "";
@@ -79,6 +96,9 @@ export class DesingStrategyComponent implements AfterViewInit {
   public rewardToAddSelected: Reward = new Reward("","","",0);
   public newAbsoluteValueType: string = "";
   public newAbsoluteValue: any = "";
+
+  public nodeClicked: node = new node(0,"","","","not initialiced","",undefined);
+  public nodeToLinkWithClickedOne : node = new node(0,"","","","not initialiced","",undefined); 
 
 
   // Flags
@@ -92,6 +112,8 @@ export class DesingStrategyComponent implements AfterViewInit {
   public isAddLinkerClicked: boolean = false;
   public isAddRewardClicked: boolean = false;
 
+  public isANodeSelected: boolean = false;
+
   // Diagram-Related Variables
   public diagram: any;
   public nodes: any;
@@ -99,6 +121,8 @@ export class DesingStrategyComponent implements AfterViewInit {
   public data: any;
   public options: any;
   public network: any;
+
+  public nodeReferences: Set<nodeReference> = new Set<nodeReference>();
 
   constructor(private _strategiesService: StrategiesService, private _router: Router, private _diagramDomainService: DiagramDomainService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
@@ -162,7 +186,10 @@ export class DesingStrategyComponent implements AfterViewInit {
 
     this.edges = new DataSet();
 
-    this.data = {nodes: this.nodes, edges: this.edges};
+    this.data = {
+      nodes: this.nodes,
+      edges: this.edges
+    };
 
     this.options = {};
 
@@ -181,6 +208,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     this.isAddAbsoluteValueClicked = false;
     this.isAddLinkerClicked = false;
     this.isAddRewardClicked = false;
+    this.isANodeSelected = false;
   }
 
   addSubstrategyToDiagram(): void {
@@ -189,17 +217,20 @@ export class DesingStrategyComponent implements AfterViewInit {
 
     this.localStrategy.substrategies.push(newSubstrategy);
 
-    let newNode: node = new node(
-      this.nodeIDCounter,
-      this.newSubstrategyName,
-      DEFAULT_SUBSTRATEGY_SHAPE,
-      DEFAULT_SUBSTRATEGY_COLOR,
-      DEFAULT_SUBSTRATEGY_TYPE,
-      "",
-      undefined
-    );
+    let newNode: any = {
+      id: this.nodeIDCounter,
+      label: this.newSubstrategyName,
+      shape: DEFAULT_SUBSTRATEGY_SHAPE,
+      color: DEFAULT_SUBSTRATEGY_COLOR
+    };
+    let newNodeReference: nodeReference = {
+      idInDiagram: newNode.id,
+      nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT,
+      value: this.newSubstrategyName
+    };
     this.nodeIDCounter++;
-        
+    
+    this.nodeReferences.add(newNodeReference);
     this.nodes.add(newNode);
 
     this.newSubstrategyName = "";
@@ -214,68 +245,71 @@ export class DesingStrategyComponent implements AfterViewInit {
     this.isAddAbsoluteValueClicked = false;
     this.isAddLinkerClicked = false;
     this.isAddRewardClicked = false;
+    this.isANodeSelected = false;
   }
 
   addActivityToDiagram(): void {
-    if(this.activityToAddSelected._id)
-    {
-      let newNode: node = new node(
-        this.nodeIDCounter,
-        this.activityToAddSelected.name.toString(),
-        DEFAULT_ACTIVITY_SHAPE,
-        DEFAULT_ACTIVITY_COLOR,
-        DEFAULT_ACTIVITY_TYPE,
-        this.activityToAddSelected._id.toString(),
-        undefined
-      );      
-
-      this.nodes.add(newNode);
-      this.addPropertiesFromTheActivityToDiagram(this.nodeIDCounter); // NO AÑADE EDGES CORRECTAMENTE, NO SE MUESTRAN
-      // this.nodeIDCounter++; Is inside the method above
-      // this.updateStrategy(); Is inside the method above
-
-      this.isAddActivityClicked = false;
-      this.activityToAddSelected = new Activity("","","");
+    let newNode : any = {
+      id: this.nodeIDCounter,
+      label: this.activityToAddSelected.name.toString(),
+      shape: DEFAULT_ACTIVITY_SHAPE,
+      color: DEFAULT_ACTIVITY_COLOR
+    };
+    let newNodeReference : nodeReference = {
+      idInDiagram: this.nodeIDCounter,
+      nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT,
+      value: this.activityToAddSelected._id?.toString()
     }
+    this.nodeIDCounter++;
+    
+    this.nodeReferences.add(newNodeReference);
+    this.nodes.add(newNode);
+    
+    this.addPropertiesFromTheActivityToDiagram();
+
+    this.updateStrategy();
+
+    this.isAddActivityClicked = false;
+    this.activityToAddSelected = new Activity("","","");
   }
 
-  addPropertiesFromTheActivityToDiagram(activityNodeID: number): void {
-    this.nodeIDCounter++;
+  addPropertiesFromTheActivityToDiagram(): void {
     if(this.activityToAddSelected._id)
     {
       this._diagramDomainService.getPropertiesFromAnActivity(this.activityToAddSelected._id.toString()).subscribe((res: any) => {
-        let properties: Array<Activity_Property> = res;
-        let newNodes: Array<node> = [];
-        let newEdges: Array<edge> = [];
+        let properties: Set<Activity_Property> = res;
+        let newNodes: Array<any> = [];
+        let newEdges: Array<any> = [];
+        let activityNodeID: number = this.nodeIDCounter-1;
 
         properties.forEach((p: Activity_Property) => {
-          if(p._id)
-          {
-            let newNode: node = new node (
-              this.nodeIDCounter,
-              p.name.toString(),
-              DEFAULT_PROPERTY_SHAPE,
-              DEFAULT_PROPERTY_COLOR,
-              DEFAULT_PROPERTY_TYPE,
-              p._id.toString(),
-              undefined
-            );
-
-            let newEdge: edge = new edge(
-              activityNodeID+this.nodeIDCounter, //id
-              activityNodeID, // from
-              this.nodeIDCounter, //to
-              "none", // arrows
-              1, // value
-              undefined
-            )
-            
-            newNodes.push(newNode);
-            newEdges.push(newEdge);
-            
-            this.nodeIDCounter++;
+          let newNode : any = {
+            id: this.nodeIDCounter,
+            label: p.name,
+            shape: DEFAULT_PROPERTY_SHAPE,
+            color: DEFAULT_PROPERTY_COLOR
+          };
+          let newNodeReference : nodeReference = {
+            idInDiagram: this.nodeIDCounter,
+            nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT,
+            value: p._id?.toString()
           }
+
+          this.nodeReferences.add(newNodeReference);
+          newNodes.push(newNode);
+
+          let newEdge: any = {
+            id: this.edgeIDCounter,
+            from: activityNodeID,
+            to: this.nodeIDCounter,
+          }
+
+          newEdges.push(newEdge);
+
+          this.nodeIDCounter++;
+          this.edgeIDCounter++;
         });
+
         this.nodes.add(newNodes);
         this.edges.add(newEdges);
         this.updateStrategy();
@@ -290,6 +324,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     this.isAddAbsoluteValueClicked = false;
     this.isAddRewardClicked = false;
     this.isAddActivityClicked = false;
+    this.isANodeSelected = false;
   }
 
   addLinkerToDiagram(): void {
@@ -321,6 +356,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     this.isAddLinkerClicked = false;
     this.isAddRewardClicked = false;
     this.isAddActivityClicked = false;
+    this.isANodeSelected = false;
   }
 
   addAbsoluteValueToDiagram(): void {
@@ -364,6 +400,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     this.isAddAbsoluteValueClicked = false;
     this.isAddLinkerClicked = false;
     this.isAddActivityClicked = false;
+    this.isANodeSelected = false;
   }
 
   addRewardToDiagram(): void {
@@ -387,7 +424,51 @@ export class DesingStrategyComponent implements AfterViewInit {
     }
   }
 
-  
+  diagramIsClicked(): void {
+    this.nodeClicked = this.getNodeSelected();
+    
+    if(this.nodeClicked.type != "not initialiced") // A node has been clicked.
+    {
+      this.isANodeSelected = true;
+
+      this.isAddSubstrategyClicked = false;
+      this.isAddAbsoluteValueClicked = false;
+      this.isAddLinkerClicked = false;
+      this.isAddActivityClicked = false;
+      this.isAddRewardClicked = false;
+
+      // Prerare the container/select options should be done here.
+      
+      this.avaliableNodesToLinkWithNodeClicked = new Set<node>();
+      let allNodes: Array<node> = Array.from(this.getNodesCurrentlyOnDiagram());     
+      allNodes.forEach((n:node) => {
+        if(n.idInDiagram != this.nodeClicked.idInDiagram)
+          this.avaliableNodesToLinkWithNodeClicked.add(n);
+      })
+    }
+    else
+    {
+      this.isANodeSelected = false;
+    }
+    
+  }
+
+  linkTwoNodes(): void {
+    let newEdge: edge = new edge(
+      this.edgeIDCounter,
+      this.nodeClicked.idInDiagram,
+      this.nodeToLinkWithClickedOne.idInDiagram,
+      "to",
+      1,
+      undefined
+    );
+
+    console.log(this.edges.add({from: 0, to: 1}));    
+    this.edgeIDCounter++;
+    this.updateStrategy();
+    this.isANodeSelected = false;
+    this.nodeToLinkWithClickedOne = this.nodeClicked = new node(0,"","","","not initialiced","",undefined);
+  }
 
   updateStrategy(): void {
     /* NO UPDATEA */
@@ -395,8 +476,60 @@ export class DesingStrategyComponent implements AfterViewInit {
     
   }
 
-  debug():void {
-    console.log(this.newAbsoluteValue)
+  /* INTERACTION WITH THE DIAGRAM METHODS. SHOULD BE A SERVICE */
+
+  private getNodeSelected(): node {
+    let auxNode: node = new node(0,"","","","not initialiced","",undefined);
+
+    try {
+      let selectedNodesIds: Array<any> = this.network.getSelectedNodes();
+
+    auxNode = new node(
+      this.network.body.nodes[selectedNodesIds[0]].options.idInDiagram,
+      this.network.body.nodes[selectedNodesIds[0]].options.label,
+      this.network.body.nodes[selectedNodesIds[0]].options.shape,
+      this.network.body.nodes[selectedNodesIds[0]].options.color.background,
+      this.network.body.nodes[selectedNodesIds[0]].options.type,
+      this.network.body.nodes[selectedNodesIds[0]].options.base_element_id,
+      undefined
+    );
+    } catch (error) {
+      // Se ha clickado el diagrama sin seleccionar un nodo
+    }
+
+    return auxNode;
+  }
+
+  private getNodesCurrentlyOnDiagram(): Set<node> {
+    let nodes : Set<node> = new Set<node>();
+    let nodesIds : Array<string> = this.nodes.getIds();
+
+    nodesIds.forEach((Id: string) => {
+      let auxNode = new node(
+        this.network.body.nodes[Id].options.idInDiagram,
+        this.network.body.nodes[Id].options.label,
+        this.network.body.nodes[Id].options.shape,
+        this.network.body.nodes[Id].options.color.background,
+        this.network.body.nodes[Id].options.type,
+        this.network.body.nodes[Id].options.base_element_id,
+        undefined
+      );
+
+      nodes.add(auxNode);
+    });
+
+
+    return nodes;
+  }
+
+  debug():void {console.log(this.nodeReferences)}
+
+  addTwoNodes(): void {
+    this.nodes.add([{id: 1, label: "Node 1"}, {id: 2, label: "Node 2"}]);
+  }
+
+  linkTheNodes(): void {
+    this.edges.add({from: 1, to: 2});
   }
 
 }

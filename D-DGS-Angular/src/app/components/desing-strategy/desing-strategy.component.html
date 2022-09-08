@@ -61,6 +61,8 @@
     </mat-sidenav>
     <div>
         <button (click)="debug()">debug</button>
+        <button (click)="addTwoNodes()">nodes</button>
+        <button (click)="linkTheNodes()">edge</button>
         <h1 style="text-align: center;">Diagram Desing Area</h1>
         <h2 style="text-align: center;">Diagram: <i>{{localStrategy.name}}</i></h2>
         
@@ -83,7 +85,7 @@
                 </button>
             </div>
             <div class="Canvas">
-                <div id="diagramID">
+                <div id="diagramID" (click)="diagramIsClicked()">
 
                 </div>
             </div>
@@ -161,6 +163,22 @@
                             <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != ''">
                         </div>
                     </form>
+                </div>
+                <div *ngIf="isANodeSelected">
+                    <h3 style="text-align: left; font-size: 1vw;">Node selected: {{nodeClicked.label}}</h3>
+                    <div style="text-align: left; font-size: 0.8vw;">
+                        <form (ngSubmit)="linkTwoNodes()">
+                            This node is an activity. Would you like to link it with any other node?
+                            <mat-form-field style="margin-left: 5px;">
+                                <mat-select [(value)]="nodeToLinkWithClickedOne" placeholder="Select a node">
+                                    <mat-option *ngFor="let a of avaliableNodesToLinkWithNodeClicked" [value]=a>
+                                        {{a.label}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <input type="submit" value="Add it!" style="margin-left: 10px;">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

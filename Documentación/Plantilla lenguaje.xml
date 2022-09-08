@@ -28,7 +28,7 @@
             <Id></Id>
             <Name></Name>
             <Description></Description>
-            <Priority></Priority> <!-- INT [0...RewardSet.size()] 0 is MAX-->
+            <Priority></Priority> <!-- INT [0...RewardSet.size()], 0 is MAX-->
         </Reward>
     </RewardSet>
     <Operators>
@@ -44,7 +44,7 @@
             <Name></Name>
             <Criteria>
                 <Criterion>
-                        <C_Operator></C_Operator><!-- Operator ID (?) -->
+                        <C_Operator></C_Operator><!-- Operator ID in <Operators> -->
                         <Operands>
                             <Operand>
                                 <Type></Type> <!-- Absolute_String, Absolte_Number, Absolute_Date -->
@@ -52,7 +52,7 @@
                             </Operand>
                             <Operand>
                                 <Type></Type> <!-- Substrategy, Activity, Property -->
-                                <Id></Id> 
+                                <Id></Id>  <!-- ID in <Substrategies> / <Domain>-->
                             </Operand>
                         </Operands>
                 </Criterion>
@@ -60,7 +60,7 @@
 
             <SS_Rewards>
                 <SS_Reward><!-- One per Reward associated with the Substrategy -->
-                    <Id></Id>
+                    <Id></Id> <!-- ID in <RewardSet> -->
                     <Value></Value> <!-- Times this Reward si given when SE is completed -->
                 </SS_Reward>
             </SS_Rewards>
