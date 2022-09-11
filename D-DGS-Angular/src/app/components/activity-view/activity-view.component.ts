@@ -4,6 +4,7 @@ import { Activity } from 'src/app/models/activity';
 import { Activity_Property } from 'src/app/models/activity_property';
 import { Context } from 'src/app/models/context';
 import { DiagramDomainService } from 'src/app/services/diagramDomain.service';
+import { UsersService } from 'src/app/services/users.service';
 
 const LOG_TOKEN: string = "LOG_TOKEN";
 // LOG_TOKEN: null | FAILED | identificador del dominio del usuario
@@ -42,7 +43,7 @@ export class ActivityViewComponent implements OnInit {
   public isAddANewPropertyClicked: boolean = false;
   public isEditPropertyClicked: boolean = false;
 
-  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService) {
+  constructor(private _router: Router, private _diagramDomainService: DiagramDomainService, private _usersService: UsersService) {
     let aux = sessionStorage.getItem(LOG_TOKEN);
     if(aux)
     {
@@ -68,7 +69,8 @@ export class ActivityViewComponent implements OnInit {
             else {this._router.navigateByUrl('/main');}
           })
         })
-      }      
+      }
+      this._usersService.isAnAdmin(this.DOMAIN_KEY).subscribe(res => {if(res) this.userIsAdmin = true;})     
     }
     else {this._router.navigateByUrl('/main');}
 
