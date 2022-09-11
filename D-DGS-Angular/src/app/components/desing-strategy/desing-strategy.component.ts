@@ -54,7 +54,11 @@ const DEFAULT_REWARD_TYPE  : string = "reward";
 const DEFAULT_NODE_TYPE_CODE_STRING: string = 's';
 const DEFAULT_NODE_TYPE_CODE_NUMBER: string = 'n';
 const DEFAULT_NODE_TYPE_CODE_DATE  : string = 'd';
-const DEFAULT_NODE_TYPE_CODE_OBJECT: string = 'o';
+const DEFAULT_NODE_TYPE_CODE_OBJECT_SUBSTRATEGY: string = 'o_s';
+const DEFAULT_NODE_TYPE_CODE_OBJECT_ACTIVITY: string = 'o_a';
+const DEFAULT_NODE_TYPE_CODE_OBJECT_PROPERTY: string = 'o_p';
+const DEFAULT_NODE_TYPE_CODE_OBJECT_LINKER: string = 'o_l';
+const DEFAULT_NODE_TYPE_CODE_OBJECT_REWARD: string = 'o_r';
 
 interface nodeReference {
   idInDiagram: number,
@@ -97,8 +101,8 @@ export class DesingStrategyComponent implements AfterViewInit {
   public newAbsoluteValueType: string = "";
   public newAbsoluteValue: any = "";
 
-  public nodeClicked: node = new node(0,"","","","not initialiced","",undefined);
-  public nodeToLinkWithClickedOne : node = new node(0,"","","","not initialiced","",undefined); 
+  public nodeClicked: any /* node */;
+  public nodeToLinkWithClickedOne : any /* node */;
 
 
   // Flags
@@ -225,7 +229,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     };
     let newNodeReference: nodeReference = {
       idInDiagram: newNode.id,
-      nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT,
+      nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT_SUBSTRATEGY,
       value: this.newSubstrategyName
     };
     this.nodeIDCounter++;
@@ -257,7 +261,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     };
     let newNodeReference : nodeReference = {
       idInDiagram: this.nodeIDCounter,
-      nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT,
+      nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT_ACTIVITY,
       value: this.activityToAddSelected._id?.toString()
     }
     this.nodeIDCounter++;
@@ -291,7 +295,7 @@ export class DesingStrategyComponent implements AfterViewInit {
           };
           let newNodeReference : nodeReference = {
             idInDiagram: this.nodeIDCounter,
-            nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT,
+            nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT_PROPERTY,
             value: p._id?.toString()
           }
 
@@ -328,25 +332,25 @@ export class DesingStrategyComponent implements AfterViewInit {
   }
 
   addLinkerToDiagram(): void {
-    if(this.linkerToAddSelected._id)
-    {
-      let newNode: node = new node(
-        this.nodeIDCounter,
-        this.linkerToAddSelected.name,
-        DEFAULT_LINKER_SHAPE,
-        DEFAULT_LINKER_COLOR,
-        DEFAULT_LINKER_TYPE,
-        this.linkerToAddSelected._id,
-        undefined
-      );
+    let newNode : any = {
+      id: this.nodeIDCounter,
+      label: this.linkerToAddSelected.name,
+      shape: DEFAULT_LINKER_SHAPE,
+      color: DEFAULT_LINKER_COLOR
+    };
+    let newNodeReference : nodeReference = {
+      idInDiagram: this.nodeIDCounter,
+      nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT_LINKER,
+      value: this.linkerToAddSelected._id
+    };
+    this.nodeIDCounter++;
 
-      this.nodes.add(newNode);
-      this.nodeIDCounter++;
-      this.updateStrategy();
-      this.isAddLinkerClicked = false;
-      this.linkerToAddSelected = new Linker("","",undefined);
-      this.linkerCategorySelected = "";
-    }
+    this.nodeReferences.add(newNodeReference);
+    this.nodes.add(newNode);
+    this.updateStrategy();
+    this.isAddLinkerClicked = false;
+    this.linkerToAddSelected = new Linker("","",undefined);
+    this.linkerCategorySelected = "";
   }
 
   addAbsoluteValueIsClicked(): void {
@@ -361,33 +365,39 @@ export class DesingStrategyComponent implements AfterViewInit {
 
   addAbsoluteValueToDiagram(): void {
     let nodeLabel: string = "";
+    let nodeReferenceType: string = "";
     switch (this.newAbsoluteValueType) {
       case 'T':
         nodeLabel = this.newAbsoluteValue;
+        nodeReferenceType = DEFAULT_NODE_TYPE_CODE_STRING;
         break;
       case 'N':
         nodeLabel = this.newAbsoluteValue.toString();
+        nodeReferenceType = DEFAULT_NODE_TYPE_CODE_NUMBER;
         break;
       case 'D':
         nodeLabel = "Date: "+this.newAbsoluteValue;
+        nodeReferenceType = DEFAULT_NODE_TYPE_CODE_DATE;
         break;
       default:
         console.log("Error selecting a tag for an absolute value node");
         break;
     }
     
-    let newNode : node = new node(
-      this.nodeIDCounter,
-      nodeLabel,
-      DEFAULT_ABSOLUTE_SHAPE,
-      DEFAULT_ABSOLUTE_COLOR,
-      DEFAULT_ABSOLUTE_TYPE,
-      "",
-      undefined
-    );
-
-    this.nodes.add(newNode);
+    let newNode : any = {
+      id: this.nodeIDCounter,
+      label: nodeLabel,
+      shape: DEFAULT_ABSOLUTE_SHAPE,
+      color: DEFAULT_ABSOLUTE_COLOR
+    };
+    let newNodeReference : nodeReference = {
+      idInDiagram: this.nodeIDCounter,
+      nodeType: nodeReferenceType,
+      value: this.newAbsoluteValue
+    };
     this.nodeIDCounter++;
+    this.nodeReferences.add(newNodeReference);
+    this.nodes.add(newNode);
     this.updateStrategy();
     this.isAddAbsoluteValueClicked = false;
     this.newAbsoluteValue = this.newAbsoluteValueType = "";
@@ -404,70 +414,101 @@ export class DesingStrategyComponent implements AfterViewInit {
   }
 
   addRewardToDiagram(): void {
-    if(this.rewardToAddSelected._id)
-    {
-      let newNode: node = new node(
-        this.nodeIDCounter,
-        this.rewardToAddSelected.name.toString(),
-        DEFAULT_REWARD_SHAPE,
-        DEFAULT_REWARD_COLOR,
-        DEFAULT_REWARD_TYPE,
-        this.rewardToAddSelected._id.toString(),
-        undefined
-      );
+    let newNode : any = {
+      id: this.nodeIDCounter,
+      label: this.rewardToAddSelected.name.toString(),
+      shape: DEFAULT_REWARD_SHAPE,
+      color: DEFAULT_REWARD_COLOR
+    };
+    let newNodeReference : nodeReference = {
+      idInDiagram: this.nodeIDCounter,
+      nodeType: DEFAULT_NODE_TYPE_CODE_OBJECT_REWARD,
+      value: this.rewardToAddSelected._id?.toString()
+    };
+    this.nodeIDCounter++;
 
-      this.nodes.add(newNode);
-      this.nodeIDCounter++;
-      this.updateStrategy();
-      this.isAddRewardClicked = false;
-      this.rewardToAddSelected = new Reward("","","",0);
-    }
+    this.nodeReferences.add(newNodeReference);
+    this.nodes.add(newNode);
+    this.updateStrategy();
+    this.isAddRewardClicked = false;
+    this.rewardToAddSelected = new Reward("","","",0);
   }
 
   diagramIsClicked(): void {
-    this.nodeClicked = this.getNodeSelected();
-    
-    if(this.nodeClicked.type != "not initialiced") // A node has been clicked.
-    {
-      this.isANodeSelected = true;
 
+    // A node has been selected
+    if(this.getNodeSelected() != undefined)
+    {
+      this.nodeClicked = this.getNodeSelected();
+      this.isANodeSelected = true;
       this.isAddSubstrategyClicked = false;
       this.isAddAbsoluteValueClicked = false;
       this.isAddLinkerClicked = false;
       this.isAddActivityClicked = false;
       this.isAddRewardClicked = false;
 
-      // Prerare the container/select options should be done here.
-      
-      this.avaliableNodesToLinkWithNodeClicked = new Set<node>();
-      let allNodes: Array<node> = Array.from(this.getNodesCurrentlyOnDiagram());     
-      allNodes.forEach((n:node) => {
-        if(n.idInDiagram != this.nodeClicked.idInDiagram)
+      // Prepare the nodes avaliable for clicking in the link two nodes. Prepare data to erase the node
+      this.avaliableNodesToLinkWithNodeClicked = new Set<any>();
+      let allNodes: Set<any> = this.getNodesCurrentlyOnDiagram();
+      allNodes.forEach((n: any) => {
+        if(n.id != this.nodeClicked.id)
           this.avaliableNodesToLinkWithNodeClicked.add(n);
       })
     }
     else
     {
+      this.nodeClicked = this.nodeToLinkWithClickedOne = undefined;
       this.isANodeSelected = false;
     }
     
   }
 
   linkTwoNodes(): void {
-    let newEdge: edge = new edge(
-      this.edgeIDCounter,
-      this.nodeClicked.idInDiagram,
-      this.nodeToLinkWithClickedOne.idInDiagram,
-      "to",
-      1,
-      undefined
-    );
+    // We seek the node type
+    let nodeClickedType: string ="";
+    this.nodeReferences.forEach((n:nodeReference) =>{
+      if(n.idInDiagram == this.nodeClicked.id)
+        nodeClickedType = n.nodeType;
+    })
+    
+    let newEdge: any;
 
-    console.log(this.edges.add({from: 0, to: 1}));    
+    // We seek how many edges this node has already
+    let currentEdgeOrder: number = this.getEdgesFromThisNode(this.nodeClicked.id);
+    currentEdgeOrder++;
+
+    switch (nodeClickedType) {
+      case DEFAULT_NODE_TYPE_CODE_OBJECT_LINKER:
+        {
+          newEdge = {
+            id: this.edgeIDCounter,
+            from: this.nodeToLinkWithClickedOne.id,
+            to: this.nodeClicked.id,
+            label: currentEdgeOrder.toString(),
+            arrows: 'to'
+          };
+        }
+        break;
+      default:
+        {
+          newEdge = {
+            id: this.edgeIDCounter,
+            from: this.nodeToLinkWithClickedOne.id,
+            to: this.nodeClicked.id
+          };
+        }
+        break;
+    };
+
+    /*
+    */
+
     this.edgeIDCounter++;
+    
+    this.edges.add(newEdge);
     this.updateStrategy();
     this.isANodeSelected = false;
-    this.nodeToLinkWithClickedOne = this.nodeClicked = new node(0,"","","","not initialiced","",undefined);
+    this.nodeToLinkWithClickedOne = this.nodeClicked = undefined;
   }
 
   updateStrategy(): void {
@@ -478,58 +519,64 @@ export class DesingStrategyComponent implements AfterViewInit {
 
   /* INTERACTION WITH THE DIAGRAM METHODS. SHOULD BE A SERVICE */
 
-  private getNodeSelected(): node {
-    let auxNode: node = new node(0,"","","","not initialiced","",undefined);
+  goToEnableMode(): void
+  {
+    sessionStorage.setItem(DIAGRAM_TOKEN, "y");
+    window.location.reload();
+  }
 
-    try {
+  private getNodeSelected(): any | undefined /*node*/ {
+    let auxNode : any;
+    if(this.network.getSelectedNodes().length > 0)
+    {
       let selectedNodesIds: Array<any> = this.network.getSelectedNodes();
+      let selectedNodeId : number = selectedNodesIds[0];
 
-    auxNode = new node(
-      this.network.body.nodes[selectedNodesIds[0]].options.idInDiagram,
-      this.network.body.nodes[selectedNodesIds[0]].options.label,
-      this.network.body.nodes[selectedNodesIds[0]].options.shape,
-      this.network.body.nodes[selectedNodesIds[0]].options.color.background,
-      this.network.body.nodes[selectedNodesIds[0]].options.type,
-      this.network.body.nodes[selectedNodesIds[0]].options.base_element_id,
-      undefined
-    );
-    } catch (error) {
-      // Se ha clickado el diagrama sin seleccionar un nodo
+      auxNode = {
+        id: this.network.body.nodes[selectedNodeId].options.id,
+        label: this.network.body.nodes[selectedNodeId].options.label,
+        shape: this.network.body.nodes[selectedNodeId].options.shape,
+        color: this.network.body.nodes[selectedNodeId].options.color.background
+      };
     }
+    else
+    auxNode = undefined;
+        
 
     return auxNode;
   }
 
-  private getNodesCurrentlyOnDiagram(): Set<node> {
-    let nodes : Set<node> = new Set<node>();
-    let nodesIds : Array<string> = this.nodes.getIds();
+  private getNodesCurrentlyOnDiagram(): Set<any> {
+    let nodes : Set<any> = new Set<any>();
+    let nodesIds : Array<number> = this.nodes.getIds();
 
-    nodesIds.forEach((Id: string) => {
-      let auxNode = new node(
-        this.network.body.nodes[Id].options.idInDiagram,
-        this.network.body.nodes[Id].options.label,
-        this.network.body.nodes[Id].options.shape,
-        this.network.body.nodes[Id].options.color.background,
-        this.network.body.nodes[Id].options.type,
-        this.network.body.nodes[Id].options.base_element_id,
-        undefined
-      );
-
+    nodesIds.forEach((Id: number) => {
+      let auxNode : any = {
+        id: this.network.body.nodes[Id].options.id,
+        label: this.network.body.nodes[Id].options.label,
+        shape: this.network.body.nodes[Id].options.shape,
+        color: this.network.body.nodes[Id].options.color.background
+      };
       nodes.add(auxNode);
     });
-
-
     return nodes;
   }
 
-  debug():void {console.log(this.nodeReferences)}
+  private getEdgesFromThisNode(nodeId: number): number
+  {
+    let cont: number = 0;
+    let ocurrences: number = 0;
+    while (this.network.body.edges[cont] != undefined) {
+      if(this.network.body.edges[cont].toId == nodeId)
+        ocurrences++;
+      cont++;
+    }
 
-  addTwoNodes(): void {
-    this.nodes.add([{id: 1, label: "Node 1"}, {id: 2, label: "Node 2"}]);
+    return ocurrences;
   }
 
-  linkTheNodes(): void {
-    this.edges.add({from: 1, to: 2});
-  }
+  debug():void {
+    console.log(this.editDiagramFunctionsAvaliable);
+  };
 
 }

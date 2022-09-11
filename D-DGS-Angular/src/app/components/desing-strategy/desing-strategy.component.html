@@ -60,14 +60,12 @@
         </div>
     </mat-sidenav>
     <div>
-        <button (click)="debug()">debug</button>
-        <button (click)="addTwoNodes()">nodes</button>
-        <button (click)="linkTheNodes()">edge</button>
+        <!--<button (click)="debug()">debug</button>-->
         <h1 style="text-align: center;">Diagram Desing Area</h1>
         <h2 style="text-align: center;">Diagram: <i>{{localStrategy.name}}</i></h2>
         
         <div class="desing-grid">
-            <div class="HeaderButtonArray">
+            <div class="HeaderButtonArray" *ngIf="editDiagramFunctionsAvaliable">
                 <button class="ButtonFromTheHeader" (click)="addSubstrategyIsClicked()">
                     Substrategy
                 </button>
@@ -84,101 +82,129 @@
                     Reward
                 </button>
             </div>
+            <div class="HeaderButtonArray" *ngIf="!editDiagramFunctionsAvaliable">
+                <button class="ButtonFromTheHeader" disabled>
+                    Substrategy
+                </button>
+                <button class="ButtonFromTheHeader" disabled>
+                    Activity
+                </button>
+                <button class="ButtonFromTheHeader" disabled>
+                    Linker
+                </button>
+                <button class="ButtonFromTheHeader" disabled>
+                    Absolute value
+                </button>
+                <button class="ButtonFromTheHeader" disabled>
+                    Reward
+                </button>
+            </div>
             <div class="Canvas">
                 <div id="diagramID" (click)="diagramIsClicked()">
 
                 </div>
             </div>
             <div class="Botom">
-                <h3 style="text-align: left; font-size: 1.2vw;"><b>Info Area</b></h3>
-                <div *ngIf="isAddSubstrategyClicked">
-                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently creating a Susbtrategy</b></h3>
-                    <form (ngSubmit)="addSubstrategyToDiagram()" style="text-align: left; font-size: 1vw;">
-                        Strategy Name:<input type="text" name="newSubstrategyName" id="newSubstrategyName" [(ngModel)]="newSubstrategyName" style="margin-left: 10px;">
-                        <input type="submit" value="Add it!" style="margin-left: 10px;">
-                    </form>
-                </div>
-                <div *ngIf="isAddActivityClicked">
-                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding an Activity</b></h3>
-                    <form (ngSubmit)="addActivityToDiagram()" style="text-align: left; font-size: 1vw;">
-                        <mat-form-field style="margin-left: 5px;">
-                            <mat-select [(value)]="activityToAddSelected" placeholder="Select Activity">
-                                <mat-option *ngFor="let a of activitiesFromTheDomain" [value]=a>
-                                    {{a.name}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <input type="submit" value="Add it!" style="margin-left: 10px;">
-                    </form>
-                </div>
-                <div *ngIf="isAddLinkerClicked">
-                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding a Linker</b></h3>
-                    <form (ngSubmit)="addLinkerToDiagram()" style="text-align: left; font-size: 1vw;">
-                        <mat-form-field style="margin-left: 5px;">
-                            <mat-select [(value)]="linkerCategorySelected" placeholder="Select Category">
-                                <mat-option *ngFor="let l of linkerCategories" [value]="l">
-                                    {{l}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field style="margin-left: 10px;" *ngIf="linkerCategorySelected != ''">
-                            <mat-select [(value)]="linkerToAddSelected" placeholder="Select a Linker">
-                                <mat-option *ngFor="let l of linkers" [value]="l" >
-                                    {{l.name}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="linkerCategorySelected != ''">
-                    </form>
-                </div>
-                <div *ngIf="isAddRewardClicked">
-                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding a Reward</b></h3>
-                    <form (ngSubmit)="addRewardToDiagram()" style="text-align: left; font-size: 1vw;">
-                        <mat-form-field style="margin-left: 5px;">
-                            <mat-select [(value)]="rewardToAddSelected" placeholder="Select Reward">
-                                <mat-option *ngFor="let r of localRewards" [value]=r>
-                                    {{r.name}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <input type="submit" value="Add it!" style="margin-left: 10px;">
-                    </form>
-                </div>
-                <div *ngIf="isAddAbsoluteValueClicked">
-                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding an Absolute value</b></h3>
-                    <form (ngSubmit)="addAbsoluteValueToDiagram()" style="text-align: left; font-size: 1vw;">
-                        <input type="radio" id="Text" name="absoluteValueFormat" value="T" [(ngModel)]="newAbsoluteValueType"> Text
-                        <input type="radio" id="Number" name="absoluteValueFormat" value="N" [(ngModel)]="newAbsoluteValueType"> Number
-                        <input type="radio" id="Date" name="absoluteValueFormat" value="D" [(ngModel)]="newAbsoluteValueType"> Date
-                        <div *ngIf="newAbsoluteValueType == 'T'" style="margin-left: 5px;">
-                            Value:<input type="text" [(ngModel)]="newAbsoluteValue" id="TextValue" name="absoluteValueTextValue" style="margin-left: 10px;">
-                            <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != ''">
-                        </div>
-                        <div *ngIf="newAbsoluteValueType == 'N'" style="margin-left: 5px;">
-                            Value: <input type="number" [(ngModel)]="newAbsoluteValue" name="absoluteValueNumberValue" id="NumberValue" style="margin-left: 10px;">
-                            <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != '' && newAbsoluteValue != null">
-                        </div>
-                        <div *ngIf="newAbsoluteValueType == 'D'" style="margin-left: 5px;">
-                            Value: <input type="date" [(ngModel)]="newAbsoluteValue" name="absoluteValueDateValue" id="DateValue" style="margin-left: 10px;">
-                            <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != ''">
-                        </div>
-                    </form>
-                </div>
-                <div *ngIf="isANodeSelected">
-                    <h3 style="text-align: left; font-size: 1vw;">Node selected: {{nodeClicked.label}}</h3>
-                    <div style="text-align: left; font-size: 0.8vw;">
-                        <form (ngSubmit)="linkTwoNodes()">
-                            This node is an activity. Would you like to link it with any other node?
+                <div *ngIf="editDiagramFunctionsAvaliable">
+                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Info Area</b></h3>
+                    <div *ngIf="isAddSubstrategyClicked">
+                        <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently creating a Susbtrategy</b></h3>
+                        <form (ngSubmit)="addSubstrategyToDiagram()" style="text-align: left; font-size: 1vw;">
+                            Strategy Name:<input type="text" name="newSubstrategyName" id="newSubstrategyName" [(ngModel)]="newSubstrategyName" style="margin-left: 10px;">
+                            <input type="submit" value="Add it!" style="margin-left: 10px;">
+                        </form>
+                    </div>
+                    <div *ngIf="isAddActivityClicked">
+                        <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding an Activity</b></h3>
+                        <form (ngSubmit)="addActivityToDiagram()" style="text-align: left; font-size: 1vw;">
                             <mat-form-field style="margin-left: 5px;">
-                                <mat-select [(value)]="nodeToLinkWithClickedOne" placeholder="Select a node">
-                                    <mat-option *ngFor="let a of avaliableNodesToLinkWithNodeClicked" [value]=a>
-                                        {{a.label}}
+                                <mat-select [(value)]="activityToAddSelected" placeholder="Select Activity">
+                                    <mat-option *ngFor="let a of activitiesFromTheDomain" [value]=a>
+                                        {{a.name}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
                             <input type="submit" value="Add it!" style="margin-left: 10px;">
                         </form>
                     </div>
+                    <div *ngIf="isAddLinkerClicked">
+                        <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding a Linker</b></h3>
+                        <form (ngSubmit)="addLinkerToDiagram()" style="text-align: left; font-size: 1vw;">
+                            <mat-form-field style="margin-left: 5px;">
+                                <mat-select [(value)]="linkerCategorySelected" placeholder="Select Category">
+                                    <mat-option *ngFor="let l of linkerCategories" [value]="l">
+                                        {{l}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="margin-left: 10px;" *ngIf="linkerCategorySelected != ''">
+                                <mat-select [(value)]="linkerToAddSelected" placeholder="Select a Linker">
+                                    <mat-option *ngFor="let l of linkers" [value]="l" >
+                                        {{l.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="linkerCategorySelected != ''">
+                        </form>
+                    </div>
+                    <div *ngIf="isAddRewardClicked">
+                        <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding a Reward</b></h3>
+                        <form (ngSubmit)="addRewardToDiagram()" style="text-align: left; font-size: 1vw;">
+                            <mat-form-field style="margin-left: 5px;">
+                                <mat-select [(value)]="rewardToAddSelected" placeholder="Select Reward">
+                                    <mat-option *ngFor="let r of localRewards" [value]=r>
+                                        {{r.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <input type="submit" value="Add it!" style="margin-left: 10px;">
+                        </form>
+                    </div>
+                    <div *ngIf="isAddAbsoluteValueClicked">
+                        <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently adding an Absolute value</b></h3>
+                        <form (ngSubmit)="addAbsoluteValueToDiagram()" style="text-align: left; font-size: 1vw;">
+                            <input type="radio" id="Text" name="absoluteValueFormat" value="T" [(ngModel)]="newAbsoluteValueType"> Text
+                            <input type="radio" id="Number" name="absoluteValueFormat" value="N" [(ngModel)]="newAbsoluteValueType"> Number
+                            <input type="radio" id="Date" name="absoluteValueFormat" value="D" [(ngModel)]="newAbsoluteValueType"> Date
+                            <div *ngIf="newAbsoluteValueType == 'T'" style="margin-left: 5px;">
+                                Value:<input type="text" [(ngModel)]="newAbsoluteValue" id="TextValue" name="absoluteValueTextValue" style="margin-left: 10px;">
+                                <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != ''">
+                            </div>
+                            <div *ngIf="newAbsoluteValueType == 'N'" style="margin-left: 5px;">
+                                Value: <input type="number" [(ngModel)]="newAbsoluteValue" name="absoluteValueNumberValue" id="NumberValue" style="margin-left: 10px;">
+                                <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != '' && newAbsoluteValue != null">
+                            </div>
+                            <div *ngIf="newAbsoluteValueType == 'D'" style="margin-left: 5px;">
+                                Value: <input type="date" [(ngModel)]="newAbsoluteValue" name="absoluteValueDateValue" id="DateValue" style="margin-left: 10px;">
+                                <input type="submit" value="Add it!" style="margin-left: 10px;" *ngIf="newAbsoluteValue != ''">
+                            </div>
+                        </form>
+                    </div>
+                    <div *ngIf="isANodeSelected">
+                        <h3 style="text-align: left; font-size: 1vw;">Node selected: {{nodeClicked.label}}</h3>
+                        <div style="text-align: left; font-size: 0.8vw;">
+                            <form (ngSubmit)="linkTwoNodes()">
+                                This node is an activity. Would you like to link it with any other node?
+                                <mat-form-field style="margin-left: 5px;">
+                                    <mat-select [(value)]="nodeToLinkWithClickedOne" placeholder="Select a node">
+                                        <mat-option *ngFor="let a of avaliableNodesToLinkWithNodeClicked" [value]=a>
+                                            {{a.label}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <input type="submit" value="Add it!" style="margin-left: 10px;">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="HeaderButtonArray" *ngIf="!editDiagramFunctionsAvaliable" style="text-align: left;">
+                    <h3 style="text-align: left; font-size: 1.2vw;"><b>Currently on view mode.</b></h3>
+                    <button style="margin-left: 10px;" (click)="goToEnableMode()">
+                        <mat-icon style="vertical-align: middle; ">
+                            edit
+                        </mat-icon>
+                        <span>Ennable eddition</span>
+                    </button>
                 </div>
             </div>
         </div>
