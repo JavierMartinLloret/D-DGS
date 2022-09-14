@@ -55,6 +55,7 @@
         </div>
     </mat-sidenav>
     <div>
+        <button (click)="debug()">debug</button>
         <!--<button (click)="debug()">debug</button>-->
         <h1 style="text-align: center;">Diagram Desing Area</h1>
         <h2 style="text-align: center;">Diagram: <i>{{localStrategy.name}}</i></h2>
@@ -177,9 +178,9 @@
                     </div>
                     <div *ngIf="isANodeSelected">
                         <h3 style="text-align: left; font-size: 1vw;">Node selected: {{nodeClicked.label}}</h3>
-                        <div style="text-align: left; font-size: 0.8vw;">
+                        <div style="text-align: left; font-size: 0.8vw;" *ngIf="avaliableNodesToLinkWithNodeClicked.size != 0">
                             <form (ngSubmit)="linkTwoNodes()">
-                                This node is an activity. Would you like to link it with any other node?
+                                Would you like to link it with any other node?
                                 <mat-form-field style="margin-left: 5px;">
                                     <mat-select [(value)]="nodeToLinkWithClickedOne" placeholder="Select a node">
                                         <mat-option *ngFor="let a of avaliableNodesToLinkWithNodeClicked" [value]=a>

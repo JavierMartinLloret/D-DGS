@@ -51,7 +51,6 @@ strategyRouter.post('/strategies', async (req, res) => {
 
 // Update a Strategy
 strategyRouter.put('/strategies', async (req, res) => {
-    console.log("Llega aquí");
     try {
         const updatedStrategy = new StrategyModel(req.body);
         const query = {"_id": req.body._id};
@@ -60,7 +59,9 @@ strategyRouter.put('/strategies', async (req, res) => {
             "description": updatedStrategy.description,
             "domain": updatedStrategy.domain,
             "reward_set": updatedStrategy.reward_set,
-            "substrategies": updatedStrategy.substrategies
+            "nodes": updatedStrategy.nodes,
+            "edges": updatedStrategy.edges,
+            "node_references": updatedStrategy.node_references
         }};
 
         await StrategyModel.updateOne(query, update);

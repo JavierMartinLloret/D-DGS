@@ -31,8 +31,8 @@ export class StrategiesService {
   }
 
   updateAStrategy(s: Strategy)
-  {
-    return this._httpClient.put(this.strategiesURL, s);
+  {    
+    return this._httpClient.put(this.strategiesURL, s)
   }
 
   deleteAnStrategy(ID: string) {

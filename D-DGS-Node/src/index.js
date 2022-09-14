@@ -1,7 +1,6 @@
 //  npm run dev To start
 
 const mongoose = require('./db/mongoose'); // NO SE LEE NUNCA AQUÍ, PERO ES NECESARIO
-const express = require("express");
 const userRouter = require('./routers/user');
 const contextRouter = require('./routers/context');
 const activityRouter = require('./routers/activity');
@@ -13,13 +12,14 @@ const linkerRouter = require('./routers/linker');
 const downloadsRouter = require('./routers/downloads');
 const strategiesRouter = require('./routers/strategy');
 
-
+const express = require("express");
+var cors = require('cors');
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 
-var cors = require('cors');
-app.use(cors());
+
+
 
 app.all('/*', (req, res, next) => {
     //Enable CORS policy so we can make http request between the node and ng app

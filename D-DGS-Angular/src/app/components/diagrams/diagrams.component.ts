@@ -15,6 +15,12 @@ const DIAGRAM_TOKEN: string = "DIAGRAM_EDITION_ENABLE"; // 'y' | 'n'
 // LOG_TOKEN: null | FAILED | identificador del dominio del usuario
 // * DEBE SUSTITUIRSE EN ALGÚN MOMENTO POR ALGO CIFRADO
 
+interface nodeReference {
+  idInDiagram: number,
+  nodeType: string, /* 's'== string, 'n' == number, 'd' == Date, 'o' == Object */
+  value: string        /* s,n,o == value. Object == _id for service to call*/
+}
+
 @Component({
   selector: 'app-diagrams',
   templateUrl: './diagrams.component.html',
@@ -32,7 +38,7 @@ export class DiagramsComponent implements OnInit {
   public reward_sets: Reward_Set[] = [];
 
   // Local variables
-  public newStrategy: Strategy = new Strategy("","","",new Context("","",undefined), new Reward_Set("","",undefined), /*Substrategies[]*/[]);
+  public newStrategy: Strategy = new Strategy("","","",new Context("","",undefined), new Reward_Set("","",undefined), [], [], new Array<any>());
 
   // Table needs
   public tableHeader: string[] = ['DatabaseID', 'Name', 'Description', 'Domain', 'Reward_Set', 'Actions'];

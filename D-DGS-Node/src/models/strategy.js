@@ -1,22 +1,20 @@
 const mongoose = require("mongoose");
 
 const NodeSchema = new mongoose.Schema({
-    idInDiagram: String,
+    id: String,
     label: String,
-    type: String,
     shape: String,
-    color: String,
-    base_element_id: String
+    color: String
 }, {
     timestamps: true
 });
 
 const EdgeSchema = new mongoose.Schema({
-    idInDiagram: String,
+    id: String,
     from: String,
     to: String,
-    arrows: String,
-    value: Number
+    label: String,
+    arrows: String
 }, {
     timestamps : true
 });
@@ -44,13 +42,21 @@ const RewardSetSchema = new mongoose.Schema({
     timestamps: true
 })
 
+const NodeReferenceSchema = new mongoose.Schema({
+    idInDiagram: Number,
+    nodeType: String,
+    value: String
+})
+
 const StrategySchema = new mongoose.Schema({
     domain_key: String,
     name: String,
     description: String,
     domain: ContextSchema,
     reward_set: RewardSetSchema,
-    substrategies: [SubstrategySchema]
+    nodes: [NodeSchema],
+    edges: [EdgeSchema],
+    node_references: [NodeReferenceSchema]
 }, {
     timestamps: true
 })
