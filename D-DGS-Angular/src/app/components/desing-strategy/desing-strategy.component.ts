@@ -135,6 +135,11 @@ export class DesingStrategyComponent implements AfterViewInit {
       {
         this._strategiesService.getASpecificStrategy(strategyID).subscribe((res1: any) => {
           this.localStrategy = res1;
+          // If there's nodes in the Strategy, we rebuild it to the last version of it.
+          if(this.localStrategy.nodes.length > 0) {
+            this.nodes.add(this.localStrategy.nodes);
+            this.edges.add(this.localStrategy.edges);
+          }
 
           // We read the current Strategy and check if user has it's ownership.
           this._strategiesService.getAllStrategiesFromAnSpecificUser(this.DOMAIN_KEY).subscribe((res2: any) => {
@@ -609,6 +614,7 @@ export class DesingStrategyComponent implements AfterViewInit {
 
   debug():void {
     console.log(this.localStrategy);
+    console.log(this.network.body)
   };
 
 }
