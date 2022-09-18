@@ -139,6 +139,9 @@ export class DesingStrategyComponent implements AfterViewInit {
           if(this.localStrategy.nodes.length > 0) {
             this.nodes.add(this.localStrategy.nodes);
             this.edges.add(this.localStrategy.edges);
+            this.nodeIDCounter = this.nodes.length;
+            this.edgeIDCounter = this.edges.length;
+            // BUG. Editar un diagrama existente, nodeReferences se resetea.
           }
 
           // We read the current Strategy and check if user has it's ownership.
