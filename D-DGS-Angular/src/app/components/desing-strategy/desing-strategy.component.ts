@@ -141,7 +141,6 @@ export class DesingStrategyComponent implements AfterViewInit {
             this.edges.add(this.localStrategy.edges);
             this.nodeIDCounter = this.nodes.length;
             this.edgeIDCounter = this.edges.length;
-            // BUG. Editar un diagrama existente, nodeReferences se resetea.
           }
 
           // We read the current Strategy and check if user has it's ownership.
@@ -229,7 +228,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     };
     this.nodeIDCounter++;
     
-    this.nodeReferences.push(newNodeReference);
+    this.localStrategy.node_references.push(newNodeReference);
     this.nodes.add(newNode);
     this.localStrategy.nodes.push(newNode);
 
@@ -264,7 +263,7 @@ export class DesingStrategyComponent implements AfterViewInit {
       }
       this.nodeIDCounter++;
       
-      this.nodeReferences.push(newNodeReference);
+      this.localStrategy.node_references.push(newNodeReference);
       this.nodes.add(newNode);
       this.localStrategy.nodes.push(newNode);
 
@@ -301,7 +300,7 @@ export class DesingStrategyComponent implements AfterViewInit {
               value: p._id?.toString()
             }
   
-            this.nodeReferences.push(newNodeReference);
+            this.localStrategy.node_references.push(newNodeReference);
             newNodes.push(newNode);
             this.localStrategy.nodes.push(newNode);
   
@@ -352,7 +351,7 @@ export class DesingStrategyComponent implements AfterViewInit {
       };
       this.nodeIDCounter++;
   
-      this.nodeReferences.push(newNodeReference);
+      this.localStrategy.node_references.push(newNodeReference);
       this.nodes.add(newNode);
       this.localStrategy.nodes.push(newNode);
       this.updateStrategy();
@@ -405,7 +404,7 @@ export class DesingStrategyComponent implements AfterViewInit {
       value: this.newAbsoluteValue
     };
     this.nodeIDCounter++;
-    this.nodeReferences.push(newNodeReference);
+    this.localStrategy.node_references.push(newNodeReference);
     this.nodes.add(newNode);
     this.localStrategy.nodes.push(newNode);
     this.updateStrategy();
@@ -439,7 +438,7 @@ export class DesingStrategyComponent implements AfterViewInit {
       };
       this.nodeIDCounter++;
   
-      this.nodeReferences.push(newNodeReference);
+      this.localStrategy.node_references.push(newNodeReference);
       this.nodes.add(newNode);
       this.localStrategy.nodes.push(newNode);
       this.updateStrategy();
@@ -481,7 +480,7 @@ export class DesingStrategyComponent implements AfterViewInit {
     // We seek the node type
     let nodeClickedReference: nodeReference = {idInDiagram:-1,nodeType:"",value:""};
     let nodeToBeLinkedWithReference: nodeReference = {idInDiagram:-1,nodeType:"",value:""};
-    this.nodeReferences.forEach((n:nodeReference) =>{
+    this.localStrategy.node_references.forEach((n:nodeReference) =>{
       if(n.idInDiagram == this.nodeClicked.id)
         nodeClickedReference = n; 
       if(n.idInDiagram == this.nodeToLinkWithClickedOne.id)
@@ -536,8 +535,6 @@ export class DesingStrategyComponent implements AfterViewInit {
   }
 
   updateStrategy(): void {
-    console.log("Update Called");
-    this.localStrategy.node_references = this.nodeReferences;
     this._strategiesService.updateAStrategy(this.localStrategy).subscribe((res: any) => {});
   }
 
@@ -617,7 +614,6 @@ export class DesingStrategyComponent implements AfterViewInit {
 
   debug():void {
     console.log(this.localStrategy);
-    console.log(this.network.body)
   };
 
 }
